@@ -60,6 +60,34 @@ commands_visualstudio = {
     Action.EDIT_PREV_MATCH : None,
 }
 
+commands_vscode = {
+    Action.LEFT            : {'command': 'cursorLeft', 'when': 'textInputFocus'},
+    Action.CTRL_LEFT       : {'command': 'cursorWordLeft', 'when': 'textInputFocus && !accessibilityModeEnabled'},
+    Action.SHIFT_LEFT      : {'command': 'cursorLeftSelect', 'when': 'textInputFocus'},
+    Action.CTRL_SHIFT_LEFT : {'command': 'cursorWordLeftSelect', 'when': 'textInputFocus && !accessibilityModeEnabled'},
+    Action.RIGHT           : {'command': 'cursorRight', 'when': 'textInputFocus'},
+    Action.CTRL_RIGHT      : {'command': 'cursorWordRight', 'when': 'textInputFocus && !accessibilityModeEnabled'},
+    Action.SHIFT_RIGHT     : {'command': 'cursorRightSelect', 'when': 'textInputFocus'},
+    Action.CTRL_SHIFT_RIGHT: {'command': 'cursorWordRightSelect', 'when': 'textInputFocus && !accessibilityModeEnabled'},
+    Action.UP              : {'command': 'cursorUp', 'when': 'textInputFocus'},
+    Action.SHIFT_UP        : {'command': 'cursorUpSelect', 'when': 'textInputFocus'},
+    Action.DOWN            : {'command': 'cursorDown', 'when': 'textInputFocus'},
+    Action.SHIFT_DOWN      : {'command': 'cursorDownSelect', 'when': 'textInputFocus'},
+    Action.HOME            : {'command': 'cursorHome', 'when': 'textInputFocus'},
+    Action.SHIFT_HOME      : {'command': 'cursorHomeSelect', 'when': 'textInputFocus'},
+    Action.END             : {'command': 'cursorEnd', 'when': 'textInputFocus'},
+    Action.SHIFT_END       : {'command': 'cursorEndSelect', 'when': 'textInputFocus'},
+    Action.BACKSPACE       : {'command': 'deleteLeft', 'when': 'textInputFocus'},
+    Action.SHIFT_BACKSPACE : None,
+    Action.DELETE          : {'command': 'deleteRight', 'when': 'textInputFocus'},
+    Action.SHIFT_DELETE    : None,
+    Action.DUPLICATE_LINE  : {'command': 'editor.action.copyLinesDownAction', 'when': 'editorTextFocus && !editorReadonly'},
+    Action.DELETE_LINE     : {'command': 'editor.action.deleteLines', 'when': 'textInputFocus && !editorReadonly'},
+    Action.ENTER           : {'command': 'extension.multiCommand.execute', 'args': {'sequence': ['lineBreakInsert', 'cursorDown', 'cursorEnd', 'cursorHome']}, 'when': 'editorTextFocus && !editorReadonly'},
+    Action.COMMENT         : {'command': 'editor.action.commentLine', 'when': 'editorTextFocus && !editorReadonly'},
+    Action.EDIT_NEXT_MATCH : {'command': 'editor.action.addSelectionToNextFindMatch', 'when': 'editorFocus'},
+    Action.EDIT_PREV_MATCH : {'command': 'editor.action.addSelectionToPreviousFindMatch', 'when': 'editorFocus'},
+}
 
 def xml2dict(elem):
     children = []
@@ -152,16 +180,55 @@ class VisualStudio:
             file.write(shortcuts_str)
 
 
+class VSCode:
+    def __init__(self):
+        self.shortcuts = []
+
+    @staticmethod
+    def format_shortcut(shortcut_str):
+        def strip(s):
+            l0 = len(s)
+            s = s.replace(" +", "+").replace("+ ", "+")
+            if s[0] == " ":
+                s = s[1:]
+            if s[-1] == " ":
+                s = s[:-1]
+
+            if len(s) < l0:
+                return strip(s)
+            else:
+                return s
+
+        shortcut_str = strip(shortcut_str).lower()
+        return shortcut_str
+
+    def add(self, action, shortcut_str):
+        shortcut_str = VSCode.format_shortcut(shortcut_str)
+        cmd = commands_vscode[action]
+        if cmd is None:
+            return
+
+        shortcut_dict = {"key": shortcut_str}
+        shortcut_dict.update(cmd)
+        self.shortcuts.append(shortcut_dict)
+
+    def save(self):
+        with open("out/keybindings_altitude.json", 'w') as file:
+            file.write(json.dumps(self.shortcuts, indent=4))
+
 
 class Shortcut:
     def __init__(self, visualstudio_file):
         self.visualstudio = VisualStudio(visualstudio_file)
+        self.vscode = VSCode()
 
     def add(self, action, shortcut_str):
         self.visualstudio.add(action, shortcut_str)
+        self.vscode.add(action, shortcut_str)
 
     def save(self):
         self.visualstudio.save()
+        self.vscode.save()
 
 
 def main():
@@ -197,6 +264,14 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+# TODO: don^t forget shortcut deletion. Are they needed?
+# {'command': '-workbench.action.openEditorAtIndex7'}
+# {'command': '-editor.action.addSelectionToNextFindMatch', 'when': 'editorFocus'}
+# {'command': '-editor.action.copyLinesDownAction', 'when': 'editorTextFocus && !editorReadonly'}
+# {'command': '-editor.action.deleteLines', 'when': 'textInputFocus && !editorReadonly'}
+# {'command': '-notebook.cell.copyDown', 'when': 'notebookEditorFocused && !inputFocus'}
+
 
 
 
