@@ -267,12 +267,11 @@ class VisualStudio:
 
     def save(self):
         root = dict2xml(self.shortcuts)
-        xml_1line_str = et.tostring(root).decode("utf-8")
-        dom = xml.dom.minidom.parseString(xml_1line_str)
-        shortcut_prettyxml_str = dom.toprettyxml()
+        shortcuts_str = et.tostring(root).decode("utf-8")
+        shortcuts_str = xml.dom.minidom.parseString(shortcuts_str).toprettyxml()
 
         with open(f"{BUILD_FOLDER}/Altitude.vssettings", 'w') as file:
-            file.write(shortcut_prettyxml_str)
+            file.write(shortcuts_str)
 
 
 class VSCode:

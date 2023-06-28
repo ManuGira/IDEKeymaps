@@ -78,6 +78,7 @@
   <action id="MethodUp" />
   <action id="MoveLineDown">
     <keyboard-shortcut first-keystroke="alt down" />
+  </action>
   <action id="MoveLineUp">
     <keyboard-shortcut first-keystroke="alt up" />
   </action>
@@ -85,7 +86,6 @@
   <action id="SelectAllOccurrences" />
   <action id="SelectNextOccurrence" />
   <action id="ShowContent" />
-  </action>
   <action id="ShowReformatFileDialog" />
   <action id="ShowSearchHistory" />
   <action id="SurroundWithLiveTemplate" />
