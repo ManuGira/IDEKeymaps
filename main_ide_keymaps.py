@@ -1,4 +1,5 @@
 import xml.etree.ElementTree as et
+import xml.dom.minidom
 import enum
 import json
 import zipfile
@@ -266,11 +267,12 @@ class VisualStudio:
 
     def save(self):
         root = dict2xml(self.shortcuts)
-        shortcuts_str = et.tostring(root).decode("utf-8")
-
+        xml_1line_str = et.tostring(root).decode("utf-8")
+        dom = xml.dom.minidom.parseString(xml_1line_str)
+        shortcut_prettyxml_str = dom.toprettyxml()
 
         with open(f"{OUT_FOLDER}/Altitude.vssettings", 'w') as file:
-            file.write(shortcuts_str)
+            file.write(shortcut_prettyxml_str)
 
 
 class VSCode:
@@ -557,30 +559,4 @@ Table-selectNextColumn : right
 {'tag': 'action', 'tail': '\n  ', 'text': '\n    ', 'attrib': {'id': 'Back'}, 'children': [{'tag': 'keyboard-shortcut', 'tail': '\n    ', 'text': None, 'attrib': {'first-keystroke': 'ctrl alt left'}, 'children': []}, {'tag': 'mouse-shortcut', 'tail': '\n    ', 'text': None, 'attrib': {'keystroke': 'button4'}, 'children': []}, {'tag': 'keyboard-shortcut', 'tail': '\n  ', 'text': None, 'attrib': {'first-keystroke': 'alt comma'}, 'children': []}]}
 
 """
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
