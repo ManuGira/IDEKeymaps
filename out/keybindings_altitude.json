@@ -5,12 +5,12 @@
         "when": "textInputFocus"
     },
     {
-        "key": "shift+alt+j",
+        "key": "ctrl+alt+j",
         "command": "cursorWordLeft",
         "when": "textInputFocus && !accessibilityModeEnabled"
     },
     {
-        "key": "ctrl+alt+j",
+        "key": "shift+alt+j",
         "command": "cursorLeftSelect",
         "when": "textInputFocus"
     },
@@ -25,12 +25,12 @@
         "when": "textInputFocus"
     },
     {
-        "key": "shift+alt+l",
+        "key": "ctrl+alt+l",
         "command": "cursorWordRight",
         "when": "textInputFocus && !accessibilityModeEnabled"
     },
     {
-        "key": "ctrl+alt+l",
+        "key": "shift+alt+l",
         "command": "cursorRightSelect",
         "when": "textInputFocus"
     },
