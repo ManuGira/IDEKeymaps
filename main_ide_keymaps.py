@@ -45,12 +45,12 @@ class Action(enum.IntEnum):
 
 commands_visualstudio = {
     Action.LEFT            : "Edit.CharLeft",
-    Action.CTRL_LEFT       : "Edit.CharLeftExtend",
-    Action.SHIFT_LEFT      : "Edit.WordPrevious",
+    Action.CTRL_LEFT       : "Edit.WordPrevious",
+    Action.SHIFT_LEFT      : "Edit.CharLeftExtend",
     Action.CTRL_SHIFT_LEFT : "Edit.WordPreviousExtend",
     Action.RIGHT           : "Edit.CharRight",
-    Action.CTRL_RIGHT      : "Edit.CharRightExtend",
-    Action.SHIFT_RIGHT     : "Edit.WordNext",
+    Action.CTRL_RIGHT      : "Edit.WordNext",
+    Action.SHIFT_RIGHT     : "Edit.CharRightExtend",
     Action.CTRL_SHIFT_RIGHT: "Edit.WordNextExtend",
     Action.UP              : "Edit.LineUp",
     Action.SHIFT_UP        : "Edit.LineUpExtend",

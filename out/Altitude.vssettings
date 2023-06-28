@@ -54,12 +54,12 @@
 				<ShortcutsScheme>ReSharper (Visual Studio)</ShortcutsScheme>
 				<UserShortcuts>
 					<Shortcut Command="Edit.CharLeft" Scope="Text Editor">Alt+J</Shortcut>
-					<Shortcut Command="Edit.CharLeftExtend" Scope="Text Editor">Shift+Alt+J</Shortcut>
-					<Shortcut Command="Edit.WordPrevious" Scope="Text Editor">Ctrl+Alt+J</Shortcut>
+					<Shortcut Command="Edit.WordPrevious" Scope="Text Editor">Shift+Alt+J</Shortcut>
+					<Shortcut Command="Edit.CharLeftExtend" Scope="Text Editor">Ctrl+Alt+J</Shortcut>
 					<Shortcut Command="Edit.WordPreviousExtend" Scope="Text Editor">Ctrl+Shift+Alt+J</Shortcut>
 					<Shortcut Command="Edit.CharRight" Scope="Text Editor">Alt+L</Shortcut>
-					<Shortcut Command="Edit.CharRightExtend" Scope="Text Editor">Shift+Alt+L</Shortcut>
-					<Shortcut Command="Edit.WordNext" Scope="Text Editor">Ctrl+Alt+L</Shortcut>
+					<Shortcut Command="Edit.WordNext" Scope="Text Editor">Shift+Alt+L</Shortcut>
+					<Shortcut Command="Edit.CharRightExtend" Scope="Text Editor">Ctrl+Alt+L</Shortcut>
 					<Shortcut Command="Edit.WordNextExtend" Scope="Text Editor">Ctrl+Shift+Alt+L</Shortcut>
 					<Shortcut Command="Edit.LineUp" Scope="Text Editor">Alt+I</Shortcut>
 					<Shortcut Command="Edit.LineUpExtend" Scope="Text Editor">Shift+Alt+I</Shortcut>
