@@ -6,8 +6,8 @@ import zipfile
 import os
 import shutil
 
-TMP_FOLDER = os.path.join(os.path.dirname(os.path.realpath(__file__)), "tmp")
-OUT_FOLDER = os.path.join(os.path.dirname(os.path.realpath(__file__)), "out")
+BUILD_FOLDER = os.path.join(os.path.dirname(os.path.realpath(__file__)), "build")
+TMP_FOLDER = BUILD_FOLDER
 
 class Action(enum.IntEnum):
     LEFT = enum.auto()
@@ -271,7 +271,7 @@ class VisualStudio:
         dom = xml.dom.minidom.parseString(xml_1line_str)
         shortcut_prettyxml_str = dom.toprettyxml()
 
-        with open(f"{OUT_FOLDER}/Altitude.vssettings", 'w') as file:
+        with open(f"{BUILD_FOLDER}/Altitude.vssettings", 'w') as file:
             file.write(shortcut_prettyxml_str)
 
 
@@ -308,7 +308,7 @@ class VSCode:
         self.shortcuts.append(shortcut_dict)
 
     def save(self):
-        with open("out/keybindings_altitude.json", 'w') as file:
+        with open(f"{BUILD_FOLDER}/keybindings_altitude.json", 'w') as file:
             file.write(json.dumps(self.shortcuts, indent=4))
 
 
@@ -316,7 +316,7 @@ class PyCharm:
     def __init__(self, pycharm_settings_zipfile):
         FOLDER_SRC, self.name, ext = split_filename(pycharm_settings_zipfile)
         self.FOLDER_EXTRACTED = os.path.join(TMP_FOLDER, self.name)
-        self.FOLDER_DST = os.path.join("out", self.name)
+        self.FOLDER_DST = os.path.join(BUILD_FOLDER, self.name)
 
         with zipfile.ZipFile(pycharm_settings_zipfile, 'r') as zip_ref:
             zip_ref.extractall(self.FOLDER_EXTRACTED)
@@ -442,12 +442,12 @@ class Shortcut:
 
 def main():
     # delete tmp folder
-    for folder in [TMP_FOLDER, OUT_FOLDER]:
-        try:
-            shutil.rmtree(folder)
-        except FileNotFoundError:
-            pass
-        os.mkdir(folder)
+    try:
+        shutil.rmtree(BUILD_FOLDER)
+    except FileNotFoundError:
+        pass
+    os.mkdir(BUILD_FOLDER)
+    # os.mkdir(TMP_FOLDER)
 
     shct = Shortcut("VisualStudio/Exported-2022-02-23.vssettings", "PyCharm/pycharm_settings.zip")
     shct.add(Action.LEFT            , "Alt+J               ")
@@ -485,10 +485,10 @@ def main():
     shct.add(Action.SCROLL_DOWN     , None)
     shct.save()
 
-    try:
-        shutil.rmtree(TMP_FOLDER)
-    except FileNotFoundError:
-        pass
+    # try:
+    #     shutil.rmtree(TMP_FOLDER)
+    # except FileNotFoundError:
+    #     pass
 
 if __name__ == '__main__':
     main()

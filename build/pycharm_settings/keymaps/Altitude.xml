@@ -1,0 +1,116 @@
+<keymap name="Altitude" parent="$default" version="1">
+  <action id="ActivateStructureToolWindow" />
+  <action id="Arrangement.Rule.Match.Condition.Move.Down" />
+  <action id="Arrangement.Rule.Match.Condition.Move.Up" />
+  <action id="AutoIndentLines" />
+  <action id="Back">
+    <keyboard-shortcut first-keystroke="ctrl alt left" />
+    <mouse-shortcut keystroke="button4" />
+  </action>
+  <action id="CodeInspection.OnEditor" />
+  <action id="CommentByLineComment">
+    <keyboard-shortcut first-keystroke="ctrl slash" />
+    <keyboard-shortcut first-keystroke="ctrl divide" />
+  <keyboard-shortcut first-keystroke="ctrl num /" />
+t2<keyboard-shortcut first-keystroke="alt 7" />
+t2</action>
+  <action id="EditorDown">
+    <keyboard-shortcut first-keystroke="down" />
+  <keyboard-shortcut first-keystroke="alt k" />
+t2</action>
+  <action id="EditorDownWithSelection">
+    <keyboard-shortcut first-keystroke="shift down" />
+  <keyboard-shortcut first-keystroke="shift alt k" />
+t2</action>
+  <action id="EditorLeft">
+    <keyboard-shortcut first-keystroke="left" />
+  <keyboard-shortcut first-keystroke="alt j" />
+t2</action>
+  <action id="EditorLeftWithSelection">
+    <keyboard-shortcut first-keystroke="shift left" />
+  <keyboard-shortcut first-keystroke="shift alt j" />
+t2</action>
+  <action id="EditorLineEnd">
+    <keyboard-shortcut first-keystroke="end" />
+  <keyboard-shortcut first-keystroke="alt o" />
+t2</action>
+  <action id="EditorLineEndWithSelection">
+    <keyboard-shortcut first-keystroke="shift end" />
+  <keyboard-shortcut first-keystroke="shift alt o" />
+t2</action>
+  <action id="EditorLineStart">
+    <keyboard-shortcut first-keystroke="home" />
+  <keyboard-shortcut first-keystroke="alt u" />
+t2</action>
+  <action id="EditorLineStartWithSelection">
+    <keyboard-shortcut first-keystroke="shift home" />
+  <keyboard-shortcut first-keystroke="shift alt u" />
+t2</action>
+  <action id="EditorNextWord">
+    <keyboard-shortcut first-keystroke="ctrl right" />
+  <keyboard-shortcut first-keystroke="ctrl alt l" />
+t2</action>
+  <action id="EditorNextWordWithSelection">
+    <keyboard-shortcut first-keystroke="shift ctrl right" />
+  <keyboard-shortcut first-keystroke="ctrl shift alt l" />
+t2</action>
+  <action id="EditorPreviousWord">
+    <keyboard-shortcut first-keystroke="ctrl left" />
+  <keyboard-shortcut first-keystroke="ctrl alt j" />
+t2</action>
+  <action id="EditorPreviousWordWithSelection">
+    <keyboard-shortcut first-keystroke="shift ctrl left" />
+  <keyboard-shortcut first-keystroke="ctrl shift alt j" />
+t2</action>
+  <action id="EditorRight">
+    <keyboard-shortcut first-keystroke="right" />
+  <keyboard-shortcut first-keystroke="alt l" />
+t2</action>
+  <action id="EditorRightWithSelection">
+    <keyboard-shortcut first-keystroke="shift right" />
+  <keyboard-shortcut first-keystroke="shift alt l" />
+t2</action>
+  <action id="EditorScrollDown">
+    <keyboard-shortcut first-keystroke="ctrl down" />
+  </action>
+  <action id="EditorScrollUp">
+    <keyboard-shortcut first-keystroke="ctrl up" />
+  </action>
+  <action id="EditorUp">
+    <keyboard-shortcut first-keystroke="up" />
+  <keyboard-shortcut first-keystroke="alt i" />
+t2</action>
+  <action id="EditorUpWithSelection">
+    <keyboard-shortcut first-keystroke="shift up" />
+  <keyboard-shortcut first-keystroke="shift alt i" />
+t2</action>
+  <action id="ExportToTextFile" />
+  <action id="Forward">
+    <keyboard-shortcut first-keystroke="ctrl alt right" />
+    <mouse-shortcut keystroke="button5" />
+  </action>
+  <action id="List-selectNextColumn">
+    <keyboard-shortcut first-keystroke="right" />
+  </action>
+  <action id="MethodDown" />
+  <action id="MethodUp" />
+  <action id="MoveLineDown">
+    <keyboard-shortcut first-keystroke="alt down" />
+  <action id="MoveLineUp">
+    <keyboard-shortcut first-keystroke="alt up" />
+  </action>
+  <action id="ReformatCode" />
+  <action id="SelectAllOccurrences" />
+  <action id="SelectNextOccurrence" />
+  <action id="ShowContent" />
+  </action>
+  <action id="ShowReformatFileDialog" />
+  <action id="ShowSearchHistory" />
+  <action id="SurroundWithLiveTemplate" />
+  <action id="Table-selectNextColumn">
+    <keyboard-shortcut first-keystroke="right" />
+  </action>
+  <action id="UnselectPreviousOccurrence" />
+  <action id="Vcs.ReformatCommitMessage" />
+  <action id="context.load" />
+</keymap>
