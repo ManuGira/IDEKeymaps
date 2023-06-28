@@ -123,11 +123,6 @@
         "when": "editorTextFocus && !editorReadonly"
     },
     {
-        "key": "alt+7",
-        "command": "editor.action.commentLine",
-        "when": "editorTextFocus && !editorReadonly"
-    },
-    {
         "key": "alt+w",
         "command": "editor.action.addSelectionToNextFindMatch",
         "when": "editorFocus"
