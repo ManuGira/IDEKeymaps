@@ -15,3 +15,15 @@ I want my keymaps to be synchronized between the different IDE I use
 1. File > Preferences > Keyboard shortcuts
 1. Open Keyboard Shortcut as JSON by clicking on the ![](images/vscode_open_json.png) icon in top right corner
 1. Paste the json content here
+
+
+## Future Works
+#### New actions:
+* Open in explorer
+* Extend selection (IntelliJ ctrl+w)
+* Duplicate cursor to similar word (VSCode ctrl+w)
+* Enter (on alt+m)
+* backspace (on alt+n)
+
+#### cheat sheet
+Generate a human readable cheat-sheet with all available keymaps
