@@ -409,6 +409,25 @@ class PyCharm:
         root = dict2xml(self.shortcuts)
         shortcuts_str = et.tostring(root).decode("utf-8")
 
+
+
+        shortcuts_str = xml.dom.minidom.parseString(shortcuts_str).toprettyxml()  # TODO: does this broke everything?
+
+        def clean_spaces(txt):
+            # TODO: does this broke everything?
+            N = len(txt)
+            while True:
+                txt = txt.replace(" \n", "\n")
+                txt = txt.replace("\t\n", "\n")
+                txt = txt.replace("\n\n", "\n")
+                if N == len(txt):
+                    break
+                N = len(txt)
+            return txt
+
+        shortcuts_str = clean_spaces(shortcuts_str)
+
+
         with open(self.KEYMAP_FILE, 'w') as file:
             file.write(shortcuts_str)
 
