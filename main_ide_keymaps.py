@@ -215,6 +215,13 @@ def dict2xml(dic):
 
     return elem
 
+# def repair_special_characters(txt):
+#     translation_pairs = [
+#         ("&#233;", "é"),
+#     ]
+#     for broken_utf8, special_character in translation_pairs:
+#         txt = txt.replace(broken_utf8, special_character)
+#     return txt
 
 class VisualStudio:
     def __init__(self, visualstudio_file):
@@ -227,7 +234,7 @@ class VisualStudio:
         with open(visualstudio_file, 'r') as file:
             visualstudio_str = file.read()
         root = et.fromstring(visualstudio_str)
-        str1 = et.tostring(root).decode("utf-8")
+        str1 = et.tostring(root).decode("cp1252")
         visualstudio_dict = xml2dict(root)
         return visualstudio_dict
 
@@ -248,7 +255,7 @@ class VisualStudio:
 
         shortcut_str = strip(shortcut_str + "")
         keys = shortcut_str.strip().split("+")
-        keys = [k[0].upper() + k[1:].lower() for k in keys]
+        keys = [k[0].upper() + k[1:].lower() if k not in ["é"] else k for k in keys]
         return "+".join(keys)
 
     def clear_usershortcut(self):
@@ -275,7 +282,8 @@ class VisualStudio:
 
     def save(self):
         root = dict2xml(self.shortcuts)
-        shortcuts_str = et.tostring(root).decode("utf-8")
+        shortcuts_str = et.tostring(root).decode("cp1252")
+        # shortcuts_str = repair_special_characters(shortcuts_str)
         shortcuts_str = xml.dom.minidom.parseString(shortcuts_str).toprettyxml()
 
         with open(f"{BUILD_FOLDER}/Altitude.vssettings", 'w') as file:
@@ -338,7 +346,7 @@ class PyCharm:
         with open(pycharm_keymap_file, 'r') as file:
             pycharm_str = file.read()
         root = et.fromstring(pycharm_str)
-        str1 = et.tostring(root).decode("utf-8")
+        str1 = et.tostring(root).decode("cp1252")
         pycharm_dict = xml2dict(root)
         return pycharm_dict
 
@@ -419,10 +427,10 @@ class PyCharm:
         t["children"] = []
         t["children"].append(self.shortcuts["children"][9]["children"][0])
         t["children"].append(self.shortcuts["children"][9]["children"][0].copy())
-        print(et.tostring(dict2xml(t)).decode("utf-8"))
+        print(et.tostring(dict2xml(t)).decode("cp1252"))
 
         root = dict2xml(self.shortcuts)
-        shortcuts_str = et.tostring(root).decode("utf-8")
+        shortcuts_str = et.tostring(root).decode("cp1252")
         shortcuts_str = xml.dom.minidom.parseString(shortcuts_str).toprettyxml()
 
         def clean_spaces(txt):
