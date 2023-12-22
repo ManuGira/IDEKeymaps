@@ -7,6 +7,8 @@
 	<action id="Back">
 		<keyboard-shortcut first-keystroke="ctrl alt left"/>
 		<mouse-shortcut keystroke="button4"/>
+		<keyboard-shortcut first-keystroke="alt comma"/>
+t2
 	</action>
 	<action id="CodeInspection.OnEditor"/>
 	<action id="CommentByLineComment">
@@ -107,6 +109,8 @@ t2
 	<action id="Forward">
 		<keyboard-shortcut first-keystroke="ctrl alt right"/>
 		<mouse-shortcut keystroke="button5"/>
+		<keyboard-shortcut first-keystroke="alt period"/>
+t2
 	</action>
 	<action id="List-selectNextColumn">
 		<keyboard-shortcut first-keystroke="right"/>

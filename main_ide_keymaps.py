@@ -42,6 +42,8 @@ class Action(enum.IntEnum):
     MOVE_LINE_DOWN = enum.auto()
     SCROLL_UP = enum.auto()
     SCROLL_DOWN = enum.auto()
+    BACK = enum.auto()
+    FORWARD = enum.auto()
 
 commands_visualstudio = {
     Action.LEFT            : "Edit.CharLeft",
@@ -76,6 +78,8 @@ commands_visualstudio = {
     Action.MOVE_LINE_DOWN  : None,
     Action.SCROLL_UP       : None,
     Action.SCROLL_DOWN     : None,
+    Action.BACK            : None,
+    Action.FORWARD         : None,
 }
 
 commands_vscode = {
@@ -111,6 +115,8 @@ commands_vscode = {
     Action.MOVE_LINE_DOWN  : None,
     Action.SCROLL_UP       : None,
     Action.SCROLL_DOWN     : None,
+    Action.BACK            : None,
+    Action.FORWARD         : None,
 }
 
 commands_pycharm = {
@@ -146,6 +152,8 @@ commands_pycharm = {
     Action.MOVE_LINE_DOWN  : "MoveLineDown",
     Action.SCROLL_UP       : None,
     Action.SCROLL_DOWN     : None,
+    Action.BACK            : "Back",
+    Action.FORWARD         : "Forward",
 }
 # "Back",
 # "Forward",
@@ -350,8 +358,15 @@ class PyCharm:
                 return s
 
         shortcut_str = strip(shortcut_str + "")
+
+        shortcut_str = shortcut_str.replace("é", "#10000e9")
+        shortcut_str = shortcut_str.replace(",", "comma")
+        shortcut_str = shortcut_str.replace(".", "period")
+
         keys = shortcut_str.strip().split("+")
         keys = [k.lower() for k in keys]
+
+
         return " ".join(keys)
 
     def print_debug_info(self):
@@ -408,17 +423,9 @@ class PyCharm:
 
         root = dict2xml(self.shortcuts)
         shortcuts_str = et.tostring(root).decode("utf-8")
-
-        # TODO: The char "é" is decoded into "&#233;", which cannot be interpreted as a key in pycharm. Pycharm needs "#10000e9"
-        e_aigu_utf8 = "&#233;"
-        e_aigu_pycharm = "#10000e9"
-        shortcuts_str = shortcuts_str.replace(e_aigu_utf8, e_aigu_pycharm)
-
-
-        shortcuts_str = xml.dom.minidom.parseString(shortcuts_str).toprettyxml()  # TODO: does this broke everything?
+        shortcuts_str = xml.dom.minidom.parseString(shortcuts_str).toprettyxml()
 
         def clean_spaces(txt):
-            # TODO: does this broke everything?
             N = len(txt)
             while True:
                 txt = txt.replace(" \n", "\n")
@@ -505,6 +512,8 @@ def main():
     shct.add(Action.MOVE_LINE_DOWN  , "Alt+é               ")
     shct.add(Action.SCROLL_UP       , None)
     shct.add(Action.SCROLL_DOWN     , None)
+    shct.add(Action.BACK            , "Alt+,               ")
+    shct.add(Action.FORWARD         , "Alt+.               ")
     shct.save()
 
     # try:
