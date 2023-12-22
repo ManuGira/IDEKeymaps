@@ -1,10 +1,10 @@
-import xml.etree.ElementTree as et
-import xml.dom.minidom
 import enum
 import json
-import zipfile
 import os
 import shutil
+import xml.dom.minidom
+import xml.etree.ElementTree as et
+import zipfile
 
 BUILD_FOLDER = os.path.join(os.path.dirname(os.path.realpath(__file__)), "build")
 TMP_FOLDER = BUILD_FOLDER
@@ -142,8 +142,8 @@ commands_pycharm = {
     Action.EDIT_PREV_MATCH : None,
     Action.NEW_CARET_UP    : None,
     Action.NEW_CARET_DOWN  : None,
-    Action.MOVE_LINE_UP    : None,
-    Action.MOVE_LINE_DOWN  : None,
+    Action.MOVE_LINE_UP    : "MoveLineUp",
+    Action.MOVE_LINE_DOWN  : "MoveLineDown",
     Action.SCROLL_UP       : None,
     Action.SCROLL_DOWN     : None,
 }
@@ -409,6 +409,10 @@ class PyCharm:
         root = dict2xml(self.shortcuts)
         shortcuts_str = et.tostring(root).decode("utf-8")
 
+        # TODO: The char "é" is decoded into "&#233;", which cannot be interpreted as a key in pycharm. Pycharm needs "#10000e9"
+        e_aigu_utf8 = "&#233;"
+        e_aigu_pycharm = "#10000e9"
+        shortcuts_str = shortcuts_str.replace(e_aigu_utf8, e_aigu_pycharm)
 
 
         shortcuts_str = xml.dom.minidom.parseString(shortcuts_str).toprettyxml()  # TODO: does this broke everything?
