@@ -140,4 +140,28 @@ t2
 	<action id="UnselectPreviousOccurrence"/>
 	<action id="Vcs.ReformatCommitMessage"/>
 	<action id="context.load"/>
+	<action id="EditorDeleteLine">
+txt1
+		<keyboard-shortcut first-keystroke="alt d"/>
+t2
+	</action>
+t1
+	<action id="EditorCloneCaretAbove">
+txt1
+		<keyboard-shortcut first-keystroke="ctrl alt i"/>
+t2
+	</action>
+t1
+	<action id="EditorCloneCaretBelow">
+txt1
+		<keyboard-shortcut first-keystroke="ctrl alt k"/>
+t2
+	</action>
+t1
+	<action id="ShowFilePath">
+txt1
+		<keyboard-shortcut first-keystroke="alt e"/>
+t2
+	</action>
+t1
 </keymap>

@@ -131,5 +131,20 @@
         "key": "sift+alt+w",
         "command": "editor.action.addSelectionToPreviousFindMatch",
         "when": "editorFocus"
+    },
+    {
+        "key": "ctrl+alt+i",
+        "command": "editor.action.insertCursorAbove",
+        "when": "editorFocus"
+    },
+    {
+        "key": "ctrl+alt+k",
+        "command": "editor.action.insertCursorBelow",
+        "when": "editorFocus"
+    },
+    {
+        "key": "alt+e",
+        "command": "editor.action.revealFileInOS",
+        "when": "editorFocus"
     }
 ]

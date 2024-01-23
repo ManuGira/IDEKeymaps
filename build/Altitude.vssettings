@@ -77,6 +77,10 @@
 					<Shortcut Command="Edit.BreakLine" Scope="Text Editor">Alt+M</Shortcut>
 					<Shortcut Command="ReSharper.ReSharper_LineComment" Scope="Text Editor">Ctrl+Num /</Shortcut>
 					<Shortcut Command="ReSharper.ReSharper_LineComment" Scope="Text Editor">Alt+7</Shortcut>
+					<Shortcut Command="Edit.MoveSelectedLinesUp" Scope="Text Editor">Alt+P</Shortcut>
+					<Shortcut Command="Edit.MoveSelectedLinesDown" Scope="Text Editor">Alt+é</Shortcut>
+					<Shortcut Command="View.NavigateBackward" Scope="Text Editor">Alt+,</Shortcut>
+					<Shortcut Command="View.NavigateForward" Scope="Text Editor">Alt+.</Shortcut>
 				</UserShortcuts>
 			</KeyboardShortcuts>
 		</Category>

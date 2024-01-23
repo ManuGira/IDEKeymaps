@@ -36,124 +36,128 @@ class Action(enum.IntEnum):
     COMMENT = enum.auto()
     EDIT_NEXT_MATCH = enum.auto()
     EDIT_PREV_MATCH = enum.auto()
-    NEW_CARET_UP = enum.auto()
-    NEW_CARET_DOWN = enum.auto()
+    NEW_CARET_ABOVE = enum.auto()
+    NEW_CARET_BELOW = enum.auto()
     MOVE_LINE_UP = enum.auto()
     MOVE_LINE_DOWN = enum.auto()
     SCROLL_UP = enum.auto()
     SCROLL_DOWN = enum.auto()
     BACK = enum.auto()
     FORWARD = enum.auto()
+    REVEAL_IN_EXPLORER = enum.auto()
 
 commands_visualstudio = {
-    Action.LEFT            : "Edit.CharLeft",
-    Action.CTRL_LEFT       : "Edit.WordPrevious",
-    Action.SHIFT_LEFT      : "Edit.CharLeftExtend",
-    Action.CTRL_SHIFT_LEFT : "Edit.WordPreviousExtend",
-    Action.RIGHT           : "Edit.CharRight",
-    Action.CTRL_RIGHT      : "Edit.WordNext",
-    Action.SHIFT_RIGHT     : "Edit.CharRightExtend",
-    Action.CTRL_SHIFT_RIGHT: "Edit.WordNextExtend",
-    Action.UP              : "Edit.LineUp",
-    Action.SHIFT_UP        : "Edit.LineUpExtend",
-    Action.DOWN            : "Edit.LineDown",
-    Action.SHIFT_DOWN      : "Edit.LineDownExtend",
-    Action.HOME            : "Edit.LineStart",
-    Action.SHIFT_HOME      : "Edit.LineStartExtend",
-    Action.END             : "Edit.LineEnd",
-    Action.SHIFT_END       : "Edit.LineEndExtend",
-    Action.BACKSPACE       : "Edit.DeleteBackwards",
-    Action.SHIFT_BACKSPACE : "Edit.WordDeleteToStart",
-    Action.DELETE          : "Edit.Delete",
-    Action.SHIFT_DELETE    : "Edit.WordDeleteToEnd",
-    Action.DUPLICATE_LINE  : None,
-    Action.DELETE_LINE     : "Edit.LineDelete",
-    Action.ENTER           : "Edit.BreakLine",
-    Action.COMMENT         : "ReSharper.ReSharper_LineComment",
-    Action.EDIT_NEXT_MATCH : None,
-    Action.EDIT_PREV_MATCH : None,
-    Action.NEW_CARET_UP    : None,
-    Action.NEW_CARET_DOWN  : None,
-    Action.MOVE_LINE_UP    : None,
-    Action.MOVE_LINE_DOWN  : None,
-    Action.SCROLL_UP       : None,
-    Action.SCROLL_DOWN     : None,
-    Action.BACK            : None,
-    Action.FORWARD         : None,
+    Action.LEFT                 : "Edit.CharLeft",
+    Action.CTRL_LEFT            : "Edit.WordPrevious",
+    Action.SHIFT_LEFT           : "Edit.CharLeftExtend",
+    Action.CTRL_SHIFT_LEFT      : "Edit.WordPreviousExtend",
+    Action.RIGHT                : "Edit.CharRight",
+    Action.CTRL_RIGHT           : "Edit.WordNext",
+    Action.SHIFT_RIGHT          : "Edit.CharRightExtend",
+    Action.CTRL_SHIFT_RIGHT     : "Edit.WordNextExtend",
+    Action.UP                   : "Edit.LineUp",
+    Action.SHIFT_UP             : "Edit.LineUpExtend",
+    Action.DOWN                 : "Edit.LineDown",
+    Action.SHIFT_DOWN           : "Edit.LineDownExtend",
+    Action.HOME                 : "Edit.LineStart",
+    Action.SHIFT_HOME           : "Edit.LineStartExtend",
+    Action.END                  : "Edit.LineEnd",
+    Action.SHIFT_END            : "Edit.LineEndExtend",
+    Action.BACKSPACE            : "Edit.DeleteBackwards",
+    Action.SHIFT_BACKSPACE      : "Edit.WordDeleteToStart",
+    Action.DELETE               : "Edit.Delete",
+    Action.SHIFT_DELETE         : "Edit.WordDeleteToEnd",
+    Action.DUPLICATE_LINE       : None,
+    Action.DELETE_LINE          : "Edit.LineDelete",
+    Action.ENTER                : "Edit.BreakLine",
+    Action.COMMENT              : "ReSharper.ReSharper_LineComment",
+    Action.EDIT_NEXT_MATCH      : None,
+    Action.EDIT_PREV_MATCH      : None,
+    Action.NEW_CARET_ABOVE      : None,
+    Action.NEW_CARET_BELOW      : None,
+    Action.MOVE_LINE_UP         : "Edit.MoveSelectedLinesUp",
+    Action.MOVE_LINE_DOWN       : "Edit.MoveSelectedLinesDown",
+    Action.SCROLL_UP            : None,
+    Action.SCROLL_DOWN          : None,
+    Action.BACK                 : "View.NavigateBackward",
+    Action.FORWARD              : "View.NavigateForward",
+    Action.REVEAL_IN_EXPLORER   : None,
 }
 
 commands_vscode = {
-    Action.LEFT            : {'command': 'cursorLeft', 'when': 'textInputFocus'},
-    Action.CTRL_LEFT       : {'command': 'cursorWordLeft', 'when': 'textInputFocus && !accessibilityModeEnabled'},
-    Action.SHIFT_LEFT      : {'command': 'cursorLeftSelect', 'when': 'textInputFocus'},
-    Action.CTRL_SHIFT_LEFT : {'command': 'cursorWordLeftSelect', 'when': 'textInputFocus && !accessibilityModeEnabled'},
-    Action.RIGHT           : {'command': 'cursorRight', 'when': 'textInputFocus'},
-    Action.CTRL_RIGHT      : {'command': 'cursorWordRight', 'when': 'textInputFocus && !accessibilityModeEnabled'},
-    Action.SHIFT_RIGHT     : {'command': 'cursorRightSelect', 'when': 'textInputFocus'},
-    Action.CTRL_SHIFT_RIGHT: {'command': 'cursorWordRightSelect', 'when': 'textInputFocus && !accessibilityModeEnabled'},
-    Action.UP              : {'command': 'cursorUp', 'when': 'textInputFocus'},
-    Action.SHIFT_UP        : {'command': 'cursorUpSelect', 'when': 'textInputFocus'},
-    Action.DOWN            : {'command': 'cursorDown', 'when': 'textInputFocus'},
-    Action.SHIFT_DOWN      : {'command': 'cursorDownSelect', 'when': 'textInputFocus'},
-    Action.HOME            : {'command': 'cursorHome', 'when': 'textInputFocus'},
-    Action.SHIFT_HOME      : {'command': 'cursorHomeSelect', 'when': 'textInputFocus'},
-    Action.END             : {'command': 'cursorEnd', 'when': 'textInputFocus'},
-    Action.SHIFT_END       : {'command': 'cursorEndSelect', 'when': 'textInputFocus'},
-    Action.BACKSPACE       : {'command': 'deleteLeft', 'when': 'textInputFocus'},
-    Action.SHIFT_BACKSPACE : None,
-    Action.DELETE          : {'command': 'deleteRight', 'when': 'textInputFocus'},
-    Action.SHIFT_DELETE    : None,
-    Action.DUPLICATE_LINE  : {'command': 'editor.action.copyLinesDownAction', 'when': 'editorTextFocus && !editorReadonly'},
-    Action.DELETE_LINE     : {'command': 'editor.action.deleteLines', 'when': 'textInputFocus && !editorReadonly'},
-    Action.ENTER           : {'command': 'extension.multiCommand.execute', 'args': {'sequence': ['lineBreakInsert', 'cursorDown', 'cursorEnd', 'cursorHome']}, 'when': 'editorTextFocus && !editorReadonly'},
-    Action.COMMENT         : {'command': 'editor.action.commentLine', 'when': 'editorTextFocus && !editorReadonly'},
-    Action.EDIT_NEXT_MATCH : {'command': 'editor.action.addSelectionToNextFindMatch', 'when': 'editorFocus'},
-    Action.EDIT_PREV_MATCH : {'command': 'editor.action.addSelectionToPreviousFindMatch', 'when': 'editorFocus'},
-    Action.NEW_CARET_UP    : None,
-    Action.NEW_CARET_DOWN  : None,
-    Action.MOVE_LINE_UP    : None,
-    Action.MOVE_LINE_DOWN  : None,
-    Action.SCROLL_UP       : None,
-    Action.SCROLL_DOWN     : None,
-    Action.BACK            : None,
-    Action.FORWARD         : None,
+    Action.LEFT                 : {'command': 'cursorLeft', 'when': 'textInputFocus'},
+    Action.CTRL_LEFT            : {'command': 'cursorWordLeft', 'when': 'textInputFocus && !accessibilityModeEnabled'},
+    Action.SHIFT_LEFT           : {'command': 'cursorLeftSelect', 'when': 'textInputFocus'},
+    Action.CTRL_SHIFT_LEFT      : {'command': 'cursorWordLeftSelect', 'when': 'textInputFocus && !accessibilityModeEnabled'},
+    Action.RIGHT                : {'command': 'cursorRight', 'when': 'textInputFocus'},
+    Action.CTRL_RIGHT           : {'command': 'cursorWordRight', 'when': 'textInputFocus && !accessibilityModeEnabled'},
+    Action.SHIFT_RIGHT          : {'command': 'cursorRightSelect', 'when': 'textInputFocus'},
+    Action.CTRL_SHIFT_RIGHT     : {'command': 'cursorWordRightSelect', 'when': 'textInputFocus && !accessibilityModeEnabled'},
+    Action.UP                   : {'command': 'cursorUp', 'when': 'textInputFocus'},
+    Action.SHIFT_UP             : {'command': 'cursorUpSelect', 'when': 'textInputFocus'},
+    Action.DOWN                 : {'command': 'cursorDown', 'when': 'textInputFocus'},
+    Action.SHIFT_DOWN           : {'command': 'cursorDownSelect', 'when': 'textInputFocus'},
+    Action.HOME                 : {'command': 'cursorHome', 'when': 'textInputFocus'},
+    Action.SHIFT_HOME           : {'command': 'cursorHomeSelect', 'when': 'textInputFocus'},
+    Action.END                  : {'command': 'cursorEnd', 'when': 'textInputFocus'},
+    Action.SHIFT_END            : {'command': 'cursorEndSelect', 'when': 'textInputFocus'},
+    Action.BACKSPACE            : {'command': 'deleteLeft', 'when': 'textInputFocus'},
+    Action.SHIFT_BACKSPACE      : None,
+    Action.DELETE               : {'command': 'deleteRight', 'when': 'textInputFocus'},
+    Action.SHIFT_DELETE         : None,
+    Action.DUPLICATE_LINE       : {'command': 'editor.action.copyLinesDownAction', 'when': 'editorTextFocus && !editorReadonly'},
+    Action.DELETE_LINE          : {'command': 'editor.action.deleteLines', 'when': 'textInputFocus && !editorReadonly'},
+    Action.ENTER                : {'command': 'extension.multiCommand.execute', 'args': {'sequence': ['lineBreakInsert', 'cursorDown', 'cursorEnd', 'cursorHome']}, 'when': 'editorTextFocus && !editorReadonly'},
+    Action.COMMENT              : {'command': 'editor.action.commentLine', 'when': 'editorTextFocus && !editorReadonly'},
+    Action.EDIT_NEXT_MATCH      : {'command': 'editor.action.addSelectionToNextFindMatch', 'when': 'editorFocus'},
+    Action.EDIT_PREV_MATCH      : {'command': 'editor.action.addSelectionToPreviousFindMatch', 'when': 'editorFocus'},
+    Action.NEW_CARET_ABOVE      : {'command': 'editor.action.insertCursorAbove', 'when': 'editorFocus'},
+    Action.NEW_CARET_BELOW      : {'command': 'editor.action.insertCursorBelow', 'when': 'editorFocus'},
+    Action.MOVE_LINE_UP         : None,
+    Action.MOVE_LINE_DOWN       : None,
+    Action.SCROLL_UP            : None,
+    Action.SCROLL_DOWN          : None,
+    Action.BACK                 : None,
+    Action.FORWARD              : None,
+    Action.REVEAL_IN_EXPLORER   : {'command': 'editor.action.revealFileInOS', 'when': 'editorFocus'},
 }
 
 commands_pycharm = {
-    Action.LEFT            : "EditorLeft",
-    Action.CTRL_LEFT       : "EditorPreviousWord",
-    Action.SHIFT_LEFT      : "EditorLeftWithSelection",
-    Action.CTRL_SHIFT_LEFT : "EditorPreviousWordWithSelection",
-    Action.RIGHT           : "EditorRight",
-    Action.CTRL_RIGHT      : "EditorNextWord",
-    Action.SHIFT_RIGHT     : "EditorRightWithSelection",
-    Action.CTRL_SHIFT_RIGHT: "EditorNextWordWithSelection",
-    Action.UP              : "EditorUp",
-    Action.SHIFT_UP        : "EditorUpWithSelection",
-    Action.DOWN            : "EditorDown",
-    Action.SHIFT_DOWN      : "EditorDownWithSelection",
-    Action.HOME            : "EditorLineStart",
-    Action.SHIFT_HOME      : "EditorLineStartWithSelection",
-    Action.END             : "EditorLineEnd",
-    Action.SHIFT_END       : "EditorLineEndWithSelection",
-    Action.BACKSPACE       : None,
-    Action.SHIFT_BACKSPACE : None,
-    Action.DELETE          : None,
-    Action.SHIFT_DELETE    : None,
-    Action.DUPLICATE_LINE  : None,
-    Action.DELETE_LINE     : None,
-    Action.ENTER           : None,
-    Action.COMMENT         : "CommentByLineComment",
-    Action.EDIT_NEXT_MATCH : None,
-    Action.EDIT_PREV_MATCH : None,
-    Action.NEW_CARET_UP    : None,
-    Action.NEW_CARET_DOWN  : None,
-    Action.MOVE_LINE_UP    : "MoveLineUp",
-    Action.MOVE_LINE_DOWN  : "MoveLineDown",
-    Action.SCROLL_UP       : None,
-    Action.SCROLL_DOWN     : None,
-    Action.BACK            : "Back",
-    Action.FORWARD         : "Forward",
+    Action.LEFT                 : "EditorLeft",
+    Action.CTRL_LEFT            : "EditorPreviousWord",
+    Action.SHIFT_LEFT           : "EditorLeftWithSelection",
+    Action.CTRL_SHIFT_LEFT      : "EditorPreviousWordWithSelection",
+    Action.RIGHT                : "EditorRight",
+    Action.CTRL_RIGHT           : "EditorNextWord",
+    Action.SHIFT_RIGHT          : "EditorRightWithSelection",
+    Action.CTRL_SHIFT_RIGHT     : "EditorNextWordWithSelection",
+    Action.UP                   : "EditorUp",
+    Action.SHIFT_UP             : "EditorUpWithSelection",
+    Action.DOWN                 : "EditorDown",
+    Action.SHIFT_DOWN           : "EditorDownWithSelection",
+    Action.HOME                 : "EditorLineStart",
+    Action.SHIFT_HOME           : "EditorLineStartWithSelection",
+    Action.END                  : "EditorLineEnd",
+    Action.SHIFT_END            : "EditorLineEndWithSelection",
+    Action.BACKSPACE            : None,
+    Action.SHIFT_BACKSPACE      : None,
+    Action.DELETE               : None,
+    Action.SHIFT_DELETE         : None,
+    Action.DUPLICATE_LINE       : None,
+    Action.DELETE_LINE          : "EditorDeleteLine",
+    Action.ENTER                : None,
+    Action.COMMENT              : "CommentByLineComment",
+    Action.EDIT_NEXT_MATCH      : None,
+    Action.EDIT_PREV_MATCH      : None,
+    Action.NEW_CARET_ABOVE      : "EditorCloneCaretAbove",
+    Action.NEW_CARET_BELOW      : "EditorCloneCaretBelow",
+    Action.MOVE_LINE_UP         : "MoveLineUp",
+    Action.MOVE_LINE_DOWN       : "MoveLineDown",
+    Action.SCROLL_UP            : None,
+    Action.SCROLL_DOWN          : None,
+    Action.BACK                 : "Back",
+    Action.FORWARD              : "Forward",
+    Action.REVEAL_IN_EXPLORER   : "ShowFilePath",
 }
 # "Back",
 # "Forward",
@@ -487,41 +491,42 @@ def main():
     # os.mkdir(TMP_FOLDER)
 
     shct = Shortcut("VisualStudio/Exported-2022-02-23.vssettings", "PyCharm/pycharm_settings.zip")
-    shct.add(Action.LEFT            , "Alt+J               ")
-    shct.add(Action.CTRL_LEFT       , "Ctrl+Alt+J          ")
-    shct.add(Action.SHIFT_LEFT      , "Shift+Alt+J         ")
-    shct.add(Action.CTRL_SHIFT_LEFT , "Ctrl+Shift+Alt+J    ")
-    shct.add(Action.RIGHT           , "Alt+L               ")
-    shct.add(Action.CTRL_RIGHT      , "Ctrl+Alt+L          ")
-    shct.add(Action.SHIFT_RIGHT     , "Shift+Alt+L         ")
-    shct.add(Action.CTRL_SHIFT_RIGHT, "Ctrl+Shift+Alt+L    ")
-    shct.add(Action.UP              , "Alt+I               ")
-    shct.add(Action.SHIFT_UP        , "Shift+Alt+I         ")
-    shct.add(Action.DOWN            , "Alt+K               ")
-    shct.add(Action.SHIFT_DOWN      , "Shift+Alt+K         ")
-    shct.add(Action.HOME            , "Alt+U               ")
-    shct.add(Action.SHIFT_HOME      , "Shift+Alt+U         ")
-    shct.add(Action.END             , "Alt+O               ")
-    shct.add(Action.SHIFT_END       , "Shift+Alt+O         ")
-    shct.add(Action.BACKSPACE       , "Alt+N               ")
-    shct.add(Action.SHIFT_BACKSPACE , "Ctrl+Alt+N          ")
-    shct.add(Action.DELETE          , "Shift+Alt+N         ")
-    shct.add(Action.SHIFT_DELETE    , "Ctrl+Shift+Alt+N    ")
-    shct.add(Action.DUPLICATE_LINE  , "Ctrl+D              ")
-    shct.add(Action.DELETE_LINE     , "Alt+D               ")
-    shct.add(Action.ENTER           , "Alt+M               ")
-    shct.add(Action.COMMENT         , "Ctrl+Num /          ")
-    shct.add(Action.COMMENT         , "Alt+7               ")
-    shct.add(Action.EDIT_NEXT_MATCH , "Alt+W               ")
-    shct.add(Action.EDIT_PREV_MATCH , "Sift+Alt+W          ")
-    shct.add(Action.NEW_CARET_UP    , None)
-    shct.add(Action.NEW_CARET_DOWN  , None)
-    shct.add(Action.MOVE_LINE_UP    , "Alt+P               ")
-    shct.add(Action.MOVE_LINE_DOWN  , "Alt+é               ")
-    shct.add(Action.SCROLL_UP       , None)
-    shct.add(Action.SCROLL_DOWN     , None)
-    shct.add(Action.BACK            , "Alt+,               ")
-    shct.add(Action.FORWARD         , "Alt+.               ")
+    shct.add(Action.LEFT                , "Alt+J               ")
+    shct.add(Action.CTRL_LEFT           , "Ctrl+Alt+J          ")
+    shct.add(Action.SHIFT_LEFT          , "Shift+Alt+J         ")
+    shct.add(Action.CTRL_SHIFT_LEFT     , "Ctrl+Shift+Alt+J    ")
+    shct.add(Action.RIGHT               , "Alt+L               ")
+    shct.add(Action.CTRL_RIGHT          , "Ctrl+Alt+L          ")
+    shct.add(Action.SHIFT_RIGHT         , "Shift+Alt+L         ")
+    shct.add(Action.CTRL_SHIFT_RIGHT    , "Ctrl+Shift+Alt+L    ")
+    shct.add(Action.UP                  , "Alt+I               ")
+    shct.add(Action.SHIFT_UP            , "Shift+Alt+I         ")
+    shct.add(Action.DOWN                , "Alt+K               ")
+    shct.add(Action.SHIFT_DOWN          , "Shift+Alt+K         ")
+    shct.add(Action.HOME                , "Alt+U               ")
+    shct.add(Action.SHIFT_HOME          , "Shift+Alt+U         ")
+    shct.add(Action.END                 , "Alt+O               ")
+    shct.add(Action.SHIFT_END           , "Shift+Alt+O         ")
+    shct.add(Action.BACKSPACE           , "Alt+N               ")
+    shct.add(Action.SHIFT_BACKSPACE     , "Ctrl+Alt+N          ")
+    shct.add(Action.DELETE              , "Shift+Alt+N         ")
+    shct.add(Action.SHIFT_DELETE        , "Ctrl+Shift+Alt+N    ")
+    shct.add(Action.DUPLICATE_LINE      , "Ctrl+D              ")
+    shct.add(Action.DELETE_LINE         , "Alt+D               ")
+    shct.add(Action.ENTER               , "Alt+M               ")
+    shct.add(Action.COMMENT             , "Ctrl+Num /          ")
+    shct.add(Action.COMMENT             , "Alt+7               ")
+    shct.add(Action.EDIT_NEXT_MATCH     , "Alt+W               ")
+    shct.add(Action.EDIT_PREV_MATCH     , "Sift+Alt+W          ")
+    shct.add(Action.NEW_CARET_ABOVE     , "Ctrl+Alt+I          ")
+    shct.add(Action.NEW_CARET_BELOW     , "Ctrl+Alt+K          ")
+    shct.add(Action.MOVE_LINE_UP        , "Alt+P               ")
+    shct.add(Action.MOVE_LINE_DOWN      , "Alt+é               ")
+    shct.add(Action.SCROLL_UP           , None)
+    shct.add(Action.SCROLL_DOWN         , None)
+    shct.add(Action.BACK                , "Alt+,               ")
+    shct.add(Action.FORWARD             , "Alt+.               ")
+    shct.add(Action.REVEAL_IN_EXPLORER  , "Alt+E               ")
     shct.save()
 
     # try:
