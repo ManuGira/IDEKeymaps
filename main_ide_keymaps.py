@@ -237,7 +237,19 @@ class IDEKeymapInterface(metaclass=abc.ABCMeta):
     def save(self):
         raise NotImplementedError
 
+    @abc.abstractmethod
+    def get_name(self):
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def is_capable_of(self, action: Action):
+        raise NotImplementedError
+
+
 class VisualStudio(IDEKeymapInterface):
+    name = "VisualStudio"
+    commands = commands_visualstudio
+
     def __init__(self, visualstudio_file):
         self.visualstudio_file = visualstudio_file
         self.shortcuts = VisualStudio.load(self.visualstudio_file)
@@ -278,7 +290,7 @@ class VisualStudio(IDEKeymapInterface):
 
     def add(self, action, shortcut_str):
         shortcut_str = VisualStudio.format_shortcut(shortcut_str)
-        cmd = commands_visualstudio[action]
+        cmd = self.commands[action]
         if cmd is None:
             return
 
@@ -303,8 +315,16 @@ class VisualStudio(IDEKeymapInterface):
         with open(f"{BUILD_FOLDER}/Altitude.vssettings", 'w') as file:
             file.write(shortcuts_str)
 
+    def get_name(self):
+        return self.name
 
-class VSCode:
+    def is_capable_of(self, action: Action):
+        return action in self.commands and self.commands[action] is not None
+
+class VSCode(IDEKeymapInterface):
+    name = "VSCode"
+    commands = commands_vscode
+
     def __init__(self):
         self.shortcuts = []
 
@@ -328,7 +348,7 @@ class VSCode:
 
     def add(self, action, shortcut_str):
         shortcut_str = VSCode.format_shortcut(shortcut_str)
-        cmd = commands_vscode[action]
+        cmd = self.commands[action]
         if cmd is None:
             return
 
@@ -340,8 +360,16 @@ class VSCode:
         with open(f"{BUILD_FOLDER}/keybindings_altitude.json", 'w') as file:
             file.write(json.dumps(self.shortcuts, indent=4))
 
+    def get_name(self):
+        return self.name
+
+    def is_capable_of(self, action: Action):
+        return action in self.commands and self.commands[action] is not None
 
 class PyCharm(IDEKeymapInterface):
+    name = "PacCharm"
+    commands = commands_pycharm
+
     def __init__(self, pycharm_settings_zipfile):
         FOLDER_SRC, self.name, ext = split_filename(pycharm_settings_zipfile)
         self.FOLDER_EXTRACTED = os.path.join(TMP_FOLDER, self.name)
@@ -408,7 +436,7 @@ class PyCharm(IDEKeymapInterface):
 
     def add(self, action, shortcut_str):
         shortcut_str = PyCharm.format_shortcut(shortcut_str)
-        cmd = commands_pycharm[action]
+        cmd = self.commands[action]
         if cmd is None:
             return
 
@@ -471,20 +499,54 @@ class PyCharm(IDEKeymapInterface):
         #         file_src = os.path.join(self.FOLDER_EXTRACTED, filename)
         #         zf.write(file_src, filename, compress_type=zipfile.ZIP_DEFLATED)
 
+    def get_name(self):
+        return self.name
+
+    def is_capable_of(self, action: Action):
+        return action in self.commands and self.commands[action] is not None
 
 class Shortcut:
     def __init__(self, ide_list: list[IDEKeymapInterface]):
         self.ide_list = ide_list
+        self.items = []
 
     def add(self, action, shortcut_str):
         if shortcut_str is None:
             return
+        self.items.append((action, shortcut_str))
         for ide in self.ide_list:
             ide.add(action, shortcut_str)
 
     def save(self):
         for ide in self.ide_list:
             ide.save()
+
+    def generate_markdown_table(self):
+        lines = []
+        header = ["Keymap", "Action"] + [ide.get_name() for ide in self.ide_list]
+        # lines.append(header)
+        # lines.append("".join(["|" if c == "|" else "-" for c in header]))
+
+        for action, shortcut_str in self.items:
+            line = [shortcut_str, action.name]
+            for ide in self.ide_list:
+                line.append("X" if ide.is_capable_of(action) else " ")
+            lines.append(line)
+
+        max_len = 0
+        for line in lines:
+            for word in line:
+                max_len = len(word) if max_len < len(word) else max_len
+
+        sep_line = ["-"*max_len for _ in header]
+
+        out = ""
+        for line in [header, sep_line] + lines:
+            for word in line:
+                out += "|" + word + " "*(max_len-len(word))
+            out += "|\n"
+        return out
+
 
 
 
@@ -539,6 +601,10 @@ def main():
     shct.add(Action.FORWARD             , "Alt+.               ")
     shct.add(Action.REVEAL_IN_EXPLORER  , "Alt+E               ")
     shct.save()
+
+    keymap_array: str = shct.generate_markdown_table()
+    import generate_readme
+    generate_readme.write(keymap_array)
 
     # try:
     #     shutil.rmtree(TMP_FOLDER)
