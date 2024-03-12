@@ -211,7 +211,7 @@ def dict2xml(dic):
     elem = et.Element(dic["tag"])
     elem.text = dic["text"]
     elem.tail = dic["tail"]
-    for att in dic["attrib"]:
+    for att in sorted(dic["attrib"].keys()):
         elem.set(att, dic["attrib"][att])
 
     for child in dic["children"]:
