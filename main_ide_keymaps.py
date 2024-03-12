@@ -490,7 +490,7 @@ def main():
     os.mkdir(BUILD_FOLDER)
     # os.mkdir(TMP_FOLDER)
 
-    shct = Shortcut("VisualStudio/Exported-2022-02-23.vssettings", "PyCharm/pycharm_settings.zip")
+    shct = Shortcut("models/VisualStudio/Exported-2022-02-23.vssettings", "models/PyCharm/pycharm_settings.zip")
     shct.add(Action.LEFT                , "Alt+J               ")
     shct.add(Action.CTRL_LEFT           , "Ctrl+Alt+J          ")
     shct.add(Action.SHIFT_LEFT          , "Shift+Alt+J         ")
