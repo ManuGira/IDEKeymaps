@@ -1,3 +1,4 @@
+import abc
 import enum
 import json
 import os
@@ -7,7 +8,7 @@ import xml.etree.ElementTree as et
 import zipfile
 
 BUILD_FOLDER = os.path.join(os.path.dirname(os.path.realpath(__file__)), "build")
-TMP_FOLDER = BUILD_FOLDER
+TMP_FOLDER = os.path.join(BUILD_FOLDER, "tmp")
 
 class Action(enum.IntEnum):
     LEFT = enum.auto()
@@ -227,7 +228,16 @@ def dict2xml(dic):
 #         txt = txt.replace(broken_utf8, special_character)
 #     return txt
 
-class VisualStudio:
+class IDEKeymapInterface(metaclass=abc.ABCMeta):
+    @abc.abstractmethod
+    def add(self, action, shortcut_str):
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def save(self):
+        raise NotImplementedError
+
+class VisualStudio(IDEKeymapInterface):
     def __init__(self, visualstudio_file):
         self.visualstudio_file = visualstudio_file
         self.shortcuts = VisualStudio.load(self.visualstudio_file)
@@ -331,7 +341,7 @@ class VSCode:
             file.write(json.dumps(self.shortcuts, indent=4))
 
 
-class PyCharm:
+class PyCharm(IDEKeymapInterface):
     def __init__(self, pycharm_settings_zipfile):
         FOLDER_SRC, self.name, ext = split_filename(pycharm_settings_zipfile)
         self.FOLDER_EXTRACTED = os.path.join(TMP_FOLDER, self.name)
@@ -463,22 +473,19 @@ class PyCharm:
 
 
 class Shortcut:
-    def __init__(self, visualstudio_file, pycharm_settings_zipfile):
-        self.visualstudio = VisualStudio(visualstudio_file)
-        self.vscode = VSCode()
-        self.pycharm = PyCharm(pycharm_settings_zipfile)
+    def __init__(self, ide_list: list[IDEKeymapInterface]):
+        self.ide_list = ide_list
 
     def add(self, action, shortcut_str):
         if shortcut_str is None:
             return
-        self.visualstudio.add(action, shortcut_str)
-        self.vscode.add(action, shortcut_str)
-        self.pycharm.add(action, shortcut_str)
+        for ide in self.ide_list:
+            ide.add(action, shortcut_str)
 
     def save(self):
-        self.visualstudio.save()
-        self.vscode.save()
-        self.pycharm.save()
+        for ide in self.ide_list:
+            ide.save()
+
 
 
 def main():
@@ -488,9 +495,13 @@ def main():
     except FileNotFoundError:
         pass
     os.mkdir(BUILD_FOLDER)
-    # os.mkdir(TMP_FOLDER)
+    os.mkdir(TMP_FOLDER)
 
-    shct = Shortcut("models/VisualStudio/Exported-2022-02-23.vssettings", "models/PyCharm/pycharm_settings.zip")
+    pycharm = PyCharm("models/PyCharm/pycharm_settings.zip")
+    vscode = VSCode()
+    visual_studio = VisualStudio("models/VisualStudio/Exported-2022-02-23.vssettings")
+
+    shct = Shortcut([pycharm, vscode, visual_studio])
     shct.add(Action.LEFT                , "Alt+J               ")
     shct.add(Action.CTRL_LEFT           , "Ctrl+Alt+J          ")
     shct.add(Action.SHIFT_LEFT          , "Shift+Alt+J         ")
