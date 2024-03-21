@@ -46,6 +46,8 @@ class Action(enum.IntEnum):
     BACK = enum.auto()
     FORWARD = enum.auto()
     REVEAL_IN_EXPLORER = enum.auto()
+    REFORMAT_CODE = enum.auto()
+    COMPARE_SELECTION_WITH_CLIPBOARD = enum.auto()
 
 commands_visualstudio = {
     Action.LEFT                 : "Edit.CharLeft",
@@ -83,6 +85,8 @@ commands_visualstudio = {
     Action.BACK                 : "View.NavigateBackward",
     Action.FORWARD              : "View.NavigateForward",
     Action.REVEAL_IN_EXPLORER   : None,
+    Action.REFORMAT_CODE        : "Edit.FormatDocument",  # TODO: test it
+    Action.COMPARE_SELECTION_WITH_CLIPBOARD: None,
 }
 
 commands_vscode = {
@@ -121,6 +125,8 @@ commands_vscode = {
     Action.BACK                 : None,
     Action.FORWARD              : None,
     Action.REVEAL_IN_EXPLORER   : {'command': 'editor.action.revealFileInOS', 'when': 'editorFocus'},
+    Action.REFORMAT_CODE        : {'command': 'editor.action.formatDocument', 'when': 'editorTextFocus'},  # TODO: test it
+    Action.COMPARE_SELECTION_WITH_CLIPBOARD: {'command': 'editor.action.compareWithClipboard', 'when': 'editorTextFocus'},  # Todo: test it
 }
 
 commands_pycharm = {
@@ -159,6 +165,8 @@ commands_pycharm = {
     Action.BACK                 : "Back",
     Action.FORWARD              : "Forward",
     Action.REVEAL_IN_EXPLORER   : "ShowFilePath",
+    Action.REFORMAT_CODE        : "ReformatCode",
+    Action.COMPARE_SELECTION_WITH_CLIPBOARD: "CompareSelectionWithClipboard",
 }
 # "Back",
 # "Forward",
@@ -598,7 +606,7 @@ def main():
     shct.add(Action.DELETE              , "Shift+Alt+N         ")
     shct.add(Action.SHIFT_DELETE        , "Ctrl+Shift+Alt+N    ")
     shct.add(Action.DUPLICATE_LINE      , "Ctrl+D              ")
-    shct.add(Action.DELETE_LINE         , "Alt+D               ")
+    shct.add(Action.DELETE_LINE         , "Ctrl+Y              ")
     shct.add(Action.ENTER               , "Alt+M               ")
     shct.add(Action.COMMENT             , "Ctrl+Num /          ")
     shct.add(Action.COMMENT             , "Alt+7               ")
@@ -613,6 +621,8 @@ def main():
     shct.add(Action.BACK                , "Alt+,               ")
     shct.add(Action.FORWARD             , "Alt+.               ")
     shct.add(Action.REVEAL_IN_EXPLORER  , "Alt+E               ")
+    shct.add(Action.REFORMAT_CODE       , "Alt+S               ")
+    shct.add(Action.COMPARE_SELECTION_WITH_CLIPBOARD, "Alt+C   ")
     shct.save()
 
     keymap_array: str = shct.generate_markdown_table()
