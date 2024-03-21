@@ -448,8 +448,8 @@ class PyCharm(IDEKeymapInterface):
         if not found:
             gen1 = {
                 'tag': 'action',
-                'tail': '\nt1',
-                'text': '\ntxt1',
+                'tail': '\n',
+                'text': '\n',
                 'attrib': {'id': cmd},
                 'children': []
             }
@@ -457,7 +457,7 @@ class PyCharm(IDEKeymapInterface):
 
         gen2 = {
             'tag': 'keyboard-shortcut',
-            'tail': '\nt2',
+            'tail': '\n',
             'text': None,
             'attrib': {'first-keystroke': shortcut_str},
             'children': []
@@ -473,7 +473,20 @@ class PyCharm(IDEKeymapInterface):
 
         root = dict2xml(self.shortcuts)
         shortcuts_str = et.tostring(root).decode("cp1252")
-        shortcuts_str = xml.dom.minidom.parseString(shortcuts_str).toprettyxml()
+        shortcuts_str = xml.dom.minidom.parseString(shortcuts_str).toprettyxml(indent="  ")
+
+
+        def ensure_single_space_before_closing_balisis(txt):
+            N = len(txt)
+            while True:
+                txt = txt.replace(" />", "/>")
+                if N == len(txt):
+                    break
+                N = len(txt)
+            txt = txt.replace("/>", " />")
+            return txt
+
+        shortcuts_str = ensure_single_space_before_closing_balisis(shortcuts_str)
 
         def clean_spaces(txt):
             N = len(txt)
