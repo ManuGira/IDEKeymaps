@@ -10,5 +10,8 @@ def write(keymaps_array: str):
     text = header + MODEL
     text = text.replace(f"<<<{TAGS.KEYMAPS_ARRAY.name}>>>", keymaps_array)
 
+    text = text.replace("](../images/", "](images/")
+    text = text.replace("](..%2Fimages%2F", "](images%2F")
+
     with open("README.md", "w") as file:
         file.write(text)

@@ -32,7 +32,7 @@ _(This readme has been generated with generate_readme.py)_
 |Ctrl+Alt+I                      |NEW_CARET_ABOVE                 |X                               |X                               |                                |                                |
 |Ctrl+Alt+K                      |NEW_CARET_BELOW                 |X                               |X                               |                                |                                |
 |Alt+P                           |MOVE_LINE_UP                    |X                               |                                |X                               |X                               |
-|Alt+é                           |MOVE_LINE_DOWN                  |X                               |                                |X                               |X                               |
+|Alt+ï¿½                           |MOVE_LINE_DOWN                  |X                               |                                |X                               |X                               |
 |Alt+,                           |BACK                            |X                               |                                |X                               |X                               |
 |Alt+.                           |FORWARD                         |X                               |                                |X                               |X                               |
 |Alt+E                           |REVEAL_IN_EXPLORER              |X                               |X                               |                                |                                |
@@ -53,6 +53,13 @@ _(This readme has been generated with generate_readme.py)_
 1. Open Keyboard Shortcut as JSON by clicking on the ![](images/vscode_open_json.png) icon in top right corner
 1. Paste the json content here
 
+#### Visual Studio
+1. Tools > Import and Export Settings... > Import selected environment settings
+
+## Export keymaps
+#### Visual Studio
+1. Tools > Import and Export Settings... > Export selected environment settings
+1. Select only: Options > Environment > Keyboard ![Export_VS2022.png](images%2FExport_VS2022.png)
 
 ## Future Works
 #### New actions:
