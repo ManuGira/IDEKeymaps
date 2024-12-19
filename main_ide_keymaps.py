@@ -255,22 +255,20 @@ class IDEKeymapInterface(metaclass=abc.ABCMeta):
 
 
 class VisualStudio(IDEKeymapInterface):
-    name = "VisualStudio"
     commands = commands_visualstudio
 
-    def __init__(self, visualstudio_file):
+    def __init__(self, visualstudio_file, suffix=""):
         self.visualstudio_file = visualstudio_file
-        self.shortcuts = VisualStudio.load(self.visualstudio_file)
+        self.visualstudio_xml = VisualStudio.load(self.visualstudio_file)
+        self.suffix = suffix
         self.clear_usershortcut()
 
     @staticmethod
     def load(visualstudio_file):
         with open(visualstudio_file, 'r') as file:
             visualstudio_str = file.read()
-        root = et.fromstring(visualstudio_str)
-        str1 = et.tostring(root).decode("cp1252")
-        visualstudio_dict = xml2dict(root)
-        return visualstudio_dict
+        visualstudio_xml = et.fromstring(visualstudio_str)
+        return visualstudio_xml
 
     @staticmethod
     def format_shortcut(shortcut_str):
@@ -293,8 +291,19 @@ class VisualStudio(IDEKeymapInterface):
         return "+".join(keys)
 
     def clear_usershortcut(self):
-        usershortcuts = self.shortcuts['children'][2]['children'][0]['children'][1]['children'][3]["children"]
-        self.shortcuts['children'][2]['children'][0]['children'][1]['children'][3]["children"] = []
+        self.visualstudio_xml.find("Category/Category/KeyboardShortcuts/UserShortcuts").clear()
+
+    def clear_usershortcut_resharper(self):
+        shortcut_path = "Category/Category/KeyboardShortcuts/UserShortcuts"
+
+        # filter out all resharper shortcuts
+        children = xml2dict(self.visualstudio_xml.find(shortcut_path))["children"]
+        children = [child for child in children if "ReSharper" not in child["attrib"]["Command"]]
+
+        # clear all children and re-add only the non-resharper ones
+        self.visualstudio_xml.find(shortcut_path).clear()
+        for child in children:
+            self.visualstudio_xml.find(shortcut_path).append(dict2xml(child))
 
     def add(self, action, shortcut_str):
         shortcut_str = VisualStudio.format_shortcut(shortcut_str)
@@ -312,25 +321,36 @@ class VisualStudio(IDEKeymapInterface):
             },
             "children": [],
         }
-        self.shortcuts['children'][2]['children'][0]['children'][1]['children'][3]["children"].append(shortcut_dict)
+        self.visualstudio_xml.find("Category/Category/KeyboardShortcuts/UserShortcuts").append(dict2xml(shortcut_dict))
 
     def save(self):
-        root = dict2xml(self.shortcuts)
-        shortcuts_str = et.tostring(root).decode("cp1252")
+        # save 2 version of the vsssetings. One with resharper shortcuts and one without
+
+        # create all foldr and subfolder if they doesn't exists
+        folder = f"{BUILD_FOLDER}/{self.get_name()}"
+        os.makedirs(folder, exist_ok=True)
+
+        shortcuts_str = et.tostring(self.visualstudio_xml).decode("cp1252")
         # shortcuts_str = repair_special_characters(shortcuts_str)
         shortcuts_str = xml.dom.minidom.parseString(shortcuts_str).toprettyxml()
 
-        with open(f"{BUILD_FOLDER}/Altitude.vssettings", 'w') as file:
+        with open(f"{folder}/Altitude.vssettings", 'w') as file:
+            file.write(shortcuts_str)
+
+        self.clear_usershortcut_resharper()
+        shortcuts_str = et.tostring(self.visualstudio_xml).decode("cp1252")
+        # shortcuts_str = repair_special_characters(shortcuts_str)
+        shortcuts_str = xml.dom.minidom.parseString(shortcuts_str).toprettyxml()
+        with open(f"{folder}/Altitude_NoReSharper.vssettings", 'w') as file:
             file.write(shortcuts_str)
 
     def get_name(self):
-        return self.name
+        return self.__class__.__name__ + self.suffix
 
     def is_capable_of(self, action: Action):
         return action in self.commands and self.commands[action] is not None
 
 class VSCode(IDEKeymapInterface):
-    name = "VSCode"
     commands = commands_vscode
 
     def __init__(self):
@@ -365,23 +385,25 @@ class VSCode(IDEKeymapInterface):
         self.shortcuts.append(shortcut_dict)
 
     def save(self):
-        with open(f"{BUILD_FOLDER}/keybindings_altitude.json", 'w') as file:
+        # create all foldr and subfolder if they doesn't exists
+        folder = f"{BUILD_FOLDER}/{self.get_name()}"
+        os.makedirs(folder, exist_ok=True)
+        with open(f"{folder}/keybindings_altitude.json", 'w') as file:
             file.write(json.dumps(self.shortcuts, indent=4))
 
     def get_name(self):
-        return self.name
+        return self.__class__.__name__
 
     def is_capable_of(self, action: Action):
         return action in self.commands and self.commands[action] is not None
 
 class PyCharm(IDEKeymapInterface):
-    name = "PacCharm"
     commands = commands_pycharm
 
     def __init__(self, pycharm_settings_zipfile):
         FOLDER_SRC, self.name, ext = split_filename(pycharm_settings_zipfile)
         self.FOLDER_EXTRACTED = os.path.join(TMP_FOLDER, self.name)
-        self.FOLDER_DST = os.path.join(BUILD_FOLDER, self.name)
+        self.FOLDER_DST = os.path.join(BUILD_FOLDER, self.get_name(), self.name)
 
         with zipfile.ZipFile(pycharm_settings_zipfile, 'r') as zip_ref:
             zip_ref.extractall(self.FOLDER_EXTRACTED)
@@ -442,6 +464,8 @@ class PyCharm(IDEKeymapInterface):
         for gen1 in self.shortcuts["children"]:
             gen1["children"] = [gen2 for gen2 in gen1["children"] if gen2["tag"] != "keyboard-shortcut"]
 
+
+
     def add(self, action, shortcut_str):
         shortcut_str = PyCharm.format_shortcut(shortcut_str)
         cmd = self.commands[action]
@@ -477,7 +501,7 @@ class PyCharm(IDEKeymapInterface):
         t["children"] = []
         t["children"].append(self.shortcuts["children"][9]["children"][0])
         t["children"].append(self.shortcuts["children"][9]["children"][0].copy())
-        print(et.tostring(dict2xml(t)).decode("cp1252"))
+        # print(et.tostring(dict2xml(t)).decode("cp1252"))
 
         root = dict2xml(self.shortcuts)
         shortcuts_str = et.tostring(root).decode("cp1252")
@@ -509,7 +533,8 @@ class PyCharm(IDEKeymapInterface):
 
         shortcuts_str = clean_spaces(shortcuts_str)
 
-
+        folder = os.path.dirname(self.KEYMAP_FILE)
+        os.makedirs(folder, exist_ok=True)
         with open(self.KEYMAP_FILE, 'w') as file:
             file.write(shortcuts_str)
 
@@ -521,7 +546,7 @@ class PyCharm(IDEKeymapInterface):
         #         zf.write(file_src, filename, compress_type=zipfile.ZIP_DEFLATED)
 
     def get_name(self):
-        return self.name
+        return self.__class__.__name__
 
     def is_capable_of(self, action: Action):
         return action in self.commands and self.commands[action] is not None
@@ -582,9 +607,10 @@ def main():
 
     pycharm = PyCharm("models/PyCharm/pycharm_settings.zip")
     vscode = VSCode()
-    visual_studio = VisualStudio("models/VisualStudio/Exported-2022-02-23.vssettings")
+    visual_studio_2017 = VisualStudio("models/VisualStudio2017/Exported-2022-02-23.vssettings", suffix="2017")
+    visual_studio_2022 = VisualStudio("models/VisualStudio2022/Exported-2024-12-19.vssettings", suffix="2022")
 
-    shct = Shortcut([pycharm, vscode, visual_studio])
+    shct = Shortcut([pycharm, vscode, visual_studio_2017, visual_studio_2022])
     shct.add(Action.LEFT                , "Alt+J               ")
     shct.add(Action.CTRL_LEFT           , "Ctrl+Alt+J          ")
     shct.add(Action.SHIFT_LEFT          , "Shift+Alt+J         ")
