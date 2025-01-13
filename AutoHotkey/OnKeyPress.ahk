@@ -1,9 +1,3 @@
-; Function to handle keypresses
-HandleKeyPress(key) {
-    ToolTip("Key pressed: " key, , , 1) ; Show the key pressed
-    Sleep(500) ; Keep the tooltip visible for a short time
-    ToolTip("") ; Clear the tooltip
-}
 
 ; List of keys to bind
 keyList := [
@@ -45,9 +39,17 @@ numpadKeys := [
 ; Combine all keys into a single list
 keyList.Push(numpadKeys*)
 
-; Loop through the keys and create hotkeys
-for key in keyList {
-    Hotkey "~*" key, HandleKeyPress
+
+; Function to handle keypresses
+Callback(key) {
+    ToolTip("Key pressed UF: " key, , , 1) ; Show the key pressed
+    Sleep(500) ; Keep the tooltip visible for a short time
+    ToolTip("") ; Clear the tooltip
 }
 
-
+OnKeyPressSubscribe(user_function) {
+    ; Loop through the keys and create hotkeys
+    for key in keyList {
+        Hotkey "~*" key, user_function
+    }
+}
