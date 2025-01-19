@@ -3,8 +3,8 @@
 #Include ../Utils/KeyStateObserver.ahk
 
 
-KeyStateObserver.Add("Numpad1")
-KeyStateObserver.Add("~$Numpad2")  ; with ~$ they key is not discarded
+KeyStateObserver.Add("Numpad1", false)  ; passThrough=false: will be blocked
+KeyStateObserver.Add("Numpad2", true) ; passThrough=true: will still be send
 
 counter := 0
 MyCallback(key, state){

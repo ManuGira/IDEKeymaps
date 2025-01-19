@@ -48,15 +48,20 @@ class KeyStateObserver{
         KeyStateObserver.UserCallbackList.Push(userCallback)
     }
 
-    static Add(key) {
+    static Add(key, passThrough) {
+        if KeyStateObserver.isKeyDown.Has(key)
+            return 
+
+        prefix := passThrough ? "~$*" : "*"
+
         KeyStateObserver.isKeyDown[key] := false
-        Hotkey "*" key, (k) => KeyStateObserver.UpdateKeyState(key, true)
-        Hotkey "*" key " Up", (k) => KeyStateObserver.UpdateKeyState(key, false)
+        Hotkey prefix key, (k) => KeyStateObserver.UpdateKeyState(key, true)
+        Hotkey prefix key " Up", (k) => KeyStateObserver.UpdateKeyState(key, false)
 
         if KeyStateObserver.shiftMap.Has(key) {
             shiftkey := KeyStateObserver.shiftMap[key]
-            Hotkey "*" shiftkey, (k) => KeyStateObserver.UpdateKeyState(key, true)
-            Hotkey "*" shiftkey " Up", (k) => KeyStateObserver.UpdateKeyState(key, false)
+            Hotkey prefix shiftkey, (k) => KeyStateObserver.UpdateKeyState(key, true)
+            Hotkey prefix shiftkey " Up", (k) => KeyStateObserver.UpdateKeyState(key, false)
         }
     }
 
