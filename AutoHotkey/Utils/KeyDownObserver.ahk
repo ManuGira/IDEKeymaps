@@ -1,7 +1,5 @@
 #Requires AutoHotkey v2.0
 
-F1::KeyHistory
-
 global isKeyDown := Map()
 
 global shiftMap := Map(
@@ -16,22 +14,32 @@ global shiftMap := Map(
     "Numpad9", "NumpadPgUp"
 )
 
+global UserCallback
+
 UpdateKeyState(key, state) {
     global
 
     ; remove " up" from the key name if its there
-    key := RegExReplace(key, "i) up$")
+    key := RegExReplace(key, "i) Up$")
     ; remove first character if it is a *
     key := RegExReplace(key, "i)^\*")
 
 
-    ToolTip("Key: " key ", State: " (state ? "down" : "up"), , , 1)
+    ; ("Key: " key ", State: " (state ? "down" : "up"), , , 1)
 
     if not isKeyDown.Has(key)
         throw("Key not found: " key)  ; This will probably never happen
     
     isKeyDown[key] := state
     HotIf()
+
+    if UserCallback
+        UserCallback(key, state)
+}
+
+OnKeyDownSubscribe(user_callback) {
+    global
+    UserCallback := user_callback
 }
 
 ObserveKeyDown(key) {
