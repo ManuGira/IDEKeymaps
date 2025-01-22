@@ -1,14 +1,14 @@
 #Requires AutoHotkey v2.0
 
-#Include Utils/KeyDownObserver.ahk
+#Include Utils/KeyStateObserver.ahk
 #Include Utils/SwitchObserver.ahk
 
-ObserveKeyDown("Numpad1")
-ObserveKeyDown("Numpad2")
+KeyStateObserver.Add("Numpad1", false)
+KeyStateObserver.Add("Numpad2", false)
 
 SwitchObserver.Add("PanicButtonLR", ["Left", "Right"])
 
-#HotIf not SwitchObserver.Get("PanicButton") and isKeyDown["Numpad1"]
+#HotIf not SwitchObserver.Get("PanicButton") and KeyStateObserver.Get("Numpad1")
 #Include Mappings/LeftIsNumPad.ahk
 #HotIf
 
