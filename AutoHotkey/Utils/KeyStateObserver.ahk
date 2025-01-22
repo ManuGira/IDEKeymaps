@@ -2,8 +2,6 @@
 
 
 class KeyStateObserver{
-
-
     static isKeyDown := Map()
 
     static shiftMap := Map(
@@ -41,6 +39,8 @@ class KeyStateObserver{
     }
 
     static Get(key){
+        if not KeyStateObserver.isKeyDown.Has(key)
+            throw "key " key " is not tracked"
         return KeyStateObserver.isKeyDown[key]
     }
 
