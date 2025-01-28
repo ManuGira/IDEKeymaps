@@ -28,6 +28,7 @@ class INode {
         this.inputNode := inputNode
         this.inputNode.Subscribe((state) => this.Update(state))
         this.hasInput := true
+        return this
     }
 
     SetInputNodeList(inputNodeList := unset){
@@ -40,6 +41,7 @@ class INode {
         for inputNode in inputNodeList
             inputNode.Subscribe((state) => this.Update(state))
         this.hasInput := true
+        return this
     }
 
     Update(state){

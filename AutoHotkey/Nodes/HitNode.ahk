@@ -9,6 +9,7 @@ class HitNode extends INode{
      * 
      * @param inputNode {(INode)}
      * @param callback {(Func<bool>)}
+     * @param intervalThresholdMs
      */
     __New(inputNode := unset, callback := unset, intervalThresholdMs := 200){
         this.timeStampDown := TimeStamp(0, 0)

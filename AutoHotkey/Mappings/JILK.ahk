@@ -20,7 +20,8 @@ class JILK {
         Conditional.Remap("k", "{Down}", condition)      ; K -> Down
         Conditional.Remap("u", "{Home}", condition)      ; U -> Home
         Conditional.Remap("o", "{End}", condition)       ; O -> End
-        Conditional.Remap("m", "{Enter}", condition)     ; M -> Enter
-        Conditional.Remap("n", "{BackSpace}", condition) ; N -> BackSpace
+        Conditional.Remap("h", "{Backspace}", condition) ; H -> Backspace
+        Conditional.Remap("n", "{Enter}", condition)     ; N -> Enter
+        Conditional.Remap("e", "{Escape}", condition)    ; E -> Escape
     }
 }
