@@ -9,6 +9,8 @@ TempToolTip(msg, durationMS){
     SetTimer(() => ToolTip(), -durationMS)
 }
 
+
+; --------------- JILK DIRECTION LAYER ------------------------
 OnJILK(state){
     global jilkNode
     counter := 0
@@ -23,7 +25,7 @@ OnJILK(state){
         SetScrollLockState(!GetKeyState("ScrollLock", "T"))
         SetTimer(() => BlinkScrollLock(), -200)
 
-        ToolTip("JILK Enabled" counter)
+        ToolTip("JILK Enabled (" counter ")")
         counter++
     }
     BlinkScrollLock()
@@ -31,7 +33,7 @@ OnJILK(state){
 }
 
 capsHold := DummyNode(KeyStateNode("Capslock", , false))
-shiftHold := DummyNode(KeyStateNode("LShift", , true))
+winHold := DummyNode(KeyStateNode("LWin", , true))
 altHold := DummyNode(KeyStateNode("LAlt", , true))
 
 global jilkNode := DummyNode(OrNode([
@@ -44,43 +46,54 @@ jilkCondition := (k) => jilkNode.GetState()
 JILK.Init(jilkCondition) 
 
 ; Use Shift+Capslock to toggle Capslock
-capsToggleNode := ToggleNode(DummyNode(AndNode([capsHold, shiftHold])))
+capsToggleNode := ToggleNode(DummyNode(AndNode([capsHold, winHold])))
 capsToggleNode.Subscribe((s) => SetCapsLockState(s))
+
+; --------------- SPECIAL CHAR LAYER -----------------
+;OnTab(state){
+;    isRelease := state = 0
+;    isCombo := A_PriorHotkey != A_ThisHotkey
+;    if (isRelease and not isCombo)
+;        SendInput("{Tab}")
+;}   
+;
+;tabNode := altHold := DummyNode(KeyStateNode("LAlt", , false)).Subscribe((s) => OnTab(s))
+
 
 ; --------------- SPACE AS SHIFT ---------------------
 #Include Mappings/SpaceAsShift.ahk
 SpaceAsShift.Init() 
 
 ; --------------- WIN CONTROLLER ---------------------
-; #Include ThirdParty/WinController.ahk
-; ; Alt + Left Button  : Drag to move a window.
-; ; Alt + Right Button : Drag to resize a window.
-; ; Double-Alt + Left Button   : Maximize/Restore a window.
-; ; Double-Alt + Right Button  : Minimize a window.
-; 
-; !LButton::
-; {
-;     doubleClick := (A_PriorHotkey = A_ThisHotkey and A_TimeSincePriorHotkey < DllCall("GetDoubleClickTime"))
-;     ; Sleep 0
-; 
-;     if doubleClick {
-;         WinController.ToggleMaximize()
-;         return
-;     }
-;     WinController.Move()
-; }
-; 
-; !RButton::
-; {
-;     doubleClick := (A_PriorHotkey = A_ThisHotkey and A_TimeSincePriorHotkey < DllCall("GetDoubleClickTime"))
-;     ; Sleep 0
-; 
-;     if doubleClick {
-;         WinController.Minimize()
-;         return
-;     }
-;     WinController.Resize()
-; }
+#Include ThirdParty/WinController.ahk
+; Alt + Left Button  : Drag to move a window.
+; Alt + Right Button : Drag to resize a window.
+; Double-Alt + Left Button   : Maximize/Restore a window.
+; Double-Alt + Right Button  : Minimize a window.
+
+#LButton::
+{
+    doubleClick := (A_PriorHotkey = A_ThisHotkey and A_TimeSincePriorHotkey < DllCall("GetDoubleClickTime"))
+    ; Sleep 0
+
+    if doubleClick {
+        WinController.ToggleMaximize()
+        return
+    }
+    WinController.Move()
+}
+
+#RButton::
+{
+    doubleClick := (A_PriorHotkey = A_ThisHotkey and A_TimeSincePriorHotkey < DllCall("GetDoubleClickTime"))
+    ; Sleep 0
+
+    if doubleClick {
+        WinController.Minimize()
+        return
+    }
+    WinController.Resize()
+}
 
 ; ---------------- DEACTIVATE ORIGINAL KEYS (force learning) ----------------
 *Left::return
