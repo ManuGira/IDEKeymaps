@@ -64,11 +64,16 @@ class INodeMI extends INode{
 
         Assert.False(this.hasInput, "An input node is already defined") ; not supported yet. That would require to implement unsubscribe
 
+        CallbackFunc(index, self) {
+            return (state) => self.Update(index, state)
+        }
+
         this.inputNodeList := inputNodeList
         index := 0
         for inputNode in inputNodeList{
-            inputNode.Subscribe((state) => this.Update(index, state))
-            index += 1
+            local capturedIndex := index + 1  ; Create a local copy
+            index := capturedIndex
+            inputNode.Subscribe(CallbackFunc(index, this))  ; can't use anonymous function here because index must be fixed
         }
             
         this.hasInput := true
