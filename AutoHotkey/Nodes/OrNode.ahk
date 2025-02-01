@@ -1,7 +1,7 @@
 #Requires AutoHotkey v2.0
 #Include INode.ahk
 
-class OrNode extends INode {
+class OrNode extends INodeMI {
 
     /**
      * 
@@ -15,7 +15,7 @@ class OrNode extends INode {
             this.Subscribe(callback)
     }
 
-    Update(state){
+    Update(index, state){
         state := false
         for inputNode in this.inputNodeList{
             if inputNode.GetState(){

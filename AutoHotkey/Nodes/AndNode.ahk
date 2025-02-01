@@ -2,7 +2,7 @@
 #Include INode.ahk
 
 
-class AndNode extends INode {
+class AndNode extends INodeMI {
 
     /**
      * 
@@ -18,7 +18,7 @@ class AndNode extends INode {
         this.state := false
     }
 
-    Update(state){
+    Update(index, state){
         if this.state == state
             return ; no state change
 
