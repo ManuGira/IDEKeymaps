@@ -6,6 +6,7 @@
 #Include HitNode.ahk
 #Include INode.ahk
 #Include KeyStateNode.ahk
+#Include NotNode.ahk
 #Include OrderedAndNode.ahk
 #Include OrNode.ahk
 #Include TimedNode.ahk

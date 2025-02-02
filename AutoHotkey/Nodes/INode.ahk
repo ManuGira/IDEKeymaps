@@ -84,3 +84,41 @@ class INodeMI extends INode{
         throw "Must be overriden by child class"
     }
 }
+
+/**
+ * Similar to Node but with multiple outputs
+ */
+class INodeMO extends INode{
+    userCallbackListMap := Map()
+
+    __New(){
+        throw "Must be overriden by child class"
+    }
+
+    SetInputNodeList(inputNodeList := unset){
+        throw "Not supported for INodeMO. Please use SetInputNodeList instead"
+    }
+
+    Update(index, state){
+        throw "Must be overriden by child class"
+    }
+
+    Subscribe(channel, callback := unset) {
+        if not this.userCallbackListMap.Has(channel)
+            this.userCallbackListMap[channel] := Array()
+
+        if IsSet(callback)
+            this.userCallbackListMap[channel].Push(callback)
+    }
+
+    NotifySubscribers(channel){
+        for userCallback in this.userCallbackListMap[channel]
+            userCallback(this.state)
+    }
+}
+
+
+TestNodeInterface(NodeInstance) {
+    Assert.True(IsObject(NodeInstance.GetState), "Node must implement GetState() function")
+    Assert.True(IsObject(NodeInstance.Subscribe), "Node must implement Subscribe() function")
+}
