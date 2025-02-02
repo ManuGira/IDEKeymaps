@@ -24,6 +24,22 @@ TestDummyNode() {
 }
 TestDummyNode()
 
+TestNotNode(){
+    nn := NotNode(,,false)
+    TestNodeInterface(nn)
+
+
+    Assert.False(nn.GetState())
+    nn.Update(False)
+    Assert.True(nn.GetState())
+    nn.Update(True)
+    Assert.False(nn.GetState())
+
+    nn := NotNode(,,true)
+    Assert.True(nn.GetState())
+}
+TestNotNode()
+
 TestAndNode() {
     dummy0 := DummyNode(,,false)
     dummy1 := DummyNode(,,false)
