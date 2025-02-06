@@ -95,6 +95,8 @@ SpaceAsShift.Init()
     WinController.Resize()
 }
 
+#MButton::WinController.Close()
+
 ; ---------------- DEACTIVATE ORIGINAL KEYS (force learning) ----------------
 *Left::return
 *Up::return
