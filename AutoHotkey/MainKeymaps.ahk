@@ -68,8 +68,8 @@ SpaceAsShift.Init()
 #Include ThirdParty/WinController.ahk
 ; Alt + Left Button  : Drag to move a window.
 ; Alt + Right Button : Drag to resize a window.
-; Double-Alt + Left Button   : Maximize/Restore a window.
-; Double-Alt + Right Button  : Minimize a window.
+; Alt + Double-Left Button   : Maximize/Restore a window.
+; Alt + Double-Right Button  : Minimize a window.
 
 #LButton::
 {
