@@ -11,16 +11,17 @@ class KeyStateNode extends INode {
     /**
      * 
      * @param key  {(String)}
-     * @param passThrough {(bool)}
      * @param callback {(Func<bool>)}
+     * @param passThrough {(bool)}
+     * @param keepMods {(bool)}
      */
-    __New(key, callback := unset, passThrough := true) {
+    __New(key, callback := unset, passThrough := true, keepMods := true) {
         this.key := key
 
         if IsSet(callback)
             this.Subscribe(callback)
 
-        KeyStateObserver.Add(key, passThrough)
+        KeyStateObserver.Add(key, passThrough, keepMods)
         KeyStateObserver.Subscribe(key, (k, s) => this.Update(s))
     }
 

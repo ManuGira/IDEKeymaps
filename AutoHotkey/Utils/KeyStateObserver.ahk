@@ -59,11 +59,12 @@ class KeyStateObserver{
     }
     
 
-    static Add(key, passThrough := true, callback := unset) {
+    static Add(key, passThrough := true, keepMods := true, callback := unset) {
         if KeyStateObserver.isKeyDown.Has(key)
             return 
 
-        prefix := passThrough ? "~$*" : "*"
+        prefix := passThrough ? "~$" : ""
+        prefix := (prefix) (keepMods ? "*" : "")
 
         KeyStateObserver.isKeyDown[key] := false
         Hotkey prefix key, (k) => KeyStateObserver.UpdateKeyState(key, true)
