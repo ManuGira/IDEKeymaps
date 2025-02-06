@@ -13,7 +13,6 @@ class TimedNode extends INode {
     __New(inputNode := unset, callback := unset, durationMs := 1000){
         this.durationMs := durationMs
         this.counter := 0
-        this.downSchedule := TimeStamp(0, 0)
 
         if IsSet(inputNode)
             this.SetInputNode(inputNode)
@@ -29,18 +28,16 @@ class TimedNode extends INode {
         this.NotifySubscribers()
     }
 
-    ComputeRemainingTimeMs(){
-        return this.downSchedule.Sub(TimeStamp.Now()).ValueMs()
-    }
-
     Update(state){
         if not state
-            return ; no change
-        this.downSchedule := TimeStamp.Now().Add(TimeStamp(0, this.durationMs))
+            return ; ignore state=false, no change
         
+        ; schedule the timeout. Increase the counter to invalidate existing timeouts
         this.counter++
-        SetTimer(() => this.TimeOut(this.counter+0), -this.durationMs)
+        countcopy := this.counter
+        SetTimer(() => this.TimeOut(countcopy), -this.durationMs)
         
+        ; Notify only if this.state goes from false to true
         if not this.state
             this.state := true
             this.NotifySubscribers()

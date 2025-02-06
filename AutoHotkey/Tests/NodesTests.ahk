@@ -154,3 +154,45 @@ TestToggleNode(){
 
 }
 TestToggleNode()
+
+TestTimedNode(){
+    tnode := TimedNode(,,100)
+    
+    Assert.False(tnode.GetState())
+    tnode.Update(true)
+    Assert.True(tnode.GetState())
+    Sleep(50)
+    Assert.True(tnode.GetState())
+    Sleep(100)
+    Assert.False(tnode.GetState())
+}
+TestTimedNode()
+
+TestTimedNode2(){
+    tnode := TimedNode(,,200)
+    
+    Assert.False(tnode.GetState())
+    tnode.Update(true)
+    Assert.True(tnode.GetState())
+    Sleep(150)
+    Assert.True(tnode.GetState())
+    Sleep(100)
+    Assert.False(tnode.GetState())
+}
+TestTimedNode2()
+
+TestTimedNode3(){
+    tnode := TimedNode( , , 100)
+    
+    Assert.False(tnode.GetState())
+    tnode.Update(true) ; state=true until t=100
+    Assert.True(tnode.GetState()) ; t=0
+    Sleep(60)
+    tnode.Update(true) ; t=60, state=true until t=160
+    Assert.True(tnode.GetState()) ; t=60
+    Sleep(60)
+    Assert.True(tnode.GetState()) ; t=120, state is still true
+    Sleep(100)  ; state becomes false during this sleep
+    Assert.False(tnode.GetState()) ; t=220
+}
+TestTimedNode3()
