@@ -124,4 +124,6 @@ TestIt(){
     Assert.Equal(km.rollback.Length, 0)
 }
 
-TestIt()
+;TestIt()
+
+KeyMod("f", "j", "{Left}")
