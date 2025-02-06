@@ -20,9 +20,12 @@ class Conditional {
         conditionalCallback(k1) {
             if condition(k1)
                 Action(k1) ; trigger callback only if condition() function returns true
-            else
+            else{
+                k1 := RegExReplace(k1, "i)^\$")
                 SendInput("{Blind}" k1)
+            }
         }
+        ; remove leading $ if present
         return Hotkey(KeyName, (k0) => conditionalCallback(k0))
     }
     
@@ -32,6 +35,7 @@ class Conditional {
      * @param {(String)} dstKey 
      * @param {(Func[String] -> bool)} condition 
      * @param {(String)} [modifier]
+     * @param {(bool)} [allowRecursion] 
      * @param {(Func[String])} [callback]
      */
     static Remap(srcKey, dstKey, condition, modifier := "*", callback := unset) {
