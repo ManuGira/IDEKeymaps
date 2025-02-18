@@ -33,21 +33,56 @@ OnJILK(state){
 }
 
 capsHold := DummyNode(KeyStateNode("Capslock", , false))
+agraveHold := DummyNode(KeyStateNode("à", , false))
 winHold := DummyNode(KeyStateNode("LWin", , true))
 altHold := DummyNode(KeyStateNode("LAlt", , true))
 
 global jilkNode := DummyNode(OrNode([
-    ToggleNode(AndNode([capsHold, altHold])),
+    ; ToggleNode(AndNode([
+    ;     OrNode([
+    ;         capsHold,
+    ;         agraveHold,
+    ;     ]),
+    ;     altHold,
+    ; ])),
+    ToggleNode(AndNode([
+        capsHold,
+        agraveHold,
+    ])),
     capsHold,
+    agraveHold,
 ]))
 
 jilkNode.Subscribe((s) => OnJILK(s))
 jilkCondition := (k) => jilkNode.GetState()
 JILK.Init(jilkCondition) 
 
-; Use Shift+Capslock to toggle Capslock
-capsToggleNode := ToggleNode(DummyNode(AndNode([capsHold, winHold])))
-capsToggleNode.Subscribe((s) => SetCapsLockState(s))
+; Use Win+à to insert à
+SendCapsLockIfNoCombo(state){
+    isRelease := state = 0
+    if not isRelease
+        return
+    ; remove " Up" from A_ThisHotkey
+    thisHotkey := SubStr(A_ThisHotkey, 1, StrLen(A_ThisHotkey) - 3)  ; TODO: isCombo should be asked to KeyStateObserver
+    isCombo := (A_PriorHotkey != thisHotkey) or agraveHold.GetState()
+    if (isRelease and not isCombo)
+        SetCapsLockState(1 - GetKeyState("CapsLock", "T"))  ; invert capslock state
+}
+capsHold.Subscribe((s) => SendCapsLockIfNoCombo(s))
+
+; Use Win+à to insert à
+SendAgraveIfNoCombo(state){
+    isRelease := state = 0
+    if not isRelease
+        return
+    ; remove " Up" from A_ThisHotkey
+    thisHotkey := SubStr(A_ThisHotkey, 1, StrLen(A_ThisHotkey) - 3)  ; TODO: isCombo should be asked to KeyStateObserver
+    isCombo := (A_PriorHotkey != thisHotkey) or capsHold.GetState()
+    if (isRelease and not isCombo)
+        SendInput("à")
+}
+agraveHold.Subscribe((s) => SendAgraveIfNoCombo(s))
+
 
 ; --------------- SPECIAL CHAR LAYER -----------------
 ;OnTab(state){
