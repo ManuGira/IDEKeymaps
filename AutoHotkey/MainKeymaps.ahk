@@ -3,48 +3,39 @@
 
 #Include Nodes/include.ahk
 #Include Mappings/JILK.ahk
+#Include Mappings/J4K5.ahk
 
 TempToolTip(msg, durationMS){
     ToolTip(msg)
     SetTimer(() => ToolTip(), -durationMS)
 }
 
+winHold := DummyNode(KeyStateNode("LWin", , true))
+altHold := DummyNode(KeyStateNode("LAlt", , true))
+;ctrlHold := DummyNode(KeyStateNode("LCtrl", , true))
+;shiftHold := DummyNode(KeyStateNode("LShift", , true))
 
 ; --------------- JILK DIRECTION LAYER ------------------------
 OnJILK(state){
     global jilkNode
-    counter := 0
-    scrollLockBackUp := GetKeyState("ScrollLock", "T")
-    BlinkScrollLock(){
+    ShowMessage(){
         if not jilkNode.GetState(){
-            ; restore and stop the blinking
-            SetScrollLockState(scrollLockBackUp)
             return
         }
-        ; switch scrolllock
-        SetScrollLockState(!GetKeyState("ScrollLock", "T"))
-        SetTimer(() => BlinkScrollLock(), -200)
-
-        ToolTip("JILK Enabled (" counter ")")
-        counter++
+        SetTimer(() => ShowMessage(), -200)
+        ToolTip("JILK Enabled")
     }
-    BlinkScrollLock()
-    TempToolTip("JILK " (state ? "Enabled" : "Disabled"), 1000)
+    ShowMessage()
+    if not state {
+        ToolTip("JILK Disabled")
+        SetTimer(() => ToolTip(), -1000)
+    }
 }
 
 capsHold := DummyNode(KeyStateNode("Capslock", , false))
 agraveHold := DummyNode(KeyStateNode("à", , false))
-winHold := DummyNode(KeyStateNode("LWin", , true))
-altHold := DummyNode(KeyStateNode("LAlt", , true))
 
 global jilkNode := DummyNode(OrNode([
-    ; ToggleNode(AndNode([
-    ;     OrNode([
-    ;         capsHold,
-    ;         agraveHold,
-    ;     ]),
-    ;     altHold,
-    ; ])),
     ToggleNode(AndNode([
         capsHold,
         agraveHold,
@@ -78,10 +69,56 @@ SendAgraveIfNoCombo(state){
     ; remove " Up" from A_ThisHotkey
     thisHotkey := SubStr(A_ThisHotkey, 1, StrLen(A_ThisHotkey) - 3)  ; TODO: isCombo should be asked to KeyStateObserver
     isCombo := (A_PriorHotkey != thisHotkey) or capsHold.GetState()
-    if (isRelease and not isCombo)
-        SendInput("à")
+    if (isRelease and not isCombo){
+        modifier := ""
+        modifier := modifier (GetKeyState("Shift", "P") ? "+" : "")
+        modifier := modifier (GetKeyState("Alt", "P") ? "!" : "")
+        modifier := modifier (GetKeyState("Ctrl", "P") ? "^" : "")
+        modifier := modifier (GetKeyState("LWin", "P") ? "#" : "")
+        SendInput(modifier "à")
+    }
 }
 agraveHold.Subscribe((s) => SendAgraveIfNoCombo(s))
+
+
+; --------------- J4K5 NUMPAD LAYER ------------------------
+OnJ4K5(state){
+    global j4k5Node
+    ShowMessage(){
+        if not j4k5Node.GetState()
+            return
+        SetTimer(() => ShowMessage(), -200)
+        ToolTip("J4K5 Enabled")
+    }
+    ShowMessage()
+    if state = 0 {
+        ToolTip("J4K5 Disabled")
+        SetTimer(() => ToolTip(), -1000)
+    }
+}
+egraveHold := DummyNode(KeyStateNode("è", , false))
+global j4k5Node := DummyNode(egraveHold)
+j4k5Node.Subscribe((s) => OnJ4K5(s))
+j4k5Condition := (k) => j4k5Node.GetState()
+J4K5.Init(j4k5Condition)
+
+SendEgraveIfNoCombo(state){
+    isRelease := state = 0
+    if not isRelease
+        return
+    ; remove " Up" from A_ThisHotkey
+    thisHotkey := SubStr(A_ThisHotkey, 1, StrLen(A_ThisHotkey) - 3)  ; TODO: isCombo should be asked to KeyStateObserver
+    isCombo := (A_PriorHotkey != thisHotkey)
+    if (isRelease and not isCombo){
+        modifier := ""
+        modifier := modifier (GetKeyState("Shift", "P") ? "+" : "")
+        modifier := modifier (GetKeyState("Alt", "P") ? "!" : "")
+        modifier := modifier (GetKeyState("Ctrl", "P") ? "^" : "")
+        modifier := modifier (GetKeyState("LWin", "P") ? "#" : "")
+        SendInput(modifier "è")
+    }
+}
+egraveHold.Subscribe((s) => SendEgraveIfNoCombo(s))
 
 
 ; --------------- SPECIAL CHAR LAYER -----------------

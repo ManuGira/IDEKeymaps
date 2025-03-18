@@ -1,7 +1,10 @@
 #Requires AutoHotkey v2.0
 
 class Conditional {    
-
+    static HotKeyMap := Map()
+    ; static HotKeyMapAction := Map()
+    ; static HotKeyMapConditions := Map()
+    
     /**
      * @description Wraps the builtin `Hotkey()` function. 
      * The Action callback is called only if the ConditionFunction returns true.
@@ -18,13 +21,28 @@ class Conditional {
      */
     static Hotkey(KeyName, Action, condition) {
         conditionalCallback(k1) {
-            if condition(k1)
-                Action(k1) ; trigger callback only if condition() function returns true
-            else{
-                k1 := RegExReplace(k1, "i)^\$")
-                SendInput("{Blind}" k1)
+            at_least_one_condition_met := false
+            ; iterate over all the tuples in the HotKeyMap[KeyName]
+            for ac_tuple_i in Conditional.HotKeyMap[KeyName] { ; Conditional.HotKeyMap[KeyName] {
+                Action_i := ac_tuple_i[1]
+                condition_i := ac_tuple_i[2]
+                if condition_i(k1) {
+                    Action_i(k1) ; trigger callback only if condition() function returns true
+                    at_least_one_condition_met := true
+                }
             }
+            if at_least_one_condition_met
+                return
+            
+            ; if no condition is met, send the key as is
+            k1 := RegExReplace(k1, "i)^\$")
+            SendInput("{Blind}" k1)
         }
+        if not Conditional.HotKeyMap.Has(KeyName)
+            Conditional.HotKeyMap[KeyName] := []
+        ; add tuple (Action, condition) to the HotKeyMap
+        Conditional.HotKeyMap[KeyName].Push([Action, condition])
+
         ; remove leading $ if present
         return Hotkey(KeyName, (k0) => conditionalCallback(k0))
     }

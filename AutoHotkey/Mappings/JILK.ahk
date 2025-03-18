@@ -2,32 +2,35 @@
 #Include ../Utils/Conditional.ahk
 
 
-; Fonction pour assigner une lettre à une direction
-;AssignDirection(key, direction) {
-;    Hotkey "!" key, (k) => Send("{" direction "}")
-;    Hotkey "+!" key, (k) => Send("+{" direction "}")
-;    Hotkey "^!" key, (k) => Send("^{" direction "}")
-;    Hotkey "^+!" key, (k) => Send("^+{" direction "}") 
-;    Hotkey "<^>!" key, (k) => Send("!{" direction "}")
-;
+
 
 class JILK {
+    static AllModHotKey(key, keyToSend, condition) {
+        Conditional.Hotkey("$" key, (k) => SendInput(keyToSend), condition)
+        Conditional.Hotkey("$+" key, (k) => SendInput("+" keyToSend), condition)
+        Conditional.Hotkey("$!" key, (k) => SendInput("!" keyToSend), condition)
+        Conditional.Hotkey("$^" key, (k) => SendInput("^" keyToSend), condition)
+        Conditional.Hotkey("$+!" key, (k) => SendInput("+!" keyToSend), condition)
+        Conditional.Hotkey("$+^" key, (k) => SendInput("+^" keyToSend), condition)
+        Conditional.Hotkey("$!^" key, (k) => SendInput("!^" keyToSend), condition)
+    }
+
     ;static selectLine := "{Home}{Home}{ShiftDown}{End}{Right}{ShiftUp}"
     static selectLine := "{End}{End}{ShiftDown}{Home}{Home}{Left}{ShiftUp}"
 
     static Init(condition) {
-        ; Assignation des lettres aux directions
-        Conditional.Remap("j", "{Left}", condition)      ; J -> Left
-        Conditional.Remap("i", "{Up}", condition)        ; I -> Up
-        Conditional.Remap("l", "{Right}", condition)     ; L -> Right
-        Conditional.Remap("k", "{Down}", condition)      ; K -> Down
-        Conditional.Remap("u", "{Home}", condition)      ; U -> Home
-        Conditional.Remap("o", "{End}", condition)       ; O -> End
-        Conditional.Remap("h", "{Backspace}", condition) ; H -> Backspace
-        Conditional.Remap("é", "{Delete}", condition)    ; é -> Delete
-        Conditional.Remap("n", "{Enter}", condition)     ; N -> Enter
-        Conditional.Remap("m", "{Escape}", condition)    ; M -> Escape
-        Conditional.Remap("p", "{F12}", condition)    ; M -> Escape
+        ; Assignation des lettres aux directions444
+        JILK.AllModHotKey("j", "{Left}", condition)      ; J -> Left
+        JILK.AllModHotKey("i", "{Up}", condition)        ; I -> Up
+        JILK.AllModHotKey("l", "{Right}", condition)     ; L -> Right
+        JILK.AllModHotKey("k", "{Down}", condition)      ; K -> Down
+        JILK.AllModHotKey("u", "{Home}", condition)      ; U -> Home
+        JILK.AllModHotKey("o", "{End}", condition)       ; O -> End
+        JILK.AllModHotKey("h", "{Backspace}", condition) ; H -> Backspace
+        JILK.AllModHotKey("é", "{Delete}", condition)    ; é -> Delete
+        JILK.AllModHotKey("n", "{Enter}", condition)     ; N -> Enter
+        JILK.AllModHotKey("m", "{Escape}", condition)    ; M -> Escape
+        JILK.AllModHotKey("p", "{F12}", condition)    ; M -> Escape
         
         Conditional.Hotkey("$,", (k) => SendInput("{Blind}!{Left}"), condition)
         Conditional.Hotkey("$.", (k) => SendInput("{Blind}!{Right}"), condition)
