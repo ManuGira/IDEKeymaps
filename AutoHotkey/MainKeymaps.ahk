@@ -32,7 +32,8 @@ OnJILK(state){
     }
 }
 
-SendAgraveIfNoCombo(state){
+
+SendEgraveIfNoCombo(state){
     isRelease := state = 0
     if not isRelease
         return
@@ -45,13 +46,13 @@ SendAgraveIfNoCombo(state){
         modifier := modifier (GetKeyState("Alt", "P") ? "!" : "")
         modifier := modifier (GetKeyState("Ctrl", "P") ? "^" : "")
         modifier := modifier (GetKeyState("LWin", "P") ? "#" : "")
-        SendInput(modifier "à")
+        SendInput(modifier "è")
     }
 }
 
-agraveHold.Subscribe((s) => OnJILK(s))
-agraveHold.Subscribe((s) => SendAgraveIfNoCombo(s))
-jilkCondition := (k) => agraveHold.GetState()
+egraveHold.Subscribe((s) => OnJILK(s))
+egraveHold.Subscribe((s) => SendEgraveIfNoCombo(s))
+jilkCondition := (k) => egraveHold.GetState()
 JILK.Init(jilkCondition)
 
 
@@ -104,7 +105,7 @@ OnMouseController(state){
     }
 }
 
-SendEgraveIfNoCombo(state){
+SendAgraveIfNoCombo(state){
     isRelease := state = 0
     if not isRelease
         return
@@ -117,13 +118,13 @@ SendEgraveIfNoCombo(state){
         modifier := modifier (GetKeyState("Alt", "P") ? "!" : "")
         modifier := modifier (GetKeyState("Ctrl", "P") ? "^" : "")
         modifier := modifier (GetKeyState("LWin", "P") ? "#" : "")
-        SendInput(modifier "è")
+        SendInput(modifier "à")
     }
 }
 
-egraveHold.Subscribe((s) => OnMouseController(s))
-egraveHold.Subscribe((s) => SendEgraveIfNoCombo(s))
-mouseControllerCondition := (k) => egraveHold.GetState()
+agraveHold.Subscribe((s) => OnMouseController(s))
+agraveHold.Subscribe((s) => SendAgraveIfNoCombo(s))
+mouseControllerCondition := (k) => agraveHold.GetState()
 MouseController.Init(mouseControllerCondition)
 
 
