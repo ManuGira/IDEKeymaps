@@ -2,13 +2,12 @@
 #SingleInstance Force
 
 #Include Nodes/include.ahk
-#Include Mappings/JILK.ahk
-#Include Mappings/J4K5.ahk
-
 TempToolTip(msg, durationMS){
     ToolTip(msg)
     SetTimer(() => ToolTip(), -durationMS)
 }
+#Include Layers/JILK.ahk
+#Include Layers/J4K5.ahk
 
 winHold := DummyNode(KeyStateNode("LWin", , true))
 altHold := DummyNode(KeyStateNode("LAlt", , true))
@@ -133,7 +132,7 @@ egraveHold.Subscribe((s) => SendEgraveIfNoCombo(s))
 
 
 ; --------------- SPACE AS SHIFT ---------------------
-#Include Mappings/SpaceAsShift.ahk
+#Include Layers/SpaceAsShift.ahk
 SpaceAsShift.Init() 
 
 ; --------------- WIN CONTROLLER ---------------------

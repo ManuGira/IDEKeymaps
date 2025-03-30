@@ -1,5 +1,5 @@
 #Requires AutoHotkey v2.0
 
-#Include ../Mappings/SpaceAsShift.ahk
+#Include ../Layers/SpaceAsShift.ahk
 
 SpaceAsShift.Init()
