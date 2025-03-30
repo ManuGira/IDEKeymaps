@@ -6,8 +6,8 @@
 CoordMode("Mouse", "Screen")
 
 class Envelope {
-    __New(){
-        this.slope := 200
+    __New(slope := 200){
+        this.slope := slope
         this.target := 0
         this.value := 0
     }
@@ -36,26 +36,17 @@ class MouseController {
     static Init(condition) {
         mController := MouseController()
 
-        ProcessOrPass(processFunc, k1, keyState) {
-            
-            if condition("-") {  ; "-" is a dummy character not used for evaluating conditions
-                TempToolTip(k1 " --- " keyState, 1000)
-                processFunc(keyState)
-            } else {
-                ; if no condition is met, send the key as is
-                ; k1 := RegExReplace(k1, "i)^\$")
-                ; TempToolTip("no condition is met, send the key as is: {Blind}" k1, 1000)
-                ; SendInput("{Blind}" k1)
-                if keyState = 1 {
-                    SendInput(k1)
-                }
-            }
-        }
+        Conditional.Hotkey("$e", (k) => mController.OnUp(true), condition)
+        Conditional.Hotkey("$e Up", (k) => mController.OnUp(false), condition)
 
-        DummyNode(KeyStateNode("e", , false), (state) => ProcessOrPass((s) => mController.OnUp(s), "e", state))
-        DummyNode(KeyStateNode("s", , false), (state) => ProcessOrPass((s) => mController.OnLeft(s), "s", state))
-        DummyNode(KeyStateNode("d", , false), (state) => ProcessOrPass((s) => mController.OnDown(s), "d", state))
-        DummyNode(KeyStateNode("f", , false), (state) => ProcessOrPass((s) => mController.OnRight(s), "f", state))
+        Conditional.Hotkey("$s", (k) => mController.OnLeft(true), condition)
+        Conditional.Hotkey("$s Up", (k) => mController.OnLeft(false), condition)
+
+        Conditional.Hotkey("$d", (k) => mController.OnDown(true), condition)
+        Conditional.Hotkey("$d Up", (k) => mController.OnDown(false), condition)
+
+        Conditional.Hotkey("$f", (k) => mController.OnRight(true), condition)
+        Conditional.Hotkey("$f Up", (k) => mController.OnRight(false), condition)
     }
 
     LoopFunc(){
@@ -67,8 +58,8 @@ class MouseController {
             return
         }
         
-        this.envelopeX.Update(0.05)
-        this.envelopeY.Update(0.05)
+        this.envelopeX.Update(this.period)
+        this.envelopeY.Update(this.period)
         dx := Integer(this.envelopeX.GetValue())
         dy := Integer(this.envelopeY.GetValue())
 
@@ -81,17 +72,18 @@ class MouseController {
     }
 
     Start(){
-
         if this.isRuning
             return
 
         this.isRuning := true
-        
         SetTimer(this.timerFunc, 50)
-        
     }
 
     __New(){
+        this.acceleration := 200
+        this.maxSpeed := 800
+        this.period := 0.05
+
         this.envelopeX := Envelope()
         this.envelopeY := Envelope()
         this.isRuning := false
@@ -105,8 +97,8 @@ class MouseController {
     }
 
     UpdateTargets(){
-        this.envelopeX.target := 40 * (this.right - this.left)
-        this.envelopeY.target := 40 * (this.down - this.up)
+        this.envelopeX.target := this.maxSpeed * this.period * (this.right - this.left)
+        this.envelopeY.target := this.maxSpeed * this.period * (this.down - this.up)
         this.Start()
     }
     
@@ -132,7 +124,3 @@ class MouseController {
 
 }
 
-TrueFunc(){
-    return true
-}
-MouseController.Init((s) => TrueFunc())
