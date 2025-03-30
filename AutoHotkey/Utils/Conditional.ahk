@@ -1,5 +1,8 @@
 #Requires AutoHotkey v2.0
-
+TempToolTip(msg, durationMS){
+    ToolTip(msg)
+    SetTimer(() => ToolTip(), -durationMS)
+}
 class Conditional {    
     static HotKeyMap := Map()
     ; static HotKeyMapAction := Map()
@@ -34,9 +37,14 @@ class Conditional {
             if at_least_one_condition_met
                 return
             
-            ; if no condition is met, send the key as is
-            k1 := RegExReplace(k1, "i)^\$")
-            SendInput("{Blind}" k1)
+            ; No condition is met, send the key (if its not a up key)
+
+            if (not RegExMatch(k1, " Up$")) {
+                ; if the key is NOT a release key (ends with " Up"),
+                ; remove the leading $ if present
+                k1 := RegExReplace(k1, "i)^\$")
+                SendInput("{Blind}" k1)
+            }
         }
         if not Conditional.HotKeyMap.Has(KeyName)
             Conditional.HotKeyMap[KeyName] := []
