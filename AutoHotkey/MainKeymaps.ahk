@@ -124,8 +124,7 @@ SendAgraveIfNoCombo(state){
 
 agraveHold.Subscribe((s) => OnMouseController(s))
 agraveHold.Subscribe((s) => SendAgraveIfNoCombo(s))
-mouseControllerCondition := (k) => agraveHold.GetState()
-MouseController.Init(mouseControllerCondition)
+MouseController.Init(agraveHold)
 
 
 ; --------------- SPECIAL CHAR LAYER -----------------
