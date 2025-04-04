@@ -45,6 +45,10 @@ class MouseController {
         Conditional.Hotkey("$" key " Up", (k) => mouseController.OnClick(mouseButonToClick, false), condition)
     }
 
+    /**
+     * 
+     * @param enableNode {KeyStateNode}: Node that will enable or disable the mouse controller
+     */
     static Init(enableNode) {
         condition := (k) => enableNode.GetState()
         
@@ -119,6 +123,8 @@ class MouseController {
     }
 
     __New(){
+        ; this.sniperModNode := sniperModNode
+        
         this.acceleration := 200
         this.maxSpeed := 1000
         this.period_ms := 30
@@ -137,8 +143,9 @@ class MouseController {
     }
 
     UpdateTargets(){
-        this.envelopeX.target := this.maxSpeed * this.period_ms/1000 * (this.right - this.left)
-        this.envelopeY.target := this.maxSpeed * this.period_ms/1000 * (this.down - this.up)
+        damp := 1 ;(this.sniperModNode.getState() ? 0.25 : 1)
+        this.envelopeX.target := damp * this.maxSpeed * this.period_ms/1000 * (this.right - this.left)
+        this.envelopeY.target := damp * this.maxSpeed * this.period_ms/1000 * (this.down - this.up)
         this.Start()
     }
     
@@ -163,8 +170,15 @@ class MouseController {
     }
 
     OnClick(button, state){
+
+        ;if this.sniperModNode.GetState()
+        ;    SendInput("{Shift down}")
+        
         ; MouseClick [WhichButton, X, Y, ClickCount, Speed, DownOrUp, Relative]
         MouseClick(button, , , 1, , state ? "D" : "U", )
+
+        ;if this.sniperModNode.GetState()
+        ;    SendInput("{Shift up}")
     }
 }
 

@@ -1,5 +1,5 @@
 #Requires AutoHotkey v2.0
-
+#Include ../Utils/Conditional.ahk
 class SpaceAsShift {
     static OnSpaceDown() {
         SendInput("{Blind}{ShiftDown}")
@@ -12,9 +12,9 @@ class SpaceAsShift {
             SendInput("{ShiftUp}")
     }
 
-    static Init() {
-        Hotkey("Space", (k) => SpaceAsShift.OnSpaceDown())
-        Hotkey("Space Up", (k) => SpaceAsShift.OnSpaceUp())
+    static Init(condition) {
+        Conditional.Hotkey("$Space", (k) => SpaceAsShift.OnSpaceDown(), condition)
+        Conditional.Hotkey("$Space Up", (k) => SpaceAsShift.OnSpaceUp(), condition)
     }
 }
 
