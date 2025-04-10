@@ -81,7 +81,7 @@ J4K5.Init(j4k5Condition)
 ; ---------------- MOUSE CONTROLLER LAYER ----------------
 mouseLayerNode := agraveHold
 mouseLayerNode.Subscribe((s) => ShowState("Mouse", mouseLayerNode, s))
-MouseController.Init(mouseLayerNode)
+MouseController.Init(mouseLayerNode, spaceHold)
 
 ; --------------- SPECIAL CHAR LAYER -----------------
 ;OnTab(state){
@@ -109,7 +109,7 @@ OnSpace(state, condition){
         SendInput("{Blind}{ShiftDown}")
     else
         SendInput("{ShiftUp}")
-}  
+}
 
 spaceHoldCondition := (k) => not mouseLayerNode.GetState()
 spaceHold.Subscribe((s) => OnSpace(s, spaceHoldCondition))

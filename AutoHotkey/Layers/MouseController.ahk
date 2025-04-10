@@ -33,43 +33,50 @@ class Envelope {
 }
 
 class MouseController {
-    static AllModHotKeyClick(key, mouseController, mouseButonToClick, condition) {
-        Conditional.Hotkey("$" key, (k) => mouseController.OnClick(mouseButonToClick, true), condition)
-        ; Conditional.Hotkey("$+" key, (k) => mouseController.OnClick("+{" mouseButonToClick "}", true), condition)
-        ; Conditional.Hotkey("$!" key, (k) => mouseController.OnClick("!{" mouseButonToClick "}", true), condition)
-        ; Conditional.Hotkey("$^" key, (k) => mouseController.OnClick("^{" mouseButonToClick "}", true), condition)
-        ; Conditional.Hotkey("$+!" key, (k) => mouseController.OnClick("+!{" mouseButonToClick "}", true), condition)
-        ; Conditional.Hotkey("$+^" key, (k) => mouseController.OnClick("+^{" mouseButonToClick "}", true), condition)
-        ; Conditional.Hotkey("$!^" key, (k) => mouseController.OnClick("!^{" mouseButonToClick "}", true), condition)
+    ;static AllModHotKeyClick(key, mouseController, mouseButonToClick, condition) {
+    ;    Conditional.Hotkey("$" key, (k) => mouseController.OnClick(mouseButonToClick, true), condition)
+    ;    ; Conditional.Hotkey("$+" key, (k) => mouseController.OnClick("+{" mouseButonToClick "}", true), condition)
+    ;    ; Conditional.Hotkey("$!" key, (k) => mouseController.OnClick("!{" mouseButonToClick "}", true), condition)
+    ;    ; Conditional.Hotkey("$^" key, (k) => mouseController.OnClick("^{" mouseButonToClick "}", true), condition)
+    ;    ; Conditional.Hotkey("$+!" key, (k) => mouseController.OnClick("+!{" mouseButonToClick "}", true), condition)
+    ;    ; Conditional.Hotkey("$+^" key, (k) => mouseController.OnClick("+^{" mouseButonToClick "}", true), condition)
+    ;    ; Conditional.Hotkey("$!^" key, (k) => mouseController.OnClick("!^{" mouseButonToClick "}", true), condition)
 
-        Conditional.Hotkey("$" key " Up", (k) => mouseController.OnClick(mouseButonToClick, false), condition)
-    }
+    ;    Conditional.Hotkey("$" key " Up", (k) => mouseController.OnClick(mouseButonToClick, false), condition)
+    ;}
 
     /**
      * 
      * @param enableNode {KeyStateNode}: Node that will enable or disable the mouse controller
      */
-    static Init(enableNode) {
+    static Init(enableNode, sniperModNode) {
         condition := (k) => enableNode.GetState()
         
-        mController := MouseController()
+        mController := MouseController(sniperModNode)
         enableNode.Subscribe((s) => mController.OnEnable(s))
 
-        Conditional.Hotkey("$e", (k) => mController.OnUp(true), condition)
-        Conditional.Hotkey("$e Up", (k) => mController.OnUp(false), condition)
+        mapKey(key, func){
+            filterNode := DummyNode()
+            Conditional.Hotkey("$" key, (k) => filterNode.Update(true), condition)
+            Conditional.Hotkey("$" key " Up", (k) => filterNode.Update(false), condition)
+            filterNode.Subscribe(func)
+        }
 
-        Conditional.Hotkey("$s", (k) => mController.OnLeft(true), condition)
-        Conditional.Hotkey("$s Up", (k) => mController.OnLeft(false), condition)
+        mapKey("e", (s) => mController.OnUp(s))
+        mapKey("s", (s) => mController.OnLeft(s))
+        mapKey("d", (s) => mController.OnDown(s))
+        mapKey("f", (s) => mController.OnRight(s))
 
-        Conditional.Hotkey("$d", (k) => mController.OnDown(true), condition)
-        Conditional.Hotkey("$d Up", (k) => mController.OnDown(false), condition)
-
-        Conditional.Hotkey("$f", (k) => mController.OnRight(true), condition)
-        Conditional.Hotkey("$f Up", (k) => mController.OnRight(false), condition)
+        mapKey("q", (s) => mController.OnScrollUp(s))
+        mapKey("a", (s) => mController.OnScrollDown(s))
         
-        MouseController.AllModHotKeyClick("j", mController, "Left", condition)
-        MouseController.AllModHotKeyClick("k", mController, "Middle", condition)
-        MouseController.AllModHotKeyClick("l", mController, "Right", condition)
+        mapKey("j", (s) => mController.OnClick("Left", s))
+        mapKey("k", (s) => mController.OnClick("Middle", s))
+        mapKey("l", (s) => mController.OnClick("Right", s))
+
+        ;MouseController.AllModHotKeyClick("j", mController, "Left", condition)
+        ;MouseController.AllModHotKeyClick("k", mController, "Middle", condition)
+        ;MouseController.AllModHotKeyClick("l", mController, "Right", condition)
     }
 
     OnEnable(state){
@@ -78,25 +85,40 @@ class MouseController {
     }
 
     LoopFunc(){
+        
         isEnvXDone := Abs(this.envelopeX.value) < 1 and this.envelopeX.IsReached()
         isEnvYDone := Abs(this.envelopeY.value) < 1 and this.envelopeY.IsReached()
-        if (isEnvXDone and isEnvYDone){
+        ;isEnvScrollDone := Abs(this.envelopeScroll.value) < 1 and this.envelopeScroll.IsReached()
+        isScrolling := this.scrollDown - this.scrollUp != 0
+        if (isEnvXDone and isEnvYDone and not isScrolling){
             this.isRuning := false
             SetTimer(this.timerFunc, 0)
             return
         }
         
-        this.envelopeX.Update(this.period_ms/1000)
+        this.envelopeX.Update(this.period_ms/1000) 
         this.envelopeY.Update(this.period_ms/1000)
-        dx := Integer(this.envelopeX.GetValue())
-        dy := Integer(this.envelopeY.GetValue())
+
+        damp := (this.sniperModNode.getState() ? 0.25 : 1)
+             
+        dx := Integer(this.envelopeX.GetValue() * damp)
+        dy := Integer(this.envelopeY.GetValue() * damp)
 
         DllCall("mouse_event", "UInt", 0x01, "UInt", dx, "UInt", dy)
 
-        ; string must contain only letters i. and izs length must be equal to dx. for example if x = 5,  "iiiii"
-        istr := ""
-        Loop Abs(dx)
-            istr .= "i"
+        ;this.envelopeScroll.Update(this.period_ms/1000)
+
+        ;sgn := this.envelopeScroll.GetValue() > 0 ? 1 : -1
+        ;scrollSpeedPerPeriod := Max(Abs(this.envelopeScroll.GetValue()), this.scrollMinSpeed*this.period_ms/1000) * sgn/1000
+        this.scrollPosition := this.scrollPosition + (this.scrollDown - this.scrollUp)*this.scrollSpeed*this.period_ms/1000 * damp
+        ;ToolTip("scrollPosition: " this.scrollPosition ", scrollDown: " this.scrollDown ", scrollUp: " this.scrollUp)
+        if Abs(this.scrollPosition) >= 1 {
+            sgn := this.scrollPosition > 0 ? 1 : -1
+            ds := Integer(Abs(this.scrollPosition))
+            this.scrollPosition := this.scrollPosition - ds * sgn
+            keyword := sgn > 0 ? "WheelDown" : "WheelUp"
+            Send("{" keyword " " ds "}")       
+        }
     }
 
     Start(){
@@ -113,6 +135,7 @@ class MouseController {
     }
     
     Reset(){
+        ; ---- reset mouse move -----
         this.envelopeX := Envelope(this.acceleration)
         this.envelopeY := Envelope(this.acceleration)
         this.isRuning := false
@@ -120,14 +143,22 @@ class MouseController {
         this.right := 0
         this.up := 0
         this.down := 0
+        
+        ; ---- reset wheel scroll -----
+        this.envelopeScroll := Envelope(this.scrollAcceleration)
+        this.scrollPosition := 0
+        this.scrollUp := 0
+        this.scrollDown := 0
     }
 
-    __New(){
-        ; this.sniperModNode := sniperModNode
+    __New(sniperModNode){
+        this.sniperModNode := sniperModNode
         
         this.acceleration := 200
         this.maxSpeed := 1000
         this.period_ms := 30
+        this.scrollAcceleration := 1000 ; in milli wheel ticks
+        this.scrollSpeed := 30
 
         this.timerFunc := ObjBindMethod(this, "LoopFunc")
 
@@ -139,13 +170,19 @@ class MouseController {
         this.up := unset
         this.down := unset
 
+        this.envelopeScroll := unset
+        this.scrollPosition := unset
+        this.scrollUp := unset
+        this.scrollDown := unset
+
         this.Reset()
     }
 
     UpdateTargets(){
-        damp := 1 ;(this.sniperModNode.getState() ? 0.25 : 1)
-        this.envelopeX.target := damp * this.maxSpeed * this.period_ms/1000 * (this.right - this.left)
-        this.envelopeY.target := damp * this.maxSpeed * this.period_ms/1000 * (this.down - this.up)
+        this.envelopeX.target := this.maxSpeed * this.period_ms/1000 * (this.right - this.left)
+        this.envelopeY.target := this.maxSpeed * this.period_ms/1000 * (this.down - this.up)
+        ;this.envelopeScroll.target := this.scrollMaxSpeed * this.period_ms/1000 * (this.scrollDown - this.scrollUp)
+        
         this.Start()
     }
     
@@ -166,6 +203,20 @@ class MouseController {
 
     OnDown(state){
         this.down := state
+        this.UpdateTargets()
+    }
+
+    OnScrollUp(state){
+        this.scrollUp := state
+        if state
+            Send("{WheelUp 1}")
+        this.UpdateTargets()
+    }
+
+    OnScrollDown(state){
+        this.scrollDown := state
+        if state
+            Send("{WheelDown 1}")
         this.UpdateTargets()
     }
 
