@@ -6,6 +6,10 @@
 #Include Layers/J4K5.ahk
 #Include Layers/MouseController.ahk
 
+#Include Utils/FullKeyboardObserver.ahk
+
+FullKeyboardObserver.Init()
+
 ; function to display a tooltip as long as the layer is enabled
 ShowState(name, stateNode, state){
     ShowMessage(){
@@ -21,16 +25,48 @@ ShowState(name, stateNode, state){
     }
 }
 
-; send a character if the key has been pressed and released with no other keys pressed in the mean time. 
+
+; Return true if another key was pressed between the time the mod key was pressed and released.
+; This function works only for mod keys registered by KeyStateObserver (and KeyStateNode) 
+; Mod Keys must be created with the "passthrough" parameter set to false so that 
+; KeyStateObserver registers keys starting with ~*$
+CheckIfCombo(character){
+    ; If it's not a combo (i.e mod key alone), the A_PriorHotkey must start with "~*$"
+    if not RegExMatch(A_PriorHotkey, "^\~\*\$"){
+        ; we already know A_PriorHotkey is not the same as A_ThisHotkey, 
+        ; because A_ThisHotkey is a mod key and mod keys start with "~*$" 
+        ; because they are registered by KeyStateObserver (or KeyStateNode) 
+        ; with the "passthrough" parameter set to false
+        return true
+    }
+    
+    ; remove the leading "~*$" from A_PriorHotkey
+    priorHotkey := SubStr(A_PriorHotkey, 4, StrLen(A_PriorHotkey))
+
+    ; TODO: isCombo could be asked to KeyStateObserver if we set an observer for all keys
+    if not RegExMatch(A_ThisHotkey, "^\*")
+        throw "A_ThisHotkey must start with '*' : " A_ThisHotkey
+
+    if not RegExMatch(A_ThisHotkey, " Up$")
+        throw "A_ThisHotkey must end with ' Up' : " A_ThisHotkey
+
+    ; remove the leading "*" and the ending " Up" from A_ThisHotkey (keep from char 2 to char -4)
+    thisHotkey := SubStr(A_ThisHotkey, 2, StrLen(A_ThisHotkey) - 4)
+
+    isCombo := (thisHotkey != priorHotkey)  
+    ToolTip("(" A_ThisHotkey "," A_PriorHotkey ") -> (" thisHotkey "=?" priorHotkey ") -> " (isCombo ? "different" : "same"))
+    return isCombo
+}
+
+; Send a character if the key has been pressed and released with no other keys pressed in the mean time. 
 ; This means the character must be sent, and the key is not considered as a mod key
 SendCharIfNoCombo(character, state){
     isRelease := state = 0
     if not isRelease
         return
-    ; remove " Up" from A_ThisHotkey
-    thisHotkey := SubStr(A_ThisHotkey, 1, StrLen(A_ThisHotkey) - 3)  ; TODO: isCombo should be asked to KeyStateObserver
-    isCombo := (A_PriorHotkey != thisHotkey)
-    if (isRelease and not isCombo){
+    
+    isCombo := CheckIfCombo(character)
+    if (not isCombo){    
         modifier := ""
         modifier := modifier (GetKeyState("Shift", "P") ? "+" : "")
         modifier := modifier (GetKeyState("Alt", "P") ? "!" : "")
@@ -44,10 +80,8 @@ SendCapsLockIfNoCombo(state){
     isRelease := state = 0
     if not isRelease
         return
-    ; remove " Up" from A_ThisHotkey
-    thisHotkey := SubStr(A_ThisHotkey, 1, StrLen(A_ThisHotkey) - 3)  ; TODO: isCombo should be asked to KeyStateObserver
-    isCombo := (A_PriorHotkey != thisHotkey) or agraveHold.GetState()
-    if (isRelease and not isCombo)
+    isCombo := CheckIfCombo("Capslock")
+    if (not isCombo)
         SetCapsLockState(1 - GetKeyState("CapsLock", "T"))  ; invert capslock state
 }
 
