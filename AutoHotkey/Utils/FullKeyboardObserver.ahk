@@ -1,5 +1,6 @@
 #Requires AutoHotkey v2.0
-class OnAnyKeyDown {
+
+class FullKeyboardObserver {
     static Init() {
         keys := []
         
@@ -30,9 +31,6 @@ class OnAnyKeyDown {
         loop 10
             keys.Push("Numpad" . A_Index - 1)
         keys.Push("NumpadDot", "NumpadEnter", "NumpadAdd", "NumpadSub", "NumpadMult", "NumpadDiv")
-
-        ; Symboles usuels
-        ; keys.Push(";", "=", ",", "-", ".", "/", "`", "[", "]", "\", "'", "~")
 
         ; Déclare les hotkeys à blanc
         for k in keys {
