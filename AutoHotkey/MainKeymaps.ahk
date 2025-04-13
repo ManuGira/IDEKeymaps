@@ -54,7 +54,7 @@ CheckIfCombo(character){
     thisHotkey := SubStr(A_ThisHotkey, 2, StrLen(A_ThisHotkey) - 4)
 
     isCombo := (thisHotkey != priorHotkey)  
-    ToolTip("(" A_ThisHotkey "," A_PriorHotkey ") -> (" thisHotkey "=?" priorHotkey ") -> " (isCombo ? "different" : "same"))
+    ;ToolTip("(" A_ThisHotkey "," A_PriorHotkey ") -> (" thisHotkey "=?" priorHotkey ") -> " (isCombo ? "different" : "same"))
     return isCombo
 }
 
@@ -67,6 +67,11 @@ SendCharIfNoCombo(character, state){
     
     isCombo := CheckIfCombo(character)
     if (not isCombo){    
+        if character == "CapsLock" {
+            SetCapsLockState(1 - GetKeyState("CapsLock", "T"))  ; invert capslock state
+            return
+        }
+
         modifier := ""
         modifier := modifier (GetKeyState("Shift", "P") ? "+" : "")
         modifier := modifier (GetKeyState("Alt", "P") ? "!" : "")
@@ -74,15 +79,6 @@ SendCharIfNoCombo(character, state){
         modifier := modifier (GetKeyState("LWin", "P") ? "#" : "")
         SendInput(modifier character)
     }
-}
-
-SendCapsLockIfNoCombo(state){
-    isRelease := state = 0
-    if not isRelease
-        return
-    isCombo := CheckIfCombo("Capslock")
-    if (not isCombo)
-        SetCapsLockState(1 - GetKeyState("CapsLock", "T"))  ; invert capslock state
 }
 
 winHold := DummyNode(KeyStateNode("LWin", , true))
@@ -95,7 +91,7 @@ agraveHold := DummyNode(KeyStateNode("à", , false))
 egraveHold := DummyNode(KeyStateNode("è", , false))
 spaceHold := DummyNode(KeyStateNode("Space", , false))
 
-capsHold.Subscribe((s) => SendCapsLockIfNoCombo(s))
+capsHold.Subscribe((s) => SendCharIfNoCombo("CapsLock", s))
 egraveHold.Subscribe((s) => SendCharIfNoCombo("è", s))
 spaceHold.Subscribe((s) => SendCharIfNoCombo("{Space}", s))
 agraveHold.Subscribe((s) => SendCharIfNoCombo("à", s))
