@@ -1,0 +1,37 @@
+{
+    "AHK++.v2.file": {
+        "compileBaseFile": "",
+        "helpPath": "C:/Program Files/AutoHotkey/v2/AutoHotkey.chm",
+        "interpreterPath": "c:\\Users\\emmanuel.girardin\\AppData\\Local\\Programs\\AutoHotkey\\v2\\AutoHotkey64.exe",
+        "maxScanDepth": 2,
+        "templateSnippetName": "AhkTemplateV2"
+    },
+    "workbench.colorTheme": "Visual Studio Light",
+    "workbench.colorCustomizations": {
+        "activityBar.background": "#33aa33",
+        "sideBarTitle.border": "#33aa33",
+        "icon.foreground": "#33aa33",
+        "sideBar.border": "#33aa33",
+        "titleBar.border": "#33aa33",	
+        "menu.foreground": "#33aa33",
+        "tab.activeForeground": "#33aa33",
+        "editorGroupHeader.tabsBorder": "#33aa33",
+        "panel.border": "#33aa33",
+
+        "sideBarSectionHeader.border": "#33aa3355",
+        "tab.border": "#33aa3355",
+        
+        "activityBar.activeBackground": "#33cc33",
+        "titleBar.activeForeground": "#33cc33",
+        
+        "sideBar.foreground": "#000000",
+        "titleBar.activeBackground": "#444444",
+        "sideBarTitle.background": "#555555",
+        "titleBar.inactiveBackground": "#666666",
+        "sideBar.background": "#eeeeee",
+        "menu.background": "#f7f7f7",
+        "panel.background": "#fbfbfb",
+        "activityBar.foreground": "#ffffff",
+        "sideBarTitle.foreground": "#ffffff",
+    }
+}
