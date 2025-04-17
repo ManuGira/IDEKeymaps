@@ -89,10 +89,12 @@ altHold := DummyNode(KeyStateNode("LAlt", , true))
 capsHold := DummyNode(KeyStateNode("Capslock", , false))
 agraveHold := DummyNode(KeyStateNode("à", , false))
 egraveHold := DummyNode(KeyStateNode("è", , false))
+smallerThanHold := DummyNode(KeyStateNode("<", , false))
 spaceHold := DummyNode(KeyStateNode("Space", , false))
 
 capsHold.Subscribe((s) => SendCharIfNoCombo("CapsLock", s))
 egraveHold.Subscribe((s) => SendCharIfNoCombo("è", s))
+smallerThanHold.Subscribe((s) => SendCharIfNoCombo("<", s))
 spaceHold.Subscribe((s) => SendCharIfNoCombo("{Space}", s))
 agraveHold.Subscribe((s) => SendCharIfNoCombo("à", s))
 
@@ -103,7 +105,7 @@ jilkCondition := (k) => jilkLayerNode.GetState()
 JILK.Init(jilkCondition, spaceHold)
 
 ; --------------- J4K5 NUMPAD LAYER ------------------------
-j4k5LayerNode := egraveHold
+j4k5LayerNode := OrNode([egraveHold, smallerThanHold])
 j4k5LayerNode.Subscribe((s) => ShowState("J4K5", j4k5LayerNode, s))
 j4k5Condition := (k) => j4k5LayerNode.GetState()
 J4K5.Init(j4k5Condition)
