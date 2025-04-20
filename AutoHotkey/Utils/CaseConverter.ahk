@@ -15,4 +15,18 @@ class CaseConverter {
         return "Mixed"
     }
 
+    static SwapEachCase(text) {
+        swappedText := ""
+        Loop Parse, text {
+            char := A_LoopField
+            if (char == StrUpper(char) && char != StrLower(char)) {
+                swappedText .= StrLower(char)
+            } else if (char == StrLower(char) && char != StrUpper(char)) {
+                swappedText .= StrUpper(char)
+            } else {
+                swappedText .= char
+            }
+        }
+        return swappedText
+    }
 }

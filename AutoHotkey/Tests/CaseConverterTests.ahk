@@ -17,3 +17,16 @@ TestGuessCaseType() {
     Assert.Equal(CaseConverter.GuessCaseType(".,_:;+*%&/\()=?!<>[]{}() `"¦@#°§¬|¢´``~¢çÇtEst1234567890"), mixed) 
 }
 TestGuessCaseType()
+
+
+TestSwapEachCase() {
+    Assert.Equal(CaseConverter.SwapEachCase("çtest"), "ÇTEST")
+    Assert.Equal(CaseConverter.SwapEachCase("ÇTEST"), "çtest")
+    Assert.Equal(CaseConverter.SwapEachCase("çtEst"), "ÇTeST")
+
+    specChars := ".,_:;+*%&/\()=?!<>[]{}() `"¦@#°§¬|¢´``~¢1234567890"
+    Assert.Equal(CaseConverter.SwapEachCase(specChars "çtest"), specChars "ÇTEST")
+    Assert.Equal(CaseConverter.SwapEachCase(specChars "ÇTEST"), specChars "çtest")
+    Assert.Equal(CaseConverter.SwapEachCase(specChars "çtEst"), specChars "ÇTeST")
+}
+TestSwapEachCase()
