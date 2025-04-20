@@ -15,6 +15,15 @@ class CaseConverter {
         return "Mixed"
     }
 
+    static SwapAllCase(text) {
+        currentCase := CaseConverter.GuessCaseType(text)
+        if (currentCase == CaseConverter.upper)
+            return StrLower(text)
+        else
+            return StrUpper(text)
+    }
+    static SwapAllCaseFunc := (text) => CaseConverter.SwapAllCase(text)
+
     static SwapEachCase(text) {
         swappedText := ""
         Loop Parse, text {
@@ -29,4 +38,5 @@ class CaseConverter {
         }
         return swappedText
     }
+    static SwapEachCaseFunc := (text) => CaseConverter.SwapEachCase(text)
 }
