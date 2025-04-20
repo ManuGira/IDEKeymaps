@@ -43,7 +43,7 @@ class PathConverter {
         return "Windows"
     }
 
-    static SwitchPathType(path) {
+    static SwapPathType(path) {
         ; Devine le type de chemin et le convertit
         pathType := PathConverter.GuessPathType(path)
         if (pathType = "Windows") {
@@ -54,5 +54,5 @@ class PathConverter {
             return path ; si le type est inconnu, on le laisse tel quel
         }
     }
-    static SwitchPathTypeFunc := (path) => PathConverter.SwitchPathType(path)
+    static SwapPathTypeFunc := (path) => PathConverter.SwapPathType(path)
 }
