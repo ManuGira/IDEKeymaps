@@ -1,7 +1,7 @@
 #Requires AutoHotkey v2.0
 
 class EditTextSelection {
-    static Do(UserFunction) {
+    static Apply(UserFunction) {
         ; Backup clipboard
 
         ClipBoardBackup := ClipboardAll()
@@ -15,9 +15,14 @@ class EditTextSelection {
             ; Remplace la sélection par le chemin converti
             A_Clipboard := newTxt
             Send("^v")
-    
-            ; estore the original clipboard.
-            Sleep(100) ; Attendre un peu pour s'assurer que le collage est terminé
+            
+            ; restore the original clipboard.
+            Sleep(50) ; Attendre un peu pour s'assurer que le collage est terminé
+
+            ; Sélectionne le texte collé
+            Send("{Left " . StrLen(newTxt) . "}") 
+            Send("+{Right " . StrLen(newTxt) . "}")
+
             A_Clipboard := ClipBoardBackup 
         } else {
             MsgBox("Erreur : Impossible de copier le texte sélectionné.")

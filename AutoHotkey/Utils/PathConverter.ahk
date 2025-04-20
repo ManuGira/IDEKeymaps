@@ -54,4 +54,5 @@ class PathConverter {
             return path ; si le type est inconnu, on le laisse tel quel
         }
     }
+    static SwitchPathTypeFunc := (path) => PathConverter.SwitchPathType(path)
 }
