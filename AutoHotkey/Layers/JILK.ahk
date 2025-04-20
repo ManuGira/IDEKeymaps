@@ -74,11 +74,9 @@ class JILK {
         Conditional.Hotkey("$q", (k) => SendInput("{Blind}{Text}?"), condition)
         
         Conditional.Hotkey("$z", (k) => SendInput("^z"), condition)
-        Conditional.Hotkey("$y", (k) => SendInput(JILK.selectLine "{Del}{Right}{End}{End}"), condition)          ; Y -> delete line
-        Conditional.Hotkey("$x", (k) => SendInput(JILK.selectLine "^x"), condition)             ; X -> cut line
-        Conditional.Hotkey("$c", (k) => SendInput(JILK.selectLine "^c" "{Right}"), condition)   ; C -> copy line
-        Conditional.Hotkey("$v", (k) => SendInput("^v"), condition)                             ; V -> paste
-
-        Conditional.Hotkey("$+v", (k) => SendInput("{CtrlDown}c{ShiftDown}v{ShiftUp}{CtrlUp}2"), condition)  ; swap clipboard in visual studio
+        Conditional.Hotkey("$y", (k) => SendInput(JILK.selectLine "{Del}{Right}{End}{End}"), condition) ; Y -> delete line
+        Conditional.Hotkey("$x", (k) => SendInput(JILK.selectLine "^x"), condition)                ; X -> cut line
+        Conditional.Hotkey("$c", (k) => SendInput(JILK.selectLine "^c" "{Right}"), condition)      ; C -> copy line
+        Conditional.Hotkey("$v", (k) => EditTextSelection.SwapClipboardWithSelection(), condition) ; V -> swap clipboard with selection
     }
 }
