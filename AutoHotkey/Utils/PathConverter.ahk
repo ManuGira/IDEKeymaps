@@ -28,7 +28,11 @@ class PathConverter {
         if !RegExMatch(path, "[/\\]")
             return "Unknown"
         
-        ; S'il y a au moins un /, alors c'est un chemin Unix, sinon un Windows
+        ; Si le chemin commence par [a-zA-Z]:, alors c'est un chemin Windows
+        if RegExMatch(path, "^[a-zA-Z]:")
+            return "Windows"
+
+        ; S'il y a au moins un /, alors c'est un chemin Unix
         if RegExMatch(path, "/")
             return "Unix"
         
