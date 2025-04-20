@@ -1,8 +1,9 @@
 #Requires AutoHotkey v2.0
 #Include ../Utils/Conditional.ahk
 
-
-
+#Include ../Utils/EditTextSelection.ahk
+#Include ../Utils/PathConverter.ahk
+#Include ../Utils/CaseConverter.ahk
 
 class JILK {
     static getMods(shiftModNode){
@@ -36,7 +37,7 @@ class JILK {
      * @param condition {(Func<bool>)}
      * @param shitModNode {KeyStateNode}
      */
-    static Init(condition, shiftModNode) {
+    static Init(condition, shiftmodnode) {
         ; Assignation des lettres aux directions
         JILK.AllModHotKey("j", "{Left}", condition, shiftModNode)      ; J -> Left
         JILK.AllModHotKey("i", "{Up}", condition, shiftModNode)        ; I -> Up
@@ -47,7 +48,7 @@ class JILK {
         JILK.AllModHotKey("h", "{Backspace}", condition, shiftModNode) ; H -> Backspace
         JILK.AllModHotKey("é", "{Delete}", condition, shiftModNode)    ; é -> Delete
         JILK.AllModHotKey("n", "{Enter}", condition, shiftModNode)     ; N -> Enter
-        JILK.AllModHotKey("m", "{Escape}", condition, shiftModNode)    ; M -> Escape
+        JILK.AllModHotKey("m", "{Escape}", condition, shiftModNode)    ; M -> Escape        
         
         Conditional.Hotkey("$,", (k) => SendInput("{Blind}!{Left}"), condition)
         Conditional.Hotkey("$.", (k) => SendInput("{Blind}!{Right}"), condition)
@@ -65,14 +66,12 @@ class JILK {
         Conditional.Hotkey("$+g", (k) => SendInput("{Blind}{Text}`""), condition)  ; back tick is the escape character. It escaped itself
         Conditional.Hotkey("$t", (k) => SendInput("{Blind}{Text}`""), condition)  ; back tick is the escape character. It escapes the double quotes
         Conditional.Hotkey("$b", (k) => SendInput("{Blind}{Text}'"), condition)
-        
-        Conditional.Hotkey("$q", (k) => SendInput("{Blind}{Text}:"), condition)
-        Conditional.Hotkey("$s", (k) => SendInput("{Blind}{Text}+"), condition)
-        Conditional.Hotkey("$w", (k) => SendInput("{Blind}{Text}="), condition)
-        Conditional.Hotkey("$+w", (k) => SendInput("{Blind}{Text}-"), condition)
-        
+                
+        Conditional.HotKey("$s", (key) => EditTextSelection.Apply(PathConverter.SwapPathTypeFunc), condition)
+        Conditional.HotKey("$w", (key) => EditTextSelection.Apply(CaseConverter.SwapAllCaseFunc), condition)
+
         Conditional.Hotkey("$a", (k) => SendInput("{Blind}{Text}!"), condition)
-        Conditional.Hotkey("$+a", (k) => SendInput("{Blind}{Text}?"), condition)
+        Conditional.Hotkey("$q", (k) => SendInput("{Blind}{Text}?"), condition)
         
         Conditional.Hotkey("$z", (k) => SendInput("^z"), condition)
         Conditional.Hotkey("$y", (k) => SendInput(JILK.selectLine "{Del}{Right}{End}{End}"), condition)          ; Y -> delete line

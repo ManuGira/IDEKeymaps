@@ -146,7 +146,6 @@ OnSpace(state, condition){
 spaceHoldCondition := (k) => not mouseLayerNode.GetState()
 spaceHold.Subscribe((s) => OnSpace(s, spaceHoldCondition))
 
-
 ; --------------- WIN CONTROLLER ---------------------
 #Include ThirdParty/WinController.ahk
 ; Alt + Left Button  : Drag to move a window.
