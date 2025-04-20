@@ -3,7 +3,6 @@
 class EditTextSelection {
     static Apply(UserFunction) {
         ; Backup clipboard
-
         ClipBoardBackup := ClipboardAll()
         A_Clipboard := ""   ; Restore the original clipboard.
         ; Simule un Ctrl+C pour copier la sélection
@@ -28,5 +27,33 @@ class EditTextSelection {
             MsgBox("Erreur : Impossible de copier le texte sélectionné.")
         }
         return
+    }
+
+    static SwapClipboardWithSelection(){
+        IsClipboardText() {
+            return ClipWait(0.1) && !!StrLen(A_Clipboard)
+        }
+        if !IsClipboardText()
+            return
+
+        ; Backup text clipboard
+        txtA := A_Clipboard
+        A_Clipboard := ""   ; Restore the original clipboard.
+        Send("^c")
+        if ClipWait(0.5) {
+            txtB := A_Clipboard
+            
+            A_Clipboard := txtA
+            Send("^v")
+
+            Sleep(50) ; Attendre un peu pour s'assurer que le collage est terminé
+            A_Clipboard := txtB
+
+            ; Sélectionne le texte collé
+            Send("{Left " . StrLen(txtA) . "}") 
+            Send("+{Right " . StrLen(txtA) . "}")
+
+            Sleep(50)
+        }
     }
 }
