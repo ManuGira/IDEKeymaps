@@ -32,3 +32,12 @@ TestUnixToWindows() {
     Assert.Equal(PathConverter.UnixToWindows("./Users/Moi/test"), ".\Users\Moi\test")
 }
 TestUnixToWindows()
+
+TestWindowsToUnix() {
+    Assert.Equal(PathConverter.WindowsToUnix("C:\Users\Moi\test"), "/c/Users/Moi/test")
+    Assert.Equal(PathConverter.WindowsToUnix("C:\Users\Moi et toi\test"), "/c/Users/Moi\ et\ toi/test")
+    Assert.Equal(PathConverter.WindowsToUnix("\Users\Moi\test"), "/Users/Moi/test")
+    Assert.Equal(PathConverter.WindowsToUnix("Users\Moi\test"), "Users/Moi/test")
+    Assert.Equal(PathConverter.WindowsToUnix(".\Users\Moi\test"), "./Users/Moi/test")
+}
+TestWindowsToUnix()

@@ -2,12 +2,19 @@
 
 class PathConverter {
     static WindowsToUnix(path) {
-        ; TODO
+        ; Si le chemin commence par [a-zA-Z]:\, on remplace [A-Z] par [a-z]:
+        if (RegExMatch(path, "^([a-zA-Z]):\\", &match)) {
+            drive := StrLower(match[1])
+            path := "/" drive SubStr(path, 3) ; remplace "C:" par "/c"
+        } 
+
+        path := StrReplace(path, "\", "/")
+        path := StrReplace(path, " ", "\ ") ; échappe les espaces avec un \
+        return path
     }
 
     static UnixToWindows(path) {
         ; Si le chemin commence par /[a-zA-Z]/, on replace /[a-zA-Z] par [A-Z]:
-        ; Ex: "/c/Users/Moi\ et\ toi/test" => "C:\Users\Moi et toi\test"
         if (RegExMatch(path, "^/([a-zA-Z])/", &match)) {
             drive := StrUpper(match[1])
 
