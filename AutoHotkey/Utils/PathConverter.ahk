@@ -2,24 +2,21 @@
 
 class PathConverter {
     static WindowsToUnix(path) {
-        ; Ex: "C:\Users\Moi\test" => "/c/Users/Moi/test"
-        if (RegExMatch(path, "i)^([A-Z]):\\", &match)) {
-            drive := match[1]
-            path := SubStr(path, 3) ; enlève "C:\"
-            path := StrReplace(path, "\", "/") ; remplace \ par /
-            return "/" . drive . "/" . path
-        } else {
-            return path ; si ce n'est pas un chemin Windows, on le laisse tel quel
-        }
+        ; TODO
     }
 
     static UnixToWindows(path) {
         ; Si le chemin commence par /[a-zA-Z]/, on replace /[a-zA-Z] par [A-Z]:
-        ; Ex: "/c/Users/Moi/test" => "C:\Users\Moi\test"
+        ; Ex: "/c/Users/Moi\ et\ toi/test" => "C:\Users\Moi et toi\test"
         if (RegExMatch(path, "^/([a-zA-Z])/", &match)) {
             drive := StrUpper(match[1])
-            path := drive ":" SubStr(path, 2) ; remplace "/c" par "C:"
-        }
+
+            path := drive ":" SubStr(path, 3) ; remplace "/c" par "C:"
+        } 
+
+        path := StrReplace(path, "\ ", " ")
+        path := StrReplace(path, "/", "\")
+        return path
     }
 
     static GuessPathType(path){

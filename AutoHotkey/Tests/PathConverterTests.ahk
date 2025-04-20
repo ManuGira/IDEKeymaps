@@ -23,3 +23,12 @@ TestGuessPathType() {
     Assert.Equal(PathConverter.GuessPathType("test"), unknown)
 }
 TestGuessPathType()
+
+TestUnixToWindows() {
+    Assert.Equal(PathConverter.UnixToWindows("/c/Users/Moi/test"), "C:\Users\Moi\test")
+    Assert.Equal(PathConverter.UnixToWindows("/c/Users/Moi\ et\ toi/test"), "C:\Users\Moi et toi\test")
+    Assert.Equal(PathConverter.UnixToWindows("/Users/Moi/test"), "\Users\Moi\test")
+    Assert.Equal(PathConverter.UnixToWindows("Users/Moi/test"), "Users\Moi\test")
+    Assert.Equal(PathConverter.UnixToWindows("./Users/Moi/test"), ".\Users\Moi\test")
+}
+TestUnixToWindows()
