@@ -7,7 +7,16 @@ class Conditional {
     static HotKeyMap := Map()
     ; static HotKeyMapAction := Map()
     ; static HotKeyMapConditions := Map()
-    
+
+    static SurroundWithCurlyBracketsIfNeeded(key) {
+        ; Construire le pattern en une seule regex avec alternation
+        pattern := "\b(Numpad1|Numpad2|Numpad3|Numpad4|Numpad5|Numpad6|Numpad7|Numpad8|Numpad9|Numpad0|NumpadDot|NumpadDiv|NumpadMult|NumpadAdd|NumpadSub)\b"
+
+        ; Remplacer chaque match par [match]
+        return RegExReplace(key, pattern, "{$1}")
+    }
+
+
     /**
      * @description Wraps the builtin `Hotkey()` function. 
      * The Action callback is called only if the ConditionFunction returns true.
@@ -43,6 +52,9 @@ class Conditional {
                 ; if the key is NOT a release key (ends with " Up"),
                 ; remove the leading $ if present
                 k1 := RegExReplace(k1, "i)^\$")
+                
+                k1 := Conditional.SurroundWithCurlyBracketsIfNeeded(k1)
+
                 SendInput("{Blind}" k1)
             }
         }
