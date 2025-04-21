@@ -115,23 +115,7 @@ mouseLayerNode := agraveHold
 mouseLayerNode.Subscribe((s) => ShowState("Mouse", mouseLayerNode, s))
 MouseController.Init(mouseLayerNode, spaceHold)
 
-; --------------- SPECIAL CHAR LAYER -----------------
-;OnTab(state){
-;    isRelease := state = 0
-;    isCombo := A_PriorHotkey != A_ThisHotkey
-;    if (isRelease and not isCombo)
-;        SendInput("{Tab}")
-;}   
-;
-;tabNode := altHold := DummyNode(KeyStateNode("LAlt", , false)).Subscribe((s) => OnTab(s))
-
-
-
 ; --------------- SPACE AS SHIFT ---------------------
-;#Include Layers/SpaceAsShift.ahk
-;spaceHoldCondition := (k) => not mouseLayerNode.GetState()
-;SpaceAsShift.Init(spaceHoldCondition)
-
 OnSpace(state, condition){
     if not condition("")
         return
