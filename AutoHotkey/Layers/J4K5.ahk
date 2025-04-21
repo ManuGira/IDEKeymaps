@@ -15,9 +15,9 @@ class J4K5 {
         Conditional.Hotkey("$i", (k) => SendInput("{Blind}{Text}8"), condition)
         Conditional.Hotkey("$o", (k) => SendInput("{Blind}{Text}9"), condition)
 
-        Conditional.Hotkey("$p", (k) => SendInput("{Blind}{Text}%"), condition)
+        Conditional.Hotkey("$p", (k) => SendInput("{Blind}{Text}@"), condition)
         Conditional.Hotkey("$é", (k) => SendInput("{Blind}{Text}#"), condition)
-        Conditional.Hotkey("$-", (k) => SendInput("{Blind}{Text}@"), condition)
+        Conditional.Hotkey("$-", (k) => SendInput("{Blind}{Text}%"), condition)
         
         Conditional.Hotkey("$n", (k) => SendInput("{Blind}{Text}0"), condition)
         Conditional.Hotkey("$h", (k) => SendInput("{Blind}{Text}."), condition)
