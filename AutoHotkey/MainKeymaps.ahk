@@ -92,7 +92,7 @@ egraveHold := DummyNode(KeyStateNode("è", , false))
 smallerThanHold := DummyNode(KeyStateNode("<", , false))
 spaceHold := DummyNode(KeyStateNode("Space", , false))
 
-capsHold.Subscribe((s) => SendCharIfNoCombo("CapsLock", s))
+;capsHold.Subscribe((s) => SendCharIfNoCombo("CapsLock", s))
 egraveHold.Subscribe((s) => SendCharIfNoCombo("è", s))
 smallerThanHold.Subscribe((s) => SendCharIfNoCombo("<", s))
 spaceHold.Subscribe((s) => SendCharIfNoCombo("{Space}", s))
@@ -131,9 +131,9 @@ spaceHoldCondition := (k) => not mouseLayerNode.GetState()
 spaceHold.Subscribe((s) => OnSpace(s, spaceHoldCondition))
 
 ; --------------- NUMPADAWAN LAYER ------------------------
-; #Include Layers/NumpadAwan.ahk
-; IsScrollLockEnabled := (s) => GetKeyState("ScrollLock", "T")
-; NumpadAwan.Init(IsScrollLockEnabled)
+#Include Layers/NumpadAwan.ahk
+IsScrollLockEnabled := (s) => GetKeyState("ScrollLock", "T")
+NumpadAwan.Init(IsScrollLockEnabled)
 
 ; --------------- WIN CONTROLLER ---------------------
 #Include ThirdParty/WinController.ahk
