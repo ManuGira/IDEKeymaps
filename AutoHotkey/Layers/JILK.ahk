@@ -6,6 +6,59 @@
 #Include ../Utils/CaseConverter.ahk
 #Include ../Nodes/include.ahk
 
+class CodeBlockUtils {
+    static IsClipboardText() {
+        return ClipWait(0.1) && !!StrLen(A_Clipboard)
+    }
+
+    static LineReturn(){
+        SendInput("{ShiftDown}{Enter}{ShiftUp}")
+    }
+    static SimpleBackTick(){
+        SendInput("{Blind}{Text}``")
+    }
+    static TripleBackTick(){
+        SendInput("{Blind}{Text}``````")
+    }
+
+    static Paste(){
+        SendInput("^v")
+        Sleep(100) ; Attendre un peu pour s'assurer que le collage est terminé
+    }
+    static SendCodeBlock(s) {
+        if (!s)
+            return
+        
+        SendInput("{Backspace}{Backspace}{Backspace}")
+        this.LineReturn()
+        this.TripleBackTick()
+        this.LineReturn()
+        if this.IsClipboardText(){
+            this.Paste()
+            this.LineReturn()
+            this.TripleBackTick()
+            this.LineReturn()
+        } else {
+            this.LineReturn()
+            this.TripleBackTick()
+            SendInput("{Up}")
+        }
+    }
+
+    static SendInlineCode(s) {
+        if (!s)
+            return
+
+        if CodeBlockUtils.IsClipboardText(){
+            this.Paste()
+            this.SimpleBackTick()
+        } else {
+            this.SimpleBackTick()
+            SendInput("{Left}")
+        }
+    }
+}
+
 class JILK {
     static getMods(shiftModNode){
         mods := ""
@@ -65,41 +118,21 @@ class JILK {
 
         BackTickCB(s) {
             if (s){
-                SendInput("{Blind}{Text}``")
+                CodeBlockUtils.SimpleBackTick()
             }
         }
+        
+        dummy := DummyNode( , BackTickCB, false)
+        hold := HoldNode(dummy, , 400)
+        spam3 := SpamCountNode(dummy, , 200, 3)
+        notSpam3 := InverseNode(spam3, , true)
+        AndNode([hold, notSpam3], (s) => CodeBlockUtils.SendInlineCode(s))
+        AndNode([hold, spam3], (s) => CodeBlockUtils.SendCodeBlock(s))
+        ;(s) => CodeBlockUtils.SendCodeBlock(s)
 
-        SendCodeBlock(s) {
-            LineReturn(){
-                SendInput("{ShiftDown}{Enter}{ShiftUp}")
-            }
-
-            IsClipboardText() {
-                return ClipWait(0.1) && !!StrLen(A_Clipboard)
-            }
-
-            if (s){
-                SendInput("{Backspace}")
-                LineReturn()
-                SendInput("{Blind}{Text}``````")
-                LineReturn()
-                if IsClipboardText(){
-                    SendInput("^v")
-                    Sleep(100) ; Attendre un peu pour s'assurer que le collage est terminé
-                    LineReturn()
-                    SendInput("{Blind}{Text}``````")
-                } else {
-                    LineReturn()
-                    SendInput("{Blind}{Text}``````")
-                    SendInput("{Up}")
-                }
-            }
-        }
-        node0 := DummyNode( , BackTickCB, false)
-        holdNode0 := HoldNode(node0, (s) => SendCodeBlock(s), 200)
-
-        Conditional.Hotkey("$g", (k) => node0.Update(1), condition)  ; back tick is the escape character. It escaped itself       
-        Conditional.Hotkey("$g Up", (k) => node0.Update(0), condition)  ; back tick is the escape character. It escaped itself       
+        
+        Conditional.Hotkey("$g", (k) => dummy.Update(1), condition)  ; back tick is the escape character. It escaped itself       
+        Conditional.Hotkey("$g Up", (k) => dummy.Update(0), condition)  ; back tick is the escape character. It escaped itself       
 
         Conditional.Hotkey("$t", (k) => SendInput("{Blind}{Text}`""), condition)  ; back tick is the escape character. It escapes the double quotes
         Conditional.Hotkey("$b", (k) => SendInput("{Blind}{Text}'"), condition)
