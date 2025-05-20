@@ -121,6 +121,59 @@ TestHitNode(){
 }
 TestHitNode()
 
+TestHoldNode(){
+    OutputDebug "--- TestHoldNode ---"
+    triggerCount := 0
+    MyCallback(state){
+        triggerCount++
+        OutputDebug("TestHoldNode: MyCallback(" state ")")
+    }
+    dummy := DummyNode(,(s) => OutputDebug("TestHoldNode: dummy.Update(" s ")"),false)
+    hold := HoldNode(dummy, (s) => MyCallback(s), 200)  ; t=0
+    TestNodeInterface(hold)
+
+    ; 1st run fast press-release 
+    dummy.Update(true) ; t=0, 1st timer will wake up at t=200
+    Assert.Equal(triggerCount, 0)
+    Assert.False(hold.GetState())
+    Assert.Equal(hold.counter, 0)
+
+    OutputDebug("TestHoldNode: Sleep(100) => t=100")
+    Sleep(100) ; t=100 ;  thresold is 200ms. t=100 is too short to trigger the HoldNode
+    dummy.Update(false)
+    Assert.Equal(triggerCount, 0)
+    Assert.False(hold.GetState())
+    Assert.Equal(hold.counter, 1)
+
+    ; again a fast press-release, inner 1st timer will wake up but must not trigger the callback
+    OutputDebug("TestHoldNode: Sleep(50) => t=150")
+    Sleep(50) ; t=150
+    dummy.Update(true) ; new timer scheduled for t=350
+    Assert.Equal(triggerCount, 0)
+    Assert.False(hold.GetState())
+    Assert.Equal(hold.counter, 1)
+
+    OutputDebug("TestHoldNode: Sleep(100) => t=250")
+    Sleep(100) ; t=250, 1st timer has already waken up while key was down but it must not trigger.
+    Assert.Equal(hold.counter, 1)
+    Assert.False(hold.GetState())
+    Assert.Equal(triggerCount, 0)
+
+    OutputDebug("TestHoldNode: Sleep(150) => t=400")
+    Sleep(150) ; t=400, 2nd timer must have trigger true
+    Assert.Equal(triggerCount, 1)
+    Assert.True(hold.GetState())
+
+    dummy.Update(false) ; this must trigger the callback in the current thread
+    Assert.Equal(triggerCount, 2)
+    Assert.False(hold.GetState())
+
+    dummy.Update(false) ; resending false must not trigger the callback
+    Assert.Equal(triggerCount, 2)
+    Assert.False(hold.GetState())
+}
+TestHoldNode()
+
 TestToggleNode(){
     ToggleNodeReceivesUpdates(tn){
         Assert.False(tn.GetState())
