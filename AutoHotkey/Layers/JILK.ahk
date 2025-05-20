@@ -7,53 +7,71 @@
 #Include ../Nodes/include.ahk
 
 class CodeBlockUtils {
-    static IsClipboardText() {
+    __New(character) {
+        this.character := character
+        
+        this.dummy := DummyNode( , (s) => (s) ? this.SimpleChar() : "", false)
+        hold := HoldNode(this.dummy, , 400)
+        spam3 := SpamCountNode(this.dummy, , 200, 3)
+        notSpam3 := InverseNode(spam3, , true)
+        AndNode([hold, notSpam3], (s) => this.SendInlineCode(s)) ; hold key -> send inline code
+        AndNode([hold, spam3], (s) => this.SendCodeBlock(s)) ; hit-hit-hold key -> send code block
+    }
+
+    Update(state) {
+        this.dummy.Update(state)
+    }
+
+    IsClipboardText() {
         return ClipWait(0.1) && !!StrLen(A_Clipboard)
     }
 
-    static LineReturn(){
+    LineReturn(){
         SendInput("{ShiftDown}{Enter}{ShiftUp}")
     }
-    static SimpleBackTick(){
-        SendInput("{Blind}{Text}``")
-    }
-    static TripleBackTick(){
-        SendInput("{Blind}{Text}``````")
+
+    SimpleChar(){
+        SendInput("{Blind}{Text}" this.character)
     }
 
-    static Paste(){
+    TripleChar(){
+        SendInput("{Blind}{Text}" this.character this.character this.character)
+    }
+
+    Paste(){
         SendInput("^v")
         Sleep(100) ; Attendre un peu pour s'assurer que le collage est terminé
     }
-    static SendCodeBlock(s) {
+
+    SendCodeBlock(s) {
         if (!s)
             return
         
         SendInput("{Backspace}{Backspace}{Backspace}")
         this.LineReturn()
-        this.TripleBackTick()
+        this.TripleChar()
         this.LineReturn()
         if this.IsClipboardText(){
             this.Paste()
             this.LineReturn()
-            this.TripleBackTick()
+            this.TripleChar()
             this.LineReturn()
         } else {
             this.LineReturn()
-            this.TripleBackTick()
+            this.TripleChar()
             SendInput("{Up}")
         }
     }
 
-    static SendInlineCode(s) {
+    SendInlineCode(s) {
         if (!s)
             return
 
-        if CodeBlockUtils.IsClipboardText(){
+        if this.IsClipboardText(){
             this.Paste()
-            this.SimpleBackTick()
+            this.SimpleChar()
         } else {
-            this.SimpleBackTick()
+            this.SimpleChar()
             SendInput("{Left}")
         }
     }
@@ -116,27 +134,20 @@ class JILK {
         Conditional.Hotkey("$+d", (k) => SendInput("{Blind}{Text}["), condition)
         Conditional.Hotkey("$+f", (k) => SendInput("{Blind}{Text}]"), condition)
 
-        BackTickCB(s) {
-            if (s){
-                CodeBlockUtils.SimpleBackTick()
-            }
-        }
         
-        dummy := DummyNode( , BackTickCB, false)
-        hold := HoldNode(dummy, , 400)
-        spam3 := SpamCountNode(dummy, , 200, 3)
-        notSpam3 := InverseNode(spam3, , true)
-        AndNode([hold, notSpam3], (s) => CodeBlockUtils.SendInlineCode(s))
-        AndNode([hold, spam3], (s) => CodeBlockUtils.SendCodeBlock(s))
-        ;(s) => CodeBlockUtils.SendCodeBlock(s)
+        backTickBlock := CodeBlockUtils("``")  ; back tick is the escape character. It escaped itself
+        Conditional.Hotkey("$g", (k) => backTickBlock.Update(1), condition)
+        Conditional.Hotkey("$g Up", (k) => backTickBlock.Update(0), condition) 
 
-        
-        Conditional.Hotkey("$g", (k) => dummy.Update(1), condition)  ; back tick is the escape character. It escaped itself       
-        Conditional.Hotkey("$g Up", (k) => dummy.Update(0), condition)  ; back tick is the escape character. It escaped itself       
+        doubleQuoteBlock := CodeBlockUtils('"')
+        Conditional.Hotkey("$t", (k) => doubleQuoteBlock.Update(1), condition)
+        Conditional.Hotkey("$t Up", (k) => doubleQuoteBlock.Update(0), condition)
 
-        Conditional.Hotkey("$t", (k) => SendInput("{Blind}{Text}`""), condition)  ; back tick is the escape character. It escapes the double quotes
-        Conditional.Hotkey("$b", (k) => SendInput("{Blind}{Text}'"), condition)
+        quoteBlock := CodeBlockUtils("'")
+        Conditional.Hotkey("$b", (k) => quoteBlock.Update(1), condition)
+        Conditional.Hotkey("$b Up", (k) => quoteBlock.Update(0), condition)
                 
+
         Conditional.HotKey("$s", (key) => EditTextSelection.Apply(PathConverter.SwapPathTypeFunc), condition)
         Conditional.HotKey("$w", (key) => EditTextSelection.Apply(CaseConverter.SwapAllCaseFunc), condition)
 
