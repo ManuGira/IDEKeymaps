@@ -5,6 +5,7 @@
 #Include DummyNode.ahk
 #Include HitNode.ahk
 #Include INode.ahk
+#Include InverseNode.ahk
 #Include KeyStateNode.ahk
 #Include OrNode.ahk
 #Include TimedNode.ahk

@@ -24,6 +24,19 @@ TestDummyNode() {
 }
 TestDummyNode()
 
+TestInverseNode() {
+    node := InverseNode()
+    TestNodeInterface(node)
+
+    Assert.False(node.GetState()) ; 0 -> 1
+
+    node.Update(true)
+    Assert.False(node.GetState()) ; 1 -> 0
+
+    node.Update(false)
+    Assert.True(node.GetState()) ; 0 -> 1
+}
+
 TestAndNode() {
     dummy0 := DummyNode(,,false)
     dummy1 := DummyNode(,,false)
