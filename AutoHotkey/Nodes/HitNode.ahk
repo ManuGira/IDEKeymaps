@@ -1,6 +1,5 @@
 #Requires AutoHotkey v2.0
 #Include INode.ahk
-#Include KeyStateNode.ahk
 #Include ../Utils/TimeStamp.ahk
 
 class HitNode extends INode{
@@ -21,7 +20,7 @@ class HitNode extends INode{
             this.Subscribe(callback)
     }
 
-    onKeyUp(){ 
+    onFalse(){ 
         interval := TimeStamp.Now().Sub(this.timeStampDown).ValueMs()
         if interval < this.intervalThresholdMs {
             ; send true then false
@@ -33,15 +32,15 @@ class HitNode extends INode{
         }
     }
 
-    onKeyDown(){        
+    onTrue(){        
         this.timeStampDown := TimeStamp.Now()
     }
 
     Update(state){ 
         if state == 1 
-            this.onKeyDown()
+            this.onTrue()
         else if state == 0
-            this.onKeyUp()
+            this.onFalse()
         else
             throw "Unknown key state: " state
     }
