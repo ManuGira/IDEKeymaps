@@ -9,5 +9,6 @@
 #Include InverseNode.ahk
 #Include KeyStateNode.ahk
 #Include OrNode.ahk
+#Include SpamCountNode.ahk
 #Include TimedNode.ahk
 #Include ToggleNode.ahk
