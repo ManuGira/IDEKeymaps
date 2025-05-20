@@ -4,6 +4,7 @@
 #Include ../Utils/EditTextSelection.ahk
 #Include ../Utils/PathConverter.ahk
 #Include ../Utils/CaseConverter.ahk
+#Include ../Nodes/include.ahk
 
 class JILK {
     static getMods(shiftModNode){
@@ -62,8 +63,44 @@ class JILK {
         Conditional.Hotkey("$+d", (k) => SendInput("{Blind}{Text}["), condition)
         Conditional.Hotkey("$+f", (k) => SendInput("{Blind}{Text}]"), condition)
 
-        Conditional.Hotkey("$g", (k) => SendInput("{Blind}{Text}``"), condition)  ; back tick is the escape character. It escaped itself
-        Conditional.Hotkey("$+g", (k) => SendInput("{Blind}{Text}`""), condition)  ; back tick is the escape character. It escaped itself
+        BackTickCB(s) {
+            if (s){
+                SendInput("{Blind}{Text}``")
+            }
+        }
+
+        SendCodeBlock(s) {
+            LineReturn(){
+                SendInput("{ShiftDown}{Enter}{ShiftUp}")
+            }
+
+            IsClipboardText() {
+                return ClipWait(0.1) && !!StrLen(A_Clipboard)
+            }
+
+            if (s){
+                SendInput("{Backspace}")
+                LineReturn()
+                SendInput("{Blind}{Text}``````")
+                LineReturn()
+                if IsClipboardText(){
+                    SendInput("^v")
+                    Sleep(100) ; Attendre un peu pour s'assurer que le collage est terminé
+                    LineReturn()
+                    SendInput("{Blind}{Text}``````")
+                } else {
+                    LineReturn()
+                    SendInput("{Blind}{Text}``````")
+                    SendInput("{Up}")
+                }
+            }
+        }
+        node0 := DummyNode( , BackTickCB, false)
+        holdNode0 := HoldNode(node0, (s) => SendCodeBlock(s), 200)
+
+        Conditional.Hotkey("$g", (k) => node0.Update(1), condition)  ; back tick is the escape character. It escaped itself       
+        Conditional.Hotkey("$g Up", (k) => node0.Update(0), condition)  ; back tick is the escape character. It escaped itself       
+
         Conditional.Hotkey("$t", (k) => SendInput("{Blind}{Text}`""), condition)  ; back tick is the escape character. It escapes the double quotes
         Conditional.Hotkey("$b", (k) => SendInput("{Blind}{Text}'"), condition)
                 
