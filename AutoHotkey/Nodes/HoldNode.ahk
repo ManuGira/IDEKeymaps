@@ -24,7 +24,6 @@ class HoldNode extends INode{
     }
 
     onTimerEnd(id){
-        OutputDebug("HoldNode.onTimerEnd(id: " id "), counter: " this.counter ", timerCounts: " this.timerCounts " -> " this.timerCounts -1)
         this.timerCounts--
 
         if id != this.counter
@@ -35,7 +34,6 @@ class HoldNode extends INode{
     }
 
     onFalse(){
-        OutputDebug("HoldNode.onFalse(), counter: " this.counter " -> " this.counter + 1 ", state: " this.state " -> 0, timerCounts: " this.timerCounts)
         this.counter := this.counter + 1 
 
         if !this.state
@@ -46,7 +44,6 @@ class HoldNode extends INode{
     }
 
     onTrue(){   
-        OutputDebug("HoldNode.onTrue(), counter: " this.counter ", state: " this.state ", timerCounts: " this.timerCounts " -> " this.timerCounts +1)
         this.timerCounts++
         id := this.counter
         SetTimer(() => this.onTimerEnd(id), -this.intervalThresholdMs)
