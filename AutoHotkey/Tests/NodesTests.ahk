@@ -85,9 +85,9 @@ TestHitNode(){
     MyCallback(state){
         counter++
     }
-    
     dummy := DummyNode(,,false)
     hit := HitNode(dummy, (s) => MyCallback(s))
+    TestNodeInterface(hit)
 
     ; run slow press-release 
     dummy.Update(true)
