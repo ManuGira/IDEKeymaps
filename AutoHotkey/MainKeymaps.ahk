@@ -16,11 +16,11 @@ ShowState(name, stateNode, state){
         if not stateNode.GetState()
             return
         SetTimer(() => ShowMessage(), -200)
-        ToolTip(name " Enabled")
+        ;ToolTip(name " Enabled")
     }
     ShowMessage()
     if state = 0 {
-        ToolTip(name " Disabled")
+        ;ToolTip(name " Disabled")
         SetTimer(() => ToolTip(), -1000)
     }
 }
@@ -84,7 +84,7 @@ SendCharIfNoCombo(character, state){
 winHold := DummyNode(KeyStateNode("LWin", , true))
 altHold := DummyNode(KeyStateNode("LAlt", , true))
 ;ctrlHold := DummyNode(KeyStateNode("LCtrl", , true))
-;shiftHold := DummyNode(KeyStateNode("LShift", , true))
+shiftHold := DummyNode(KeyStateNode("LShift", , true))
 
 capsHold := DummyNode(KeyStateNode("Capslock", , false))
 agraveHold := DummyNode(KeyStateNode("à", , false))
@@ -101,8 +101,8 @@ agraveHold.Subscribe((s) => SendCharIfNoCombo("à", s))
 ; --------------- JILK DIRECTION LAYER ------------------------
 jilkLayerNode := capsHold
 jilkLayerNode.Subscribe((s) => ShowState("JILK", jilkLayerNode, s))
-jilkCondition := (k) => jilkLayerNode.GetState()
-JILK.Init(jilkCondition, spaceHold)
+; space -> shift, ctrl -> shift
+JILK.Init(jilkLayerNode, spaceHold, shiftHold, )
 
 ; --------------- J4K5 NUMPAD LAYER ------------------------
 j4k5LayerNode := OrNode([egraveHold, smallerThanHold])
