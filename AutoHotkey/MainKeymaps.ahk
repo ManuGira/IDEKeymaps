@@ -8,6 +8,28 @@
 
 #Include Utils/FullKeyboardObserver.ahk
 
+; -------------------- OPTIONS -------------------
+noModSwap := "--no-mod-swap"
+noSpaceShift := "--no-space-shift"
+Options := Map()
+Options[noModSwap] := false
+Options[noSpaceShift] := false
+
+; iterate over argumenst A_Args
+for index, arg in A_Args {
+    if arg == noModSwap {
+        Options[noModSwap] := true
+        continue
+    }
+    if arg == noSpaceShift {
+        Options[noSpaceShift] := true
+        continue
+    }
+}
+OutputDebug("Option:" noModSwap ": " Options[noModSwap])
+OutputDebug("Option:" noSpaceShift ": " Options[noSpaceShift])
+; -----
+
 FullKeyboardObserver.Init()
 
 ; function to display a tooltip as long as the layer is enabled
@@ -102,7 +124,12 @@ agraveHold.Subscribe((s) => SendCharIfNoCombo("à", s))
 jilkLayerNode := capsHold
 jilkLayerNode.Subscribe((s) => ShowState("JILK", jilkLayerNode, s))
 ; space -> shift, ctrl -> shift
-JILK.Init(jilkLayerNode, spaceHold, shiftHold, )
+if Options[noModSwap] {
+    JILK.Init(jilkLayerNode, , , )
+} else {
+    JILK.Init(jilkLayerNode, spaceHold, shiftHold, )
+}
+
 
 ; --------------- J4K5 NUMPAD LAYER ------------------------
 j4k5LayerNode := OrNode([egraveHold, smallerThanHold])
@@ -127,8 +154,10 @@ OnSpace(state, condition){
         SendInput("{ShiftUp}")
 }
 
-spaceHoldCondition := (k) => not mouseLayerNode.GetState()
-spaceHold.Subscribe((s) => OnSpace(s, spaceHoldCondition))
+if !Options[noSpaceShift] {
+    spaceHoldCondition := (k) => not mouseLayerNode.GetState()
+    spaceHold.Subscribe((s) => OnSpace(s, spaceHoldCondition))
+}
 
 ; --------------- NUMPADAWAN LAYER ------------------------
 #Include Layers/NumpadAwan.ahk
