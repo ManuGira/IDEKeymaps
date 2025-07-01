@@ -11,6 +11,9 @@
 
 FullKeyboardObserver.Init()
 
+; Deactivate CapsLock at initialisation
+SetCapsLockState(0)
+
 ; function to display a tooltip as long as the layer is enabled
 ShowState(name, stateNode, state){
     ShowMessage(){

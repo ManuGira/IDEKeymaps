@@ -6,32 +6,43 @@
         "maxScanDepth": 2,
         "templateSnippetName": "AhkTemplateV2"
     },
-    "workbench.colorTheme": "Visual Studio Light",
+    "workbench.tree.indent": 25,
+    "workbench.colorTheme": "Default Light Modern",
     "workbench.colorCustomizations": {
-        "activityBar.background": "#33aa33",
-        "sideBarTitle.border": "#33aa33",
-        "icon.foreground": "#33aa33",
-        "sideBar.border": "#33aa33",
-        "titleBar.border": "#33aa33",	
-        "menu.foreground": "#33aa33",
-        "tab.activeForeground": "#33aa33",
-        "editorGroupHeader.tabsBorder": "#33aa33",
-        "panel.border": "#33aa33",
+        // "#8cf287", // pop
+        // "#56a74d", // normal
+        // "#448e3a", // dark
 
-        "sideBarSectionHeader.border": "#33aa3355",
-        "tab.border": "#33aa3355",
-        
-        "activityBar.activeBackground": "#33cc33",
-        "titleBar.activeForeground": "#33cc33",
-        
-        "sideBar.foreground": "#000000",
-        "titleBar.activeBackground": "#444444",
-        "sideBarTitle.background": "#555555",
-        "titleBar.inactiveBackground": "#666666",
-        "sideBar.background": "#eeeeee",
-        "menu.background": "#f7f7f7",
-        "panel.background": "#fbfbfb",
+        "activityBar.background": "#448e3a", // dark
+        "activityBar.activeBackground": "#56a74d", // normal
         "activityBar.foreground": "#ffffff",
+
+        "sideBarTitle.border": "#448e3a", // dark
+        "sideBarTitle.background": "#555555",
         "sideBarTitle.foreground": "#ffffff",
+        
+        "icon.foreground": "#448e3a", // dark
+
+        "sideBar.border": "#448e3a", // dark
+        "sideBar.background": "#eeeeee",
+        "sideBar.foreground": "#000000",
+
+        "titleBar.activeBackground": "#444444",
+        "titleBar.inactiveBackground": "#666666",
+        "titleBar.activeForeground": "#8cf287", // pop
+        "titleBar.border": "#448e3a", // dark	
+
+        "menu.background": "#f7f7f7",
+        "menu.foreground": "#448e3a", // dark
+
+        "tab.border": "#448e3a", // dark
+        "tab.activeForeground": "#448e3a", // dark
+
+        // border of bottom tabs
+        "editorGroupHeader.tabsBorder": "#448e3a", // dark
+        "editorGroup.border":"#448e3a", // dark
+
+        "panel.border": "#448e3a", // dark
+        "panel.background": "#ffffee",
     }
 }
