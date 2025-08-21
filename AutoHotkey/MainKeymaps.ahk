@@ -5,6 +5,7 @@
 #Include Layers/JILK.ahk
 #Include Layers/J4K5.ahk
 #Include Layers/MouseController.ahk
+#Include Layers/FXX.ahk
 
 #Include Utils/FullKeyboardObserver.ahk
 
@@ -86,17 +87,23 @@ altHold := DummyNode(KeyStateNode("LAlt", , true))
 ;ctrlHold := DummyNode(KeyStateNode("LCtrl", , true))
 ;shiftHold := DummyNode(KeyStateNode("LShift", , true))
 
-capsHold := DummyNode(KeyStateNode("Capslock", , false))
-agraveHold := DummyNode(KeyStateNode("à", , false))
-egraveHold := DummyNode(KeyStateNode("è", , false))
-smallerThanHold := DummyNode(KeyStateNode("<", , false))
-spaceHold := DummyNode(KeyStateNode("Space", , false))
+rshiftHold := DummyNode(KeyStateNode("RShift", , false))
 
+capsHold := DummyNode(KeyStateNode("Capslock", , false))
 ;capsHold.Subscribe((s) => SendCharIfNoCombo("CapsLock", s))
-egraveHold.Subscribe((s) => SendCharIfNoCombo("è", s))
-smallerThanHold.Subscribe((s) => SendCharIfNoCombo("<", s))
-spaceHold.Subscribe((s) => SendCharIfNoCombo("{Space}", s))
+
+agraveHold := DummyNode(KeyStateNode("à", , false))
 agraveHold.Subscribe((s) => SendCharIfNoCombo("à", s))
+
+egraveHold := DummyNode(KeyStateNode("è", , false))
+egraveHold.Subscribe((s) => SendCharIfNoCombo("è", s))
+
+smallerThanHold := DummyNode(KeyStateNode("<", , false))
+smallerThanHold.Subscribe((s) => SendCharIfNoCombo("<", s))
+
+spaceHold := DummyNode()
+;spaceHold.Subscribe((s) => SendCharIfNoCombo("{Space}", s))
+
 
 ; --------------- JILK DIRECTION LAYER ------------------------
 jilkLayerNode := capsHold
@@ -134,6 +141,12 @@ spaceHold.Subscribe((s) => OnSpace(s, spaceHoldCondition))
 #Include Layers/NumpadAwan.ahk
 IsScrollLockEnabled := (s) => GetKeyState("ScrollLock", "T")
 NumpadAwan.Init(IsScrollLockEnabled)
+
+; ---------------- FXX LAYER ------------------------
+ffxLayerNode := rshiftHold
+ffxLayerNode.Subscribe((s) => ShowState("FXX", ffxLayerNode, s))
+ffxCondition := (k) => ffxLayerNode.GetState()
+FXX.Init(ffxCondition)
 
 ; --------------- WIN CONTROLLER ---------------------
 #Include ThirdParty/WinController.ahk
