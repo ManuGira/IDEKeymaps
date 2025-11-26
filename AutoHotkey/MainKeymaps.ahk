@@ -112,13 +112,13 @@ jilkCondition := (k) => jilkLayerNode.GetState()
 JILK.Init(jilkCondition, spaceHold)
 
 ; --------------- J4K5 NUMPAD LAYER ------------------------
-j4k5LayerNode := OrNode([egraveHold, smallerThanHold])
+j4k5LayerNode := OrNode([rshiftHold, smallerThanHold])
 j4k5LayerNode.Subscribe((s) => ShowState("J4K5", j4k5LayerNode, s))
 j4k5Condition := (k) => j4k5LayerNode.GetState()
 J4K5.Init(j4k5Condition)
 
 ; ---------------- MOUSE CONTROLLER LAYER ----------------
-mouseLayerNode := agraveHold
+mouseLayerNode := egraveHold
 mouseLayerNode.Subscribe((s) => ShowState("Mouse", mouseLayerNode, s))
 MouseController.Init(mouseLayerNode, spaceHold)
 
@@ -143,7 +143,7 @@ IsScrollLockEnabled := (s) => GetKeyState("ScrollLock", "T")
 NumpadAwan.Init(IsScrollLockEnabled)
 
 ; ---------------- FXX LAYER ------------------------
-ffxLayerNode := rshiftHold
+ffxLayerNode := agraveHold
 ffxLayerNode.Subscribe((s) => ShowState("FXX", ffxLayerNode, s))
 ffxCondition := (k) => ffxLayerNode.GetState()
 FXX.Init(ffxCondition)
