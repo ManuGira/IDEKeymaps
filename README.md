@@ -1,70 +1,21 @@
-_(This readme has been generated with generate_readme.py)_
-# IDEKeymaps
-|Keymap                          |Action                          |PyCharm                         |VSCode                          |VisualStudio2017                |VisualStudio2022                |
-|--------------------------------|--------------------------------|--------------------------------|--------------------------------|--------------------------------|--------------------------------|
-|Alt+J                           |LEFT                            |X                               |X                               |X                               |X                               |
-|Ctrl+Alt+J                      |CTRL_LEFT                       |X                               |X                               |X                               |X                               |
-|Shift+Alt+J                     |SHIFT_LEFT                      |X                               |X                               |X                               |X                               |
-|Ctrl+Shift+Alt+J                |CTRL_SHIFT_LEFT                 |X                               |X                               |X                               |X                               |
-|Alt+L                           |RIGHT                           |X                               |X                               |X                               |X                               |
-|Ctrl+Alt+L                      |CTRL_RIGHT                      |X                               |X                               |X                               |X                               |
-|Shift+Alt+L                     |SHIFT_RIGHT                     |X                               |X                               |X                               |X                               |
-|Ctrl+Shift+Alt+L                |CTRL_SHIFT_RIGHT                |X                               |X                               |X                               |X                               |
-|Alt+I                           |UP                              |X                               |X                               |X                               |X                               |
-|Shift+Alt+I                     |SHIFT_UP                        |X                               |X                               |X                               |X                               |
-|Alt+K                           |DOWN                            |X                               |X                               |X                               |X                               |
-|Shift+Alt+K                     |SHIFT_DOWN                      |X                               |X                               |X                               |X                               |
-|Alt+U                           |HOME                            |X                               |X                               |X                               |X                               |
-|Shift+Alt+U                     |SHIFT_HOME                      |X                               |X                               |X                               |X                               |
-|Alt+O                           |END                             |X                               |X                               |X                               |X                               |
-|Shift+Alt+O                     |SHIFT_END                       |X                               |X                               |X                               |X                               |
-|Alt+N                           |BACKSPACE                       |                                |X                               |X                               |X                               |
-|Ctrl+Alt+N                      |SHIFT_BACKSPACE                 |                                |                                |X                               |X                               |
-|Shift+Alt+N                     |DELETE                          |                                |X                               |X                               |X                               |
-|Ctrl+Shift+Alt+N                |SHIFT_DELETE                    |                                |                                |X                               |X                               |
-|Ctrl+D                          |DUPLICATE_LINE                  |                                |X                               |                                |                                |
-|Ctrl+Y                          |DELETE_LINE                     |X                               |X                               |X                               |X                               |
-|Alt+M                           |ENTER                           |                                |X                               |X                               |X                               |
-|Ctrl+Num /                      |COMMENT                         |X                               |X                               |X                               |X                               |
-|Alt+7                           |COMMENT                         |X                               |X                               |X                               |X                               |
-|Alt+W                           |EDIT_NEXT_MATCH                 |                                |X                               |                                |                                |
-|Sift+Alt+W                      |EDIT_PREV_MATCH                 |                                |X                               |                                |                                |
-|Ctrl+Alt+I                      |NEW_CARET_ABOVE                 |X                               |X                               |                                |                                |
-|Ctrl+Alt+K                      |NEW_CARET_BELOW                 |X                               |X                               |                                |                                |
-|Alt+P                           |MOVE_LINE_UP                    |X                               |                                |X                               |X                               |
-|Alt+�                           |MOVE_LINE_DOWN                  |X                               |                                |X                               |X                               |
-|Alt+,                           |BACK                            |X                               |                                |X                               |X                               |
-|Alt+.                           |FORWARD                         |X                               |                                |X                               |X                               |
-|Alt+E                           |REVEAL_IN_EXPLORER              |X                               |X                               |                                |                                |
-|Alt+S                           |REFORMAT_CODE                   |X                               |X                               |X                               |X                               |
-|Alt+C                           |COMPARE_SELECTION_WITH_CLIPBOARD|X                               |X                               |                                |                                |
+
+# Keymaps 
 
 
-## Import keymaps
-#### PyCharm
+![Keymap Visualization](images/keyboard-layout.png)
 
-1. File > Manage IDE Settings > Import Settings  
-1. Select file ./PyCharm/pycharm_settings.zip  
+The visualization has been created with [Keyboard Layout Editor](https://www.keyboard-layout-editor.com/#/)
 
-#### VSCode
 
-1. Open file ./out/keybindings_altitude.json and copy its content
-1. File > Preferences > Keyboard shortcuts
-1. Open Keyboard Shortcut as JSON by clicking on the ![](images/vscode_open_json.png) icon in top right corner
-1. Paste the json content here
-
-#### Visual Studio
-1. Tools > Import and Export Settings... > Import selected environment settings
-
-## Export keymaps
-#### Visual Studio
-1. Tools > Import and Export Settings... > Export selected environment settings
-1. Select only: Options > Environment > Keyboard ![Export_VS2022.png](images%2FExport_VS2022.png)
-
-## Future Works
-#### New actions:
-* Extend selection (IntelliJ ctrl+w)
-* Duplicate cursor to similar word (VSCode ctrl+w)
-* Enter (on alt+m)
-* backspace (on alt+n)
-
+```
+[{fa:[4]},"Esc",{fa:[6]},"1","2","3","4","5",{x:3},"6","7","8","9","0","°"],
+[{fa:[5,0,0,0,0,0,5]},"→\n\n\n\n\n\n←",{t:"#000000\n#057b9e\n#c4660e\n#509e13\n#cc2174"},"Q\n?\n⇞\nF9","W\n\n\nF10","E\n{<\n⇑\nF11\n&","R\n}>\n\nF12\n|","T\n\"\n\n\n;",{x:3},"Z\n\n\n\n,","U\nhome\n\n\n7","I\n↑\n\n\n8","O\nend\n\n\n9","P\n\n\n\n@",{c:"#c4660e"},"è"],
+[{c:"#057b9e",a:7},"",{c:"#cccccc",a:4},"A\n!\n⇟\nF5\n^","S\n\n⇐\nF6\n*","D\n([\n⇓\nF7\n+","F\n)]\n⇒\nF8\n=","G\n`\n\n\n:",{x:3},"H\n⌫\n\n\n.","J\n←\nLB\n\n4","K\n↓\nMB\n\n5","L\n→\nRB\n\n6","é\n⌦\n\n\n#",{c:"#509e13"},"à"],
+[{y:-0.5,x:6,c:"#cccccc",a:7},"",{x:1},""],
+[{y:-0.5,a:4,fa:[4]},"Ctrl",{fa:[5]},"Y\n\n\nF1\n~","X\n\n\nF2\n/","C\n\n\nF3\n-","V\n\n\nF4\n\\","B\n'\n\n\n$",{x:3},"N\n⏎\n\n\n0","M\nEsc\n\n\n1",",\n↶\n\n\n2",".\n↷\n\n\n3","-\n\n\n\n%",{fa:[4]},"Shift"],
+[{x:2.5,f:4},"⌫","Alt",{c:"#cc2174",a:7},"",{x:4,c:"#cccccc",a:4},"⏎","Win","☰"],
+[{r:60,rx:8.5,ry:4.5,y:-0.5,x:-0.75,a:7,w:1.5},"Shift"],
+[{r:-60,rx:6.5,y:-0.5,x:-0.75,w:1.5},"Space"]
+```
+The code above is for visualization purposes only, it has not been generated by the project and is not part of the project itself.  
+Next time do it on [thockfactory](https://thockfactory.com/ch/configurator)
