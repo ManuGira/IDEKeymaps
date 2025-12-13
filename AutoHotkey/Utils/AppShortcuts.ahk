@@ -4,6 +4,7 @@ class ProcessNames {
     static VisualStudio := "devenv.exe"
     static VSCode := "code.exe"
     static PyCharm := "pycharm64.exe|pycharm.exe"  ; Both 64-bit and 32-bit versions
+    static Any := ".*"
 }
 
 class AppShortcuts {
@@ -21,40 +22,37 @@ class AppShortcuts {
     )
 
     static Run := Map(
-        ProcessNames.VisualStudio, "{F5}",
-        ProcessNames.VSCode, "{F5}",
-        ProcessNames.PyCharm, "{F9}",
+        ProcessNames.Any, "^{F5}",
     )
 
     static Debug := Map(
-        ProcessNames.VisualStudio, "{Ctrl Down}rt{Ctrl Up}", ; debug current test
-        ProcessNames.VSCode, "{F5}",
-        ProcessNames.PyCharm, "{Ctrl}{F9}",
+        ProcessNames.VisualStudio, "{Ctrl Down}rt{Ctrl Up}", 
+        ProcessNames.Any, "{F5}",
+    )
+
+    static Stop := Map(
+        ProcessNames.Any, "+{F5}",
     )
     
     static StepOver := Map(
         ProcessNames.VisualStudio, "{F10}",
         ProcessNames.VSCode, "{F10}",
-        ProcessNames.PyCharm, "{F8}",
+        ProcessNames.PyCharm, "{F10}",
     )
 
     static StepInto := Map(
-        ProcessNames.VisualStudio, "{F11}",
-        ProcessNames.VSCode, "{F11}",
-        ProcessNames.PyCharm, "{F7}",
+        ProcessNames.Any, "{F11}",
     )
 
     static StepOut := Map(
-        ProcessNames.VisualStudio, "{Shift}{F11}",
-        ProcessNames.VSCode, "{Shift}{F11}",
-        ProcessNames.PyCharm, "{Shift}{F8}",
+        ProcessNames.Any, "+{F11}",
     )
 
     static SendShortcutByApp(shortcutMap) {
         processName := WinGetProcessName("A")
         for app, shortcut in shortcutMap {
             if (processName ~= "i)" app) {
-                SendInput("{Blind}" shortcut)
+                SendInput(shortcut)
                 return
             }
         }
