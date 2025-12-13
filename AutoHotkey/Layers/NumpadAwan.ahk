@@ -6,10 +6,10 @@ class NumpadAwan {
 
     static Init(condition) {
         ; 1 -> Ctrl
-        ; 2 -> Shift
+        ; 2 -> LShift
         ; 3 -> Forward
 
-        ; 4 -> Alt
+        ; 4 -> RShift
         ; 5 -> Win
         ; 6 -> Backward
 

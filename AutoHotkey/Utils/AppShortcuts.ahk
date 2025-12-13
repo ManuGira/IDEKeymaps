@@ -1,62 +1,59 @@
 #Requires AutoHotkey v2.0
 
-class AppTitles {
-    static VisualStudio := "Microsoft Visual Studio"
-    static VSCode := "Visual Studio Code"
-    static PyCharm := "PyCharm"
+class ProcessNames {
+    static VisualStudio := "devenv.exe"
+    static VSCode := "code.exe"
+    static PyCharm := "pycharm64.exe|pycharm.exe"  ; Both 64-bit and 32-bit versions
 }
 
 class AppShortcuts {
-    static VisualStudio := "Microsoft Visual Studio"
-    static VSCode := "Visual Studio Code"
-    static PyCharm := "PyCharm"
 
     static CommentMap := Map(
-        AppTitles.VisualStudio, "{Ctrl Down}kc{Ctrl Up}",
-        AppTitles.VSCode, "{Ctrl Down}{SC029}{Ctrl Up}",  ; {SC029} is the scan code of "§". We must hardcode it because it is not standardised and differ depending on the keyboard layout
-        AppTitles.PyCharm, "{Ctrl Down}/{Ctrl Up}",
+        ProcessNames.VisualStudio, "{Ctrl Down}kc{Ctrl Up}",
+        ProcessNames.VSCode, "{Ctrl Down}{SC029}{Ctrl Up}",  ; {SC029} is the scan code of "§". We must hardcode it because it is not standardised and differ depending on the keyboard layout
+        ProcessNames.PyCharm, "{Ctrl Down}kc{Ctrl Up}",
     )
 
     static UncommentMap := Map(
-        AppTitles.VisualStudio, "{Ctrl Down}ku{Ctrl Up}",
-        AppTitles.VSCode, AppShortcuts.CommentMap[AppTitles.VSCode],
-        AppTitles.PyCharm, AppShortcuts.CommentMap[AppTitles.PyCharm],
+        ProcessNames.VisualStudio, "{Ctrl Down}ku{Ctrl Up}",
+        ProcessNames.VSCode, AppShortcuts.CommentMap[ProcessNames.VSCode],
+        ProcessNames.PyCharm, AppShortcuts.CommentMap[ProcessNames.PyCharm],
     )
 
     static Run := Map(
-        AppTitles.VisualStudio, "{F5}",
-        AppTitles.VSCode, "{F5}",
-        AppTitles.PyCharm, "{F9}",
+        ProcessNames.VisualStudio, "{F5}",
+        ProcessNames.VSCode, "{F5}",
+        ProcessNames.PyCharm, "{F9}",
     )
 
     static Debug := Map(
-        AppTitles.VisualStudio, "{Ctrl Down}rt{Ctrl Up}", ; debug current test
-        AppTitles.VSCode, "{F5}",
-        AppTitles.PyCharm, "{Ctrl}{F9}",
+        ProcessNames.VisualStudio, "{Ctrl Down}rt{Ctrl Up}", ; debug current test
+        ProcessNames.VSCode, "{F5}",
+        ProcessNames.PyCharm, "{Ctrl}{F9}",
     )
     
     static StepOver := Map(
-        AppTitles.VisualStudio, "{F10}",
-        AppTitles.VSCode, "{F10}",
-        AppTitles.PyCharm, "{F8}",
+        ProcessNames.VisualStudio, "{F10}",
+        ProcessNames.VSCode, "{F10}",
+        ProcessNames.PyCharm, "{F8}",
     )
 
     static StepInto := Map(
-        AppTitles.VisualStudio, "{F11}",
-        AppTitles.VSCode, "{F11}",
-        AppTitles.PyCharm, "{F7}",
+        ProcessNames.VisualStudio, "{F11}",
+        ProcessNames.VSCode, "{F11}",
+        ProcessNames.PyCharm, "{F7}",
     )
 
     static StepOut := Map(
-        AppTitles.VisualStudio, "{Shift}{F11}",
-        AppTitles.VSCode, "{Shift}{F11}",
-        AppTitles.PyCharm, "{Shift}{F8}",
+        ProcessNames.VisualStudio, "{Shift}{F11}",
+        ProcessNames.VSCode, "{Shift}{F11}",
+        ProcessNames.PyCharm, "{Shift}{F8}",
     )
 
     static SendShortcutByApp(shortcutMap) {
-        tile := WinGetTitle("A")
+        processName := WinGetProcessName("A")
         for app, shortcut in shortcutMap {
-            if (tile ~= app) {
+            if (processName ~= "i)" app) {
                 SendInput("{Blind}" shortcut)
                 return
             }
