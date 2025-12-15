@@ -12,9 +12,10 @@ class CodeBlockUtils {
         
         this.dummy := DummyNode( , (s) => (s) ? this.SimpleChar() : "", false)
         hold := HoldNode(this.dummy, , 400)
+        spam2 := SpamCountNode(this.dummy, , 200, 2)
         spam3 := SpamCountNode(this.dummy, , 200, 3)
         notSpam3 := InverseNode(spam3, , true)
-        AndNode([hold, notSpam3], (s) => this.SendInlineCode(s)) ; hold key -> send inline code
+        AndNode([hold, notSpam3, spam2], (s) => this.SendInlineCode(s)) ; hit-hold key -> send inline code
         AndNode([hold, spam3], (s) => this.SendCodeBlock(s)) ; hit-hit-hold key -> send code block
     }
 
@@ -27,7 +28,7 @@ class CodeBlockUtils {
     }
 
     LineReturn(){
-        SendInput("{ShiftDown}{Enter}{ShiftUp}")
+        SendInput("{ShiftDown}{Enter}{ShiftUp}{Home}")
     }
 
     SimpleChar(){
@@ -68,8 +69,9 @@ class CodeBlockUtils {
             return
 
         if this.IsClipboardText(){
+            SendInput("{Left}")
             this.Paste()
-            this.SimpleChar()
+            SendInput("{Right}")
         } else {
             this.SimpleChar()
             SendInput("{Left}")
@@ -80,14 +82,18 @@ class CodeBlockUtils {
 class JILK {
     static getMods(shiftModNode){
         mods := ""
-        if (shiftModNode.GetState())
-            mods := mods "+"
+        if (GetKeyState("Ctrl", "P"))
+            mods := mods "^"
 
         if (GetKeyState("Alt", "P"))
             mods := mods "!"
 
-        if (GetKeyState("Shift", "P")) ; maps shift key to ctrl
-            mods := mods "^"
+
+        if (GetKeyState("Shift", "P"))
+            mods := mods "+"
+
+        ; if (GetKeyState("LWin", "P") || GetKeyState("RWin", "P"))
+        ;     mods := mods "#"
 
         ToolTip(mods)
         return mods
