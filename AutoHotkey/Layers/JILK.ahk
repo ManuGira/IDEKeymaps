@@ -156,6 +156,8 @@ class JILK {
 
         Conditional.HotKey("$s", (key) => EditTextSelection.Apply(PathConverter.SwapPathTypeFunc), condition)
         Conditional.HotKey("$w", (key) => EditTextSelection.Apply(CaseConverter.SwapAllCaseFunc), condition)
+        Conditional.HotKey("$p", (k) => AppShortcuts.SendShortcutByApp(AppShortcuts.CommentMap), condition)
+        Conditional.HotKey("$^p", (k) => AppShortcuts.SendShortcutByApp(AppShortcuts.UncommentMap), condition)
 
         Conditional.Hotkey("$a", (k) => SendInput("{Blind}{Text}!"), condition)
         Conditional.Hotkey("$q", (k) => SendInput("{Blind}{Text}?"), condition)

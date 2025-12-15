@@ -5,21 +5,21 @@
 class NumpadAwan {
 
     static Init(condition) {
-        ; 1 -> Ctrl
-        ; 2 -> Shift
         ; 3 -> Forward
+        ; 2 -> LShift
+        ; 1 -> Ctrl
 
-        ; 4 -> Alt
-        ; 5 -> Win
         ; 6 -> Backward
+        ; 5 -> Win
+        ; 4 -> RShift
 
-        ; 7 -> Enter
+        ; 9 (NumpadDiv) -> Comment / Uncomment
         ; 8 -> Delete
-        ; 9 (num /) -> Comment / Uncomment
+        ; 7 -> Enter
 
-        ; 10 (num *) -> Step Into / Step Out
-        ; 11 (num -) -> Step Over
-        ; 12 (num +) -> Debug /Run
+        ; 12 (NumpadAdd) -> F11: Step Into / Step Out
+        ; 11 (NumpadSub) -> Step Over
+        ; 10 (NumpadMult) -> F5: Debug / Run / Stop
 
 
         ; Maps one of the modifier keys (Ctrl, Shift, Alt, Win)
@@ -38,15 +38,20 @@ class NumpadAwan {
         ; mapModKey("Numpad5", "Win")
         ; Conditional.HotKey("$Numpad6", (k) => SendInput("{Browser_Back}"), condition)
 
+        ; 9 (NumpadDiv) -> Comment / Uncomment
         Conditional.HotKey("$NumpadDiv", (k) => AppShortcuts.SendShortcutByApp(AppShortcuts.CommentMap), condition)
         Conditional.HotKey("$^NumpadDiv", (k) => AppShortcuts.SendShortcutByApp(AppShortcuts.UncommentMap), condition)
-
-        Conditional.HotKey("$NumpadAdd", (k) => AppShortcuts.SendShortcutByApp(AppShortcuts.Debug), condition)
-        Conditional.HotKey("$^NumpadAdd", (k) => AppShortcuts.SendShortcutByApp(AppShortcuts.Run), condition)
-
+        
+        ; 12 (NumpadAdd) -> F11: Step Into / Step Out
+        Conditional.HotKey("$NumpadAdd", (k) => AppShortcuts.SendShortcutByApp(AppShortcuts.StepInto), condition)
+        Conditional.HotKey("$+NumpadAdd", (k) => AppShortcuts.SendShortcutByApp(AppShortcuts.StepOut), condition)
+        
+        ; 11 (NumpadSub) -> Step Over
         Conditional.HotKey("$NumpadSub", (k) => AppShortcuts.SendShortcutByApp(AppShortcuts.StepOver), condition)
         
-        Conditional.HotKey("$NumpadMult", (k) => AppShortcuts.SendShortcutByApp(AppShortcuts.StepInto), condition)
-        Conditional.HotKey("$^NumpadMult", (k) => AppShortcuts.SendShortcutByApp(AppShortcuts.StepOut), condition)
+        ; 10 (NumpadMult) -> F5: Debug / Run / Stop
+        Conditional.HotKey("$NumpadMult", (k) => AppShortcuts.SendShortcutByApp(AppShortcuts.Debug), condition)  ; F5 for Debug
+        Conditional.HotKey("$+NumpadMult", (k) => AppShortcuts.SendShortcutByApp(AppShortcuts.Stop), condition)  ; Shift+F5 for Stop Debugging
+        Conditional.HotKey("$^NumpadMult", (k) => AppShortcuts.SendShortcutByApp(AppShortcuts.Run), condition)  ; Ctrl+F5 for Run
     }
 }
