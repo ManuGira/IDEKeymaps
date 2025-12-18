@@ -34,7 +34,7 @@ egraveHold.Subscribe((s) => SendCharIfNoCombo("è", s))
 smallerThanHold := ChangeNode(KeyStateNode("<", , false))
 smallerThanHold.Subscribe((s) => SendCharIfNoCombo("<", s))
 
-spaceHold := ChangeNode(KeyStateNode("Space", , false))
+spaceHold := ChangeNode()
 spaceHold.Subscribe((s) => SendCharIfNoCombo("{Space}", s))
 
 ; --------------- JKIL DIRECTION LAYER ------------------------
