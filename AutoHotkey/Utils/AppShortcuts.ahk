@@ -22,11 +22,12 @@ class AppShortcuts {
     )
 
     static Run := Map(
+        ProcessNames.VisualStudio, "{Ctrl Down}r{Ctrl Up}t",  ; Advertised as Ctrl+R,T in Visual Studio
         ProcessNames.Any, "^{F5}",
     )
 
     static Debug := Map(
-        ProcessNames.VisualStudio, "{Ctrl Down}rt{Ctrl Up}", 
+        ProcessNames.VisualStudio, "{Ctrl Down}rt{Ctrl Up}", ; Advertised as Ctrl+R,Ctrl+T in Visual Studio
         ProcessNames.Any, "{F5}",
     )
 
@@ -51,10 +52,12 @@ class AppShortcuts {
     static SendShortcutByApp(shortcutMap) {
         processName := WinGetProcessName("A")
         for app, shortcut in shortcutMap {
-            if (processName ~= "i)" app) {
+            if (processName == app) {
                 SendInput(shortcut)
                 return
             }
         }
+
+        SendInput(shortcutMap[ProcessNames.Any])
     }
 }
