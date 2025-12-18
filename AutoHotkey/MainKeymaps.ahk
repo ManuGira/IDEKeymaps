@@ -101,9 +101,8 @@ egraveHold.Subscribe((s) => SendCharIfNoCombo("è", s))
 smallerThanHold := DummyNode(KeyStateNode("<", , false))
 smallerThanHold.Subscribe((s) => SendCharIfNoCombo("<", s))
 
-spaceHold := DummyNode()
-;spaceHold.Subscribe((s) => SendCharIfNoCombo("{Space}", s))
-
+spaceHold := DummyNode(KeyStateNode("Space", , false))
+spaceHold.Subscribe((s) => SendCharIfNoCombo("{Space}", s))
 
 ; --------------- JILK DIRECTION LAYER ------------------------
 jilkLayerNode := capsHold
