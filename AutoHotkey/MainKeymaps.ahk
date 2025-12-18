@@ -82,8 +82,8 @@ SendCharIfNoCombo(character, state){
     }
 }
 
-winHold := DummyNode(KeyStateNode("LWin", , true))
-altHold := DummyNode(KeyStateNode("LAlt", , true))
+;winHold := DummyNode(KeyStateNode("LWin", , true))
+;altHold := DummyNode(KeyStateNode("LAlt", , true))
 ;ctrlHold := DummyNode(KeyStateNode("LCtrl", , true))
 ;shiftHold := DummyNode(KeyStateNode("LShift", , true))
 
@@ -112,7 +112,7 @@ jilkCondition := (k) => jilkLayerNode.GetState()
 JILK.Init(jilkCondition, spaceHold)
 
 ; --------------- J4K5 NUMPAD LAYER ------------------------
-j4k5LayerNode := OrNode([rshiftHold, smallerThanHold])
+j4k5LayerNode := OrNode([smallerThanHold])
 j4k5LayerNode.Subscribe((s) => ShowState("J4K5", j4k5LayerNode, s))
 j4k5Condition := (k) => j4k5LayerNode.GetState()
 J4K5.Init(j4k5Condition)
@@ -139,11 +139,11 @@ spaceHold.Subscribe((s) => OnSpace(s, spaceHoldCondition))
 
 ; --------------- NUMPADAWAN LAYER ------------------------
 #Include Layers/NumpadAwan.ahk
-IsScrollLockEnabled := (s) => GetKeyState("ScrollLock", "T")
-NumpadAwan.Init(IsScrollLockEnabled)
+numpadAwanCondition := (k) => GetKeyState("NumLock", "T")
+NumpadAwan.Init(numpadAwanCondition)
 
 ; ---------------- FXX LAYER ------------------------
-ffxLayerNode := agraveHold
+ffxLayerNode := OrNode([agraveHold, rshiftHold])
 ffxLayerNode.Subscribe((s) => ShowState("FXX", ffxLayerNode, s))
 ffxCondition := (k) => ffxLayerNode.GetState()
 FXX.Init(ffxCondition)
