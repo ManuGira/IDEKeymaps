@@ -82,15 +82,15 @@ class CodeBlockUtils {
 class JILK {
     static getMods(shiftModNode){
         mods := ""
-        if (GetKeyState("Ctrl", "P"))
-            mods := mods "^"
+        if (shiftModNode.GetState())
+            mods := mods "+"
 
         if (GetKeyState("Alt", "P"))
             mods := mods "!"
 
 
         if (GetKeyState("Shift", "P"))
-            mods := mods "+"
+            mods := mods "^"  ; maps shift key to ctrl
 
         ; if (GetKeyState("LWin", "P") || GetKeyState("RWin", "P"))
         ;     mods := mods "#"
