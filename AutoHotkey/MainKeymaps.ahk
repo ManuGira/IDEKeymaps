@@ -114,7 +114,7 @@ jilkCondition := (k) => jilkLayerNode.GetState()
 JILK.Init(jilkCondition, spaceHold)
 
 ; --------------- J4K5 NUMPAD LAYER ------------------------
-j4k5LayerNode := OrNode([smallerThanHold])
+j4k5LayerNode := OrNode([smallerThanHold, agraveHold])
 j4k5LayerNode.Subscribe((s) => ShowState("J4K5", j4k5LayerNode, s))
 j4k5Condition := (k) => j4k5LayerNode.GetState()
 J4K5.Init(j4k5Condition)
@@ -145,7 +145,7 @@ numpadAwanCondition := (k) => GetKeyState("NumLock", "T")
 NumpadAwan.Init(numpadAwanCondition)
 
 ; ---------------- FXX LAYER ------------------------
-ffxLayerNode := OrNode([agraveHold, rshiftHold])
+ffxLayerNode := OrNode([rshiftHold])
 ffxLayerNode.Subscribe((s) => ShowState("FXX", ffxLayerNode, s))
 ffxCondition := (k) => ffxLayerNode.GetState()
 FXX.Init(ffxCondition)
