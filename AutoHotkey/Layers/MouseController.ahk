@@ -70,9 +70,9 @@ class MouseController {
         mapKey("q", (s) => mController.OnScrollUp(s))
         mapKey("a", (s) => mController.OnScrollDown(s))
         
-        mapKey("j", (s) => mController.OnClick("Left", s))
-        mapKey("k", (s) => mController.OnClick("Middle", s))
-        mapKey("l", (s) => mController.OnClick("Right", s))
+        mapKey("j", (s) => mController.OnClickLeft(s))
+        mapKey("k", (s) => mController.OnClickMiddle(s))
+        mapKey("l", (s) => mController.OnClickRight(s))
 
         ;MouseController.AllModHotKeyClick("j", mController, "Left", condition)
         ;MouseController.AllModHotKeyClick("k", mController, "Middle", condition)
@@ -149,6 +149,21 @@ class MouseController {
         this.scrollPosition := 0
         this.scrollUp := 0
         this.scrollDown := 0
+
+        if this.clickLeft {
+            this.OnClick("Left", false)
+            this.clickLeft := false
+        }        
+
+        if this.clickMiddle {
+            this.OnClick("Middle", false)
+            this.clickMiddle := false
+        }
+
+        if this.clickRight {
+            this.OnClick("Right", false)
+            this.clickRight := false
+        }
     }
 
     __New(sniperModNode){
@@ -174,6 +189,10 @@ class MouseController {
         this.scrollPosition := unset
         this.scrollUp := unset
         this.scrollDown := unset
+
+        this.clickLeft := false
+        this.clickMiddle := false
+        this.clickRight := false
 
         this.Reset()
     }
@@ -218,6 +237,21 @@ class MouseController {
         if state
             Send("{WheelDown 1}")
         this.UpdateTargets()
+    }
+
+    OnClickLeft(state){
+        this.clickLeft := state
+        this.OnClick("Left", state)
+    }
+
+    OnClickMiddle(state){
+        this.clickMiddle := state
+        this.OnClick("Middle", state)
+    }
+
+    OnClickRight(state){
+        this.clickRight := state
+        this.OnClick("Right", state)
     }
 
     OnClick(button, state){
