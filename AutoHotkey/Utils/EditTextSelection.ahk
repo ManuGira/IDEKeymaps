@@ -4,7 +4,7 @@ class EditTextSelection {
     static Apply(UserFunction) {
         ; Backup clipboard
         ClipBoardBackup := ClipboardAll()
-        A_Clipboard := ""   ; Restore the original clipboard.
+        A_Clipboard := ""   ; Clear clipboard
         ; Simule un Ctrl+C pour copier la sélection
         Send("^c")
         if ClipWait(0.5) {
@@ -15,17 +15,16 @@ class EditTextSelection {
             A_Clipboard := newTxt
             Send("^v")
             
-            ; restore the original clipboard.
             Sleep(50) ; Attendre un peu pour s'assurer que le collage est terminé
 
             ; Sélectionne le texte collé
             Send("{Left " . StrLen(newTxt) . "}") 
             Send("+{Right " . StrLen(newTxt) . "}")
-
-            A_Clipboard := ClipBoardBackup 
         } else {
-            MsgBox("Erreur : Impossible de copier le texte sélectionné.")
+            ; Aucune sélection n'a été faite. Ne rien faire.
         }
+        ; restore the original clipboard.
+        A_Clipboard := ClipBoardBackup 
         return
     }
 
