@@ -108,6 +108,16 @@ class JILK {
         Conditional.Hotkey("$+^" key, (k) => SendInput(JILK.getMods(shiftModNode) keyToSend), condition)
         Conditional.Hotkey("$!^" key, (k) => SendInput(JILK.getMods(shiftModNode) keyToSend), condition)
     }
+
+    static AddCtrlMod(key, condition){
+        Conditional.Hotkey("$" key, (k) => SendInput("^" key), condition)
+        Conditional.Hotkey("$+" key, (k) => SendInput("^+" key), condition)
+        Conditional.Hotkey("$!" key, (k) => SendInput("^!" key), condition)
+        Conditional.Hotkey("$+!" key, (k) => SendInput("^+!" key), condition)
+        Conditional.Hotkey("$+^" key, (k) => SendInput("^+^" key), condition)
+        Conditional.Hotkey("$!^" key, (k) => SendInput("^^!" key), condition)
+    }
+
     static selectLine := "{End}{End}{ShiftDown}{Home}{Home}{Left}{ShiftUp}"
 
     /**
@@ -167,5 +177,12 @@ class JILK {
         Conditional.Hotkey("$x", (k) => SendInput(JILK.selectLine "^x"), condition)                ; X -> cut line
         Conditional.Hotkey("$c", (k) => SendInput(JILK.selectLine "^c" "{Right}"), condition)      ; C -> copy line
         Conditional.Hotkey("$v", (k) => EditTextSelection.SwapClipboardWithSelection(), condition) ; V -> swap clipboard with selection
+        
+        
+        ; iterate over numbers 1 to 4 to create hotkeys for ctrl+number and ctrl+shift+number
+        Loop Parse, 1234567890 {
+            num := A_LoopField
+            JILK.AddCtrlMod(num, condition)
+        }
     }
 }
