@@ -11,3 +11,4 @@
 #Include SpamCountNode.ahk
 #Include TimedNode.ahk
 #Include ToggleNode.ahk#Include NotNode.ahk
+#Include XOrNode.ahk

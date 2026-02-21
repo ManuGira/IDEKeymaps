@@ -93,6 +93,34 @@ TestOrNode() {
 }
 TestOrNode()
 
+TestXOrNode() {
+    dummy0 := DummyNode(,,false)
+    dummy1 := DummyNode(,,false)
+    node := XOrNode([dummy0, dummy1])
+    TestNodeInterface(node)
+
+    Assert.False(node.GetState()) ; 0^0=0
+
+    dummy0.Update(true)
+    Assert.True(node.GetState()) ; 1^0=1
+    
+    dummy0.Update(true)
+    Assert.True(node.GetState()) ; 1^0=1
+
+    dummy1.Update(true)
+    Assert.False(node.GetState())  ; 1^1=0
+    
+    dummy1.Update(false)
+    Assert.True(node.GetState()) ; 1^0=1
+
+    dummy1.Update(true)
+    Assert.False(node.GetState())  ; 1^1=0
+
+    dummy0.Update(false)
+    Assert.True(node.GetState()) ; 0^1=1
+}
+TestXOrNode()
+
 TestHitNode(){
     counter := 0
     MyCallback(state){
