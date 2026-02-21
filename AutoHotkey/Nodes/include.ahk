@@ -1,14 +1,24 @@
 #Requires AutoHotkey v2.0
 
-#Include AndNode.ahk
-#Include DoublePressNode.ahk
+#Include INode.ahk
+
+; Input nodes
+#Include KeyStateNode.ahk
+#Include KeyLockStateNode.ahk
+
+; Utility nodes
 #Include DummyNode.ahk
+#Include ToggleNode.ahk
+
+; Rhythme nodes
+#Include TimedNode.ahk
+#Include DoublePressNode.ahk
 #Include HitNode.ahk
 #Include HoldNode.ahk
-#Include INode.ahk
-#Include KeyStateNode.ahk
-#Include OrNode.ahk
 #Include SpamCountNode.ahk
-#Include TimedNode.ahk
-#Include ToggleNode.ahk#Include NotNode.ahk
+
+; Logic nodes
+#Include NotNode.ahk
+#Include AndNode.ahk
+#Include OrNode.ahk
 #Include XOrNode.ahk

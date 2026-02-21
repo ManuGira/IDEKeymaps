@@ -5,7 +5,7 @@
 class HitNode extends INode{
 
     /**
-     * 
+     * Fires a true state if the input node goes from false to true and then back to false within a certain time interval (default: 200ms). Useful for tap actions.
      * @param inputNode {(INode)}
      * @param callback {(Func<bool>)}
      * @param intervalThresholdMs
