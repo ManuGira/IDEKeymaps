@@ -24,8 +24,8 @@ TestDummyNode() {
 }
 TestDummyNode()
 
-TestInverseNode() {
-    node := InverseNode()
+TestNotNode() {
+    node := NotNode()
     TestNodeInterface(node)
 
     Assert.False(node.GetState()) ; 0 -> 1

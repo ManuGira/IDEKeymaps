@@ -14,7 +14,7 @@ class CodeBlockUtils {
         hold := HoldNode(this.dummy, , 400)
         spam2 := SpamCountNode(this.dummy, , 200, 2)
         spam3 := SpamCountNode(this.dummy, , 200, 3)
-        notSpam3 := InverseNode(spam3, , true)
+        notSpam3 := NotNode(spam3, , true)
         AndNode([hold, notSpam3, spam2], (s) => this.SendInlineCode(s)) ; hit-hold key -> send inline code
         AndNode([hold, spam3], (s) => this.SendCodeBlock(s)) ; hit-hit-hold key -> send code block
     }

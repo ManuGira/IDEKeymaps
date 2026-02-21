@@ -1,7 +1,7 @@
 #Requires AutoHotkey v2.0
 #Include INode.ahk
 
-class InverseNode extends INode {
+class NotNode extends INode {
     /**
      * Pass inverse of input to output. 
      * @param inputNode {INode}

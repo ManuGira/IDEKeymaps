@@ -6,9 +6,8 @@
 #Include HitNode.ahk
 #Include HoldNode.ahk
 #Include INode.ahk
-#Include InverseNode.ahk
 #Include KeyStateNode.ahk
 #Include OrNode.ahk
 #Include SpamCountNode.ahk
 #Include TimedNode.ahk
-#Include ToggleNode.ahk
+#Include ToggleNode.ahk#Include NotNode.ahk
