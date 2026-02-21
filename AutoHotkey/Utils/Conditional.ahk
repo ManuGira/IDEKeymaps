@@ -1,8 +1,5 @@
 #Requires AutoHotkey v2.0
-TempToolTip(msg, durationMS){
-    ToolTip(msg)
-    SetTimer(() => ToolTip(), -durationMS)
-}
+
 class Conditional {    
     static HotKeyMap := Map()
     ; static HotKeyMapAction := Map()
