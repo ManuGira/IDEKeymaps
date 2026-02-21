@@ -92,8 +92,8 @@ class JILK {
         if (GetKeyState("Shift", "P"))
             mods := mods "+"
 
-        ; if (GetKeyState("LWin", "P") || GetKeyState("RWin", "P"))
-        ;     mods := mods "#"
+        if (GetKeyState("LWin", "P") || GetKeyState("RWin", "P"))
+            mods := mods "#"
 
         ToolTip(mods)
         return mods
@@ -107,6 +107,10 @@ class JILK {
         Conditional.Hotkey("$+!" key, (k) => SendInput(JILK.getMods(shiftModNode) keyToSend), condition)
         Conditional.Hotkey("$+^" key, (k) => SendInput(JILK.getMods(shiftModNode) keyToSend), condition)
         Conditional.Hotkey("$!^" key, (k) => SendInput(JILK.getMods(shiftModNode) keyToSend), condition)
+
+        Conditional.Hotkey("$#" key, (k) => SendInput("{Blind}" JILK.getMods(shiftModNode) keyToSend), condition)
+        Conditional.Hotkey("$#+" key, (k) => SendInput("{Blind}" JILK.getMods(shiftModNode) keyToSend), condition)
+        Conditional.Hotkey("$#^" key, (k) => SendInput("{Blind}" JILK.getMods(shiftModNode) keyToSend), condition)
     }
 
     static AddCtrlMod(key, condition){
