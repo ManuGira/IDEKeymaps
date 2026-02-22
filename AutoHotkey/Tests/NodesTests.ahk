@@ -175,6 +175,90 @@ TestXOrNode() {
 }
 TestXOrNode()
 
+TestGateNode() {
+    inputNode := PassNode(,,false)
+    controllerNode := PassNode(,,false)
+    counter := 0
+    IncrementCounter(state){
+        counter++
+    }
+
+    gate := GateNode(inputNode, controllerNode, (s) => IncrementCounter(s),false)
+    TestNodeInterface(gate)
+
+    ResetTest(state := false, isOpen := false){
+        inputNode.Update(state)
+        controllerNode.Update(isOpen)
+        counter := 0
+        Assert.Equal(gate.isOpen, isOpen, "ResetTest: gate must be closed")
+        Assert.Equal(gate.GetState(), state, "ResetTest: gate state must be false")
+        Assert.Equal(counter, 0, "ResetTest: callback must not be triggered")
+    }
+
+    ; input is blocked by closed gate, callback not triggered
+    ResetTest()
+    inputNode.Update(true)
+    Assert.False(gate.isOpen)
+    Assert.True(gate.GetState())
+    Assert.Equal(counter, 0)
+    
+    ; Opening-Closing gate does not trigger the callback
+    ResetTest()
+    gate.Open(true)
+    Assert.True(gate.isOpen)
+    gate.Open(false)
+    Assert.False(gate.isOpen)
+    controllerNode.Update(true)
+    Assert.True(gate.isOpen)
+    controllerNode.Update(false)
+    Assert.False(gate.isOpen)
+    Assert.Equal(counter, 0, "Opening the gate must not trigger the callback")
+
+    ; Triggering input update while gate is open must trigger the callback
+    ResetTest(false, true)
+    inputNode.Update(true)
+    Assert.Equal(counter, 1, "Updating input while gate is open must trigger the callback")
+
+    ; Triggering same input twice does trigger the callback twice
+    ResetTest(false, true)
+    Assert.Equal(counter, 0, "Updating input while gate is open must trigger the callback")
+    inputNode.Update(true)
+    Assert.Equal(counter, 1, "Updating input while gate is open must trigger the callback")
+    inputNode.Update(true)
+    Assert.Equal(counter, 2, "Updating input while gate is open must trigger the callback")
+
+    ; Triggering input to false does trigger the callback
+    ResetTest(false, true)
+    inputNode.Update(false)
+    Assert.Equal(counter, 1, "Updating input while gate is open must trigger the callback")
+
+    ResetTest(false, false)
+    controllerNode.Update(false)
+    Assert.Equal(counter, 0, "Updating controller node must not trigger the callback")
+
+    ResetTest(true, false)
+    controllerNode.Update(false)
+    Assert.Equal(counter, 0, "Updating controller node must not trigger the callback")
+
+    ResetTest(false, false)
+    controllerNode.Update(true)
+    Assert.Equal(counter, 0, "Updating controller node must not trigger the callback")
+
+    ResetTest(true, false)
+    controllerNode.Update(true)
+    Assert.Equal(counter, 0, "Updating controller node must not trigger the callback")
+
+    ResetTest(false, false)
+    inputNode.Update(true)
+    Assert.True(gate.GetState(), "Input node must update the state of the gate node even if the gate is closed")
+    Assert.Equal(counter, 0, "Updating input while gate is closed must not trigger the callback")
+
+    ResetTest(true, false)
+    inputNode.Update(false)
+    Assert.False(gate.GetState(), "Input node must update the state of the gate node even if the gate is closed")
+    Assert.Equal(counter, 0, "Updating input while gate is closed must not trigger the callback")
+}
+TestGateNode()
 
 TestHitNode(){
     counter := 0

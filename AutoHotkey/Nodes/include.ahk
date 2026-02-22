@@ -10,6 +10,7 @@
 #Include PassNode.ahk
 #Include ChangeNode.ahk
 #Include ToggleNode.ahk
+#Include GateNode.ahk
 
 ; Rhythme nodes
 #Include TimedNode.ahk
