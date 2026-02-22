@@ -8,7 +8,7 @@ class NotNode extends INode {
      * @param callback {(Func<bool>)}
      * @param initialState {(bool)}
      */
-    __New(inputNode?, callback?, initialState := false){
+    __New(inputNode?, callback?, initialState := true){
         this.state := initialState
 
         if IsSet(inputNode)

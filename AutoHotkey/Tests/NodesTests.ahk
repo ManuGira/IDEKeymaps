@@ -10,8 +10,10 @@ TestNodeInterface(NodeInstance) {
 
 TestPassNode() {
     ; Test constructor
-    sut := PassNode(,,false)
+    sut := PassNode(,,)
     TestNodeInterface(sut)
+    Assert.False(sut.GetState())
+    sut := PassNode(,,false)
     Assert.False(sut.GetState())
     sut := PassNode(,,true)
     Assert.True(sut.GetState())
@@ -45,8 +47,10 @@ TestPassNode()
 
 TestChangeNode() {
     ; Test constructor
-    sut := ChangeNode(,,false)
+    sut := ChangeNode(,,)
     TestNodeInterface(sut)
+    Assert.False(sut.GetState())
+    sut := ChangeNode(,,false)
     Assert.False(sut.GetState())
     sut := ChangeNode(,,true)
     Assert.True(sut.GetState())
@@ -79,23 +83,40 @@ TestChangeNode() {
 TestChangeNode()
 
 TestNotNode() {
-    node := NotNode()
-    TestNodeInterface(node)
+    ; Test constructor
+    sut := NotNode(,,)
+    TestNodeInterface(sut)
+    Assert.True(sut.GetState())
+    sut := NotNode(,,false)
+    Assert.False(sut.GetState())
+    sut := NotNode(,,true)
+    Assert.True(sut.GetState())
 
-    Assert.False(node.GetState()) ; 0 -> 1
+    ; Test use case
+    sut := NotNode(,,false)
+    Assert.False(sut.GetState()) ; 0 -> 1
 
-    node.Update(true)
-    Assert.False(node.GetState()) ; 1 -> 0
+    sut.Update(true)
+    Assert.False(sut.GetState()) ; 1 -> 0
 
-    node.Update(false)
-    Assert.True(node.GetState()) ; 0 -> 1
+    sut.Update(false)
+    Assert.True(sut.GetState()) ; 0 -> 1
 }
 
 TestAndNode() {
+    ; Test constructor
+    sut := AndNode(,,)
+    TestNodeInterface(sut)
+    Assert.False(sut.GetState())
+    sut := AndNode(,,false)
+    Assert.False(sut.GetState())
+    sut := AndNode(,,true)
+    Assert.True(sut.GetState())
+
+    ; Test use case
     pass0 := PassNode(,,false)
     pass1 := PassNode(,,false)
     sut := AndNode([pass0, pass1])
-    TestNodeInterface(sut)
 
     Assert.False(sut.GetState()) ; 0^0=0
 
@@ -120,10 +141,18 @@ TestAndNode() {
 TestAndNode()
 
 TestOrNode() {
+    ; Test constructor
+    sut := OrNode(,,)
+    TestNodeInterface(sut)
+    Assert.False(sut.GetState())
+    sut := OrNode(,,false)
+    Assert.False(sut.GetState())
+    sut := OrNode(,,true)
+    Assert.True(sut.GetState())
+
     pass0 := PassNode(,,false)
     pass1 := PassNode(,,false)
     sut := OrNode([pass0, pass1])
-    TestNodeInterface(sut)
 
     Assert.False(sut.GetState()) ; 0+0=0
 
@@ -148,10 +177,22 @@ TestOrNode() {
 TestOrNode()
 
 TestXOrNode() {
+    ; Test constructor
+    sut := XOrNode(,,)
+    TestNodeInterface(sut)
+    Assert.False(sut.GetState())
+    sut := XOrNode(,,false)
+    Assert.False(sut.GetState())
+    sut := XOrNode(,,true)
+    Assert.True(sut.GetState())
+
+
+    ; Test use case
     pass0 := PassNode(,,false)
     pass1 := PassNode(,,false)
     sut := XOrNode([pass0, pass1])
     TestNodeInterface(sut)
+
 
     Assert.False(sut.GetState()) ; 0^0=0
 
@@ -176,6 +217,17 @@ TestXOrNode() {
 TestXOrNode()
 
 TestGateNode() {
+    ; Test constructor
+    sut := GateNode(,,,)
+    TestNodeInterface(sut)
+    Assert.False(sut.GetState())
+    sut := GateNode(,,,false)
+    Assert.False(sut.GetState())
+    sut := GateNode(,,,true)
+    Assert.True(sut.GetState())
+
+    
+    ; Test use case
     inputNode := PassNode(,,false)
     controllerNode := PassNode(,,false)
     counter := 0
@@ -183,35 +235,34 @@ TestGateNode() {
         counter++
     }
 
-    gate := GateNode(inputNode, controllerNode, (s) => IncrementCounter(s),false)
-    TestNodeInterface(gate)
+    sut := GateNode(inputNode, controllerNode, (s) => IncrementCounter(s),false)
 
     ResetTest(state := false, isOpen := false){
         inputNode.Update(state)
         controllerNode.Update(isOpen)
         counter := 0
-        Assert.Equal(gate.isOpen, isOpen, "ResetTest: gate must be closed")
-        Assert.Equal(gate.GetState(), state, "ResetTest: gate state must be false")
+        Assert.Equal(sut.isOpen, isOpen, "ResetTest: gate must be closed")
+        Assert.Equal(sut.GetState(), state, "ResetTest: gate state must be false")
         Assert.Equal(counter, 0, "ResetTest: callback must not be triggered")
     }
 
     ; input is blocked by closed gate, callback not triggered
     ResetTest()
     inputNode.Update(true)
-    Assert.False(gate.isOpen)
-    Assert.True(gate.GetState())
+    Assert.False(sut.isOpen)
+    Assert.True(sut.GetState())
     Assert.Equal(counter, 0)
     
     ; Opening-Closing gate does not trigger the callback
     ResetTest()
-    gate.Open(true)
-    Assert.True(gate.isOpen)
-    gate.Open(false)
-    Assert.False(gate.isOpen)
+    sut.Open(true)
+    Assert.True(sut.isOpen)
+    sut.Open(false)
+    Assert.False(sut.isOpen)
     controllerNode.Update(true)
-    Assert.True(gate.isOpen)
+    Assert.True(sut.isOpen)
     controllerNode.Update(false)
-    Assert.False(gate.isOpen)
+    Assert.False(sut.isOpen)
     Assert.Equal(counter, 0, "Opening the gate must not trigger the callback")
 
     ; Triggering input update while gate is open must trigger the callback
@@ -250,12 +301,12 @@ TestGateNode() {
 
     ResetTest(false, false)
     inputNode.Update(true)
-    Assert.True(gate.GetState(), "Input node must update the state of the gate node even if the gate is closed")
+    Assert.True(sut.GetState(), "Input node must update the state of the gate node even if the gate is closed")
     Assert.Equal(counter, 0, "Updating input while gate is closed must not trigger the callback")
 
     ResetTest(true, false)
     inputNode.Update(false)
-    Assert.False(gate.GetState(), "Input node must update the state of the gate node even if the gate is closed")
+    Assert.False(sut.GetState(), "Input node must update the state of the gate node even if the gate is closed")
     Assert.Equal(counter, 0, "Updating input while gate is closed must not trigger the callback")
 }
 TestGateNode()
