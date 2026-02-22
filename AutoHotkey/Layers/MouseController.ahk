@@ -56,7 +56,7 @@ class MouseController {
         enableNode.Subscribe((s) => mController.OnEnable(s))
 
         mapKey(key, func){
-            filterNode := DummyNode()
+            filterNode := ChangeNode()
             Conditional.Hotkey("$" key, (k) => filterNode.Update(true), condition)
             Conditional.Hotkey("$" key " Up", (k) => filterNode.Update(false), condition)
             filterNode.Subscribe(func)

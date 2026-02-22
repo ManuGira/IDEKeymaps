@@ -15,26 +15,26 @@ FullKeyboardObserver.Init()
 ; Deactivate CapsLock at initialisation
 SetCapsLockState(0)
 
-;winHold := DummyNode(KeyStateNode("LWin", , true))
-;altHold := DummyNode(KeyStateNode("LAlt", , true))
-;ctrlHold := DummyNode(KeyStateNode("LCtrl", , true))
-;shiftHold := DummyNode(KeyStateNode("LShift", , true))
+;winHold := ChangeNode(KeyStateNode("LWin", , true))
+;altHold := ChangeNode(KeyStateNode("LAlt", , true))
+;ctrlHold := ChangeNode(KeyStateNode("LCtrl", , true))
+;shiftHold := ChangeNode(KeyStateNode("LShift", , true))
 
-rshiftHold := DummyNode(KeyStateNode("RShift", , false))
+rshiftHold := ChangeNode(KeyStateNode("RShift", , false))
 
-capsHold := DummyNode(KeyStateNode("Capslock", , false))
+capsHold := ChangeNode(KeyStateNode("Capslock", , false))
 ;capsHold.Subscribe((s) => SendCharIfNoCombo("CapsLock", s))
 
-agraveHold := DummyNode(KeyStateNode("à", , false))
+agraveHold := ChangeNode(KeyStateNode("à", , false))
 agraveHold.Subscribe((s) => SendCharIfNoCombo("à", s))
 
-egraveHold := DummyNode(KeyStateNode("è", , false))
+egraveHold := ChangeNode(KeyStateNode("è", , false))
 egraveHold.Subscribe((s) => SendCharIfNoCombo("è", s))
 
-smallerThanHold := DummyNode(KeyStateNode("<", , false))
+smallerThanHold := ChangeNode(KeyStateNode("<", , false))
 smallerThanHold.Subscribe((s) => SendCharIfNoCombo("<", s))
 
-spaceHold := DummyNode(KeyStateNode("Space", , false))
+spaceHold := ChangeNode(KeyStateNode("Space", , false))
 spaceHold.Subscribe((s) => SendCharIfNoCombo("{Space}", s))
 
 ; --------------- JKIL DIRECTION LAYER ------------------------
