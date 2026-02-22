@@ -15,4 +15,15 @@ class Assert {
         if actual != expected
             throw "Assertion Failed. " msg ": Expected " expected ", got " actual
     }
+
+    static EqualArray(actual, expected, msg := ""){
+        actualLength := actual.Length
+        expectedLength := expected.Length
+        if (actualLength != expectedLength)
+            throw "Assertion Failed. " msg ": Expected array of length " expectedLength ", got length " actualLength
+        for i, v in expected {
+            if (actual[i] != v)
+                throw "Assertion Failed. " msg ": At index " i ": Expected " v ", got " actual[i]
+        }
+    }
 }
