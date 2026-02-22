@@ -5,7 +5,7 @@
 #Include Utils/FullKeyboardObserver.ahk
 
 #Include Nodes/include.ahk
-#Include Layers/JILK.ahk
+#Include Layers/JKIL.ahk
 #Include Layers/J4K5.ahk
 #Include Layers/MouseController.ahk
 #Include Layers/FXX.ahk
@@ -37,11 +37,11 @@ smallerThanHold.Subscribe((s) => SendCharIfNoCombo("<", s))
 spaceHold := DummyNode(KeyStateNode("Space", , false))
 spaceHold.Subscribe((s) => SendCharIfNoCombo("{Space}", s))
 
-; --------------- JILK DIRECTION LAYER ------------------------
-jilkLayerNode := capsHold
-jilkLayerNode.Subscribe((s) => ShowState("JILK", jilkLayerNode, s))
-jilkCondition := (k) => jilkLayerNode.GetState()
-JILK.Init(jilkCondition, spaceHold)
+; --------------- JKIL DIRECTION LAYER ------------------------
+jkilLayerNode := capsHold
+jkilLayerNode.Subscribe((s) => ShowState("JKIL", jkilLayerNode, s))
+jkilCondition := (k) => jkilLayerNode.GetState()
+JKIL.Init(jkilCondition, spaceHold)
 
 ; --------------- J4K5 NUMPAD LAYER ------------------------
 j4k5LayerNode := OrNode([smallerThanHold])

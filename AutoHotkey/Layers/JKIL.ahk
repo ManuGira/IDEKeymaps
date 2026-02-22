@@ -79,7 +79,7 @@ class CodeBlockUtils {
     }
 }
 
-class JILK {
+class JKIL {
     static getMods(shiftModNode){
         mods := ""
         if (GetKeyState("Ctrl", "P"))
@@ -100,17 +100,17 @@ class JILK {
     }
 
     static AllModHotKey(key, keyToSend, condition, shiftModNode) {
-        Conditional.Hotkey("$" key, (k) => SendInput(JILK.getMods(shiftModNode) keyToSend), condition)
-        Conditional.Hotkey("$+" key, (k) => SendInput(JILK.getMods(shiftModNode) keyToSend), condition)
-        Conditional.Hotkey("$!" key, (k) => SendInput(JILK.getMods(shiftModNode) keyToSend), condition)
-        Conditional.Hotkey("$^" key, (k) => SendInput(JILK.getMods(shiftModNode) keyToSend), condition)
-        Conditional.Hotkey("$+!" key, (k) => SendInput(JILK.getMods(shiftModNode) keyToSend), condition)
-        Conditional.Hotkey("$+^" key, (k) => SendInput(JILK.getMods(shiftModNode) keyToSend), condition)
-        Conditional.Hotkey("$!^" key, (k) => SendInput(JILK.getMods(shiftModNode) keyToSend), condition)
+        Conditional.Hotkey("$" key, (k) => SendInput(JKIL.getMods(shiftModNode) keyToSend), condition)
+        Conditional.Hotkey("$+" key, (k) => SendInput(JKIL.getMods(shiftModNode) keyToSend), condition)
+        Conditional.Hotkey("$!" key, (k) => SendInput(JKIL.getMods(shiftModNode) keyToSend), condition)
+        Conditional.Hotkey("$^" key, (k) => SendInput(JKIL.getMods(shiftModNode) keyToSend), condition)
+        Conditional.Hotkey("$+!" key, (k) => SendInput(JKIL.getMods(shiftModNode) keyToSend), condition)
+        Conditional.Hotkey("$+^" key, (k) => SendInput(JKIL.getMods(shiftModNode) keyToSend), condition)
+        Conditional.Hotkey("$!^" key, (k) => SendInput(JKIL.getMods(shiftModNode) keyToSend), condition)
 
-        Conditional.Hotkey("$#" key, (k) => SendInput("{Blind}" JILK.getMods(shiftModNode) keyToSend), condition)
-        Conditional.Hotkey("$#+" key, (k) => SendInput("{Blind}" JILK.getMods(shiftModNode) keyToSend), condition)
-        Conditional.Hotkey("$#^" key, (k) => SendInput("{Blind}" JILK.getMods(shiftModNode) keyToSend), condition)
+        Conditional.Hotkey("$#" key, (k) => SendInput("{Blind}" JKIL.getMods(shiftModNode) keyToSend), condition)
+        Conditional.Hotkey("$#+" key, (k) => SendInput("{Blind}" JKIL.getMods(shiftModNode) keyToSend), condition)
+        Conditional.Hotkey("$#^" key, (k) => SendInput("{Blind}" JKIL.getMods(shiftModNode) keyToSend), condition)
     }
 
     static AddCtrlMod(key, condition){
@@ -131,16 +131,16 @@ class JILK {
      */
     static Init(condition, shiftmodnode) {
         ; Assignation des lettres aux directions
-        JILK.AllModHotKey("j", "{Left}", condition, shiftModNode)      ; J -> Left
-        JILK.AllModHotKey("i", "{Up}", condition, shiftModNode)        ; I -> Up
-        JILK.AllModHotKey("l", "{Right}", condition, shiftModNode)     ; L -> Right
-        JILK.AllModHotKey("k", "{Down}", condition, shiftModNode)      ; K -> Down
-        JILK.AllModHotKey("u", "{Home}", condition, shiftModNode)      ; U -> Home
-        JILK.AllModHotKey("o", "{End}", condition, shiftModNode)       ; O -> End
-        JILK.AllModHotKey("h", "{Backspace}", condition, shiftModNode) ; H -> Backspace
-        JILK.AllModHotKey("é", "{Delete}", condition, shiftModNode)    ; é -> Delete
-        JILK.AllModHotKey("n", "{Enter}", condition, shiftModNode)     ; N -> Enter
-        JILK.AllModHotKey("m", "{Escape}", condition, shiftModNode)    ; M -> Escape        
+        JKIL.AllModHotKey("j", "{Left}", condition, shiftModNode)      ; J -> Left
+        JKIL.AllModHotKey("i", "{Up}", condition, shiftModNode)        ; I -> Up
+        JKIL.AllModHotKey("l", "{Right}", condition, shiftModNode)     ; L -> Right
+        JKIL.AllModHotKey("k", "{Down}", condition, shiftModNode)      ; K -> Down
+        JKIL.AllModHotKey("u", "{Home}", condition, shiftModNode)      ; U -> Home
+        JKIL.AllModHotKey("o", "{End}", condition, shiftModNode)       ; O -> End
+        JKIL.AllModHotKey("h", "{Backspace}", condition, shiftModNode) ; H -> Backspace
+        JKIL.AllModHotKey("é", "{Delete}", condition, shiftModNode)    ; é -> Delete
+        JKIL.AllModHotKey("n", "{Enter}", condition, shiftModNode)     ; N -> Enter
+        JKIL.AllModHotKey("m", "{Escape}", condition, shiftModNode)    ; M -> Escape        
         
         Conditional.Hotkey("$,", (k) => SendInput("{Blind}!{Left}"), condition)
         Conditional.Hotkey("$.", (k) => SendInput("{Blind}!{Right}"), condition)
@@ -177,16 +177,16 @@ class JILK {
         Conditional.Hotkey("$q", (k) => SendInput("{Blind}{Text}?"), condition)
         
         Conditional.Hotkey("$z", (k) => SendInput("^z"), condition)
-        Conditional.Hotkey("$y", (k) => SendInput(JILK.selectLine "{Del}{Right}{End}{End}"), condition) ; Y -> delete line
-        Conditional.Hotkey("$x", (k) => SendInput(JILK.selectLine "^x"), condition)                ; X -> cut line
-        Conditional.Hotkey("$c", (k) => SendInput(JILK.selectLine "^c" "{Right}"), condition)      ; C -> copy line
+        Conditional.Hotkey("$y", (k) => SendInput(JKIL.selectLine "{Del}{Right}{End}{End}"), condition) ; Y -> delete line
+        Conditional.Hotkey("$x", (k) => SendInput(JKIL.selectLine "^x"), condition)                ; X -> cut line
+        Conditional.Hotkey("$c", (k) => SendInput(JKIL.selectLine "^c" "{Right}"), condition)      ; C -> copy line
         Conditional.Hotkey("$v", (k) => EditTextSelection.SwapClipboardWithSelection(), condition) ; V -> swap clipboard with selection
         
         
         ; iterate over numbers 1 to 4 to create hotkeys for ctrl+number and ctrl+shift+number
         Loop Parse, 1234567890 {
             num := A_LoopField
-            JILK.AddCtrlMod(num, condition)
+            JKIL.AddCtrlMod(num, condition)
         }
     }
 }
