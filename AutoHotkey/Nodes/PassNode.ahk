@@ -1,9 +1,9 @@
 #Requires AutoHotkey v2.0
 #Include INode.ahk
 
-class DummyNode extends INode {
+class PassNode extends INode {
     /**
-     * Pass input to output. Notifies only if state has changed. 
+     * Pass input to output. 
      * @param inputNode {INode}
      * @param callback {(Func<bool>)}
      * @param initialState {(bool)}
@@ -18,8 +18,6 @@ class DummyNode extends INode {
     }
 
     Update(state){
-        if this.state == state
-            return
         this.state := state
         this.NotifySubscribers()
     }

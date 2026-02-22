@@ -8,21 +8,75 @@ TestNodeInterface(NodeInstance) {
     Assert.True(IsObject(NodeInstance.Subscribe), "Node must implement Subscribe() function")
 }
 
-TestDummyNode() {
-    dummy := DummyNode(,,false)
-    TestNodeInterface(dummy)
+TestPassNode() {
+    ; Test constructor
+    sut := PassNode(,,false)
+    TestNodeInterface(sut)
+    Assert.False(sut.GetState())
+    sut := PassNode(,,true)
+    Assert.True(sut.GetState())
 
+    ; Test that callback is triggered on every update even if state does not change
+    counter := 0
+    IncrementCounter(state){
+        counter++
+    }
 
-    Assert.False(dummy.GetState())
-    dummy.Update(True)
-    Assert.True(dummy.GetState())
-    dummy.Update(False)
-    Assert.False(dummy.GetState())
+    sut := PassNode(,(s) => IncrementCounter(s),false)
 
-    dummy := DummyNode(,,true)
-    Assert.True(dummy.GetState())
+    Assert.False(sut.GetState())
+    sut.Update(True)
+    Assert.Equal(counter, 1, "PassNode must trigger the callback on every update")
+    Assert.True(sut.GetState())
+
+    sut.Update(True)
+    Assert.Equal(counter, 2, "PassNode must trigger the callback on every update")
+    Assert.True(sut.GetState())
+
+    sut.Update(False)
+    Assert.Equal(counter, 3, "PassNode must trigger the callback on every update")
+    Assert.False(sut.GetState())
+
+    sut.Update(False)
+    Assert.Equal(counter, 4, "PassNode must trigger the callback on every update")
+    Assert.False(sut.GetState())
 }
-TestDummyNode()
+TestPassNode()
+
+TestChangeNode() {
+    ; Test constructor
+    sut := ChangeNode(,,false)
+    TestNodeInterface(sut)
+    Assert.False(sut.GetState())
+    sut := ChangeNode(,,true)
+    Assert.True(sut.GetState())
+
+    ; Test that callback is triggered on every update even if state does not change
+    counter := 0
+    IncrementCounter(state){
+        counter++
+    }
+
+    sut := ChangeNode(,(s) => IncrementCounter(s),false)
+
+    Assert.False(sut.GetState())
+    sut.Update(True)
+    Assert.Equal(counter, 1, "ChangeNode must trigger the callback on every update")
+    Assert.True(sut.GetState())
+
+    sut.Update(True)
+    Assert.Equal(counter, 1, "ChangeNode must trigger the callback on every update")
+    Assert.True(sut.GetState())
+
+    sut.Update(False)
+    Assert.Equal(counter, 2, "ChangeNode must trigger the callback on every update")
+    Assert.False(sut.GetState())
+
+    sut.Update(False)
+    Assert.Equal(counter, 2, "ChangeNode must trigger the callback on every update")
+    Assert.False(sut.GetState())
+}
+TestChangeNode()
 
 TestNotNode() {
     node := NotNode()
@@ -38,111 +92,112 @@ TestNotNode() {
 }
 
 TestAndNode() {
-    dummy0 := DummyNode(,,false)
-    dummy1 := DummyNode(,,false)
-    node := AndNode([dummy0, dummy1])
+    change0 := ChangeNode(,,false)
+    change1 := ChangeNode(,,false)
+    node := AndNode([change0, change1])
     TestNodeInterface(node)
 
     Assert.False(node.GetState()) ; 0^0=0
 
-    dummy0.Update(true)
+    change0.Update(true)
     Assert.False(node.GetState()) ; 1^0=0
     
-    dummy0.Update(true)
+    change0.Update(true)
     Assert.False(node.GetState()) ; 1^0=0
 
-    dummy1.Update(true)
+    change1.Update(true)
     Assert.True(node.GetState())  ; 1^1=1
     
-    dummy1.Update(false)
+    change1.Update(false)
     Assert.False(node.GetState()) ; 1^0=0
 
-    dummy1.Update(true)
+    change1.Update(true)
     Assert.True(node.GetState())  ; 1^1=1
 
-    dummy0.Update(false)
+    change0.Update(false)
     Assert.False(node.GetState()) ; 0^1=0
 }
 TestAndNode()
 
 TestOrNode() {
-    dummy0 := DummyNode(,,false)
-    dummy1 := DummyNode(,,false)
-    node := OrNode([dummy0, dummy1])
+    change0 := ChangeNode(,,false)
+    change1 := ChangeNode(,,false)
+    node := OrNode([change0, change1])
     TestNodeInterface(node)
 
     Assert.False(node.GetState()) ; 0+0=0
 
-    dummy0.Update(true)
+    change0.Update(true)
     Assert.True(node.GetState()) ; 1+0=1
     
-    dummy0.Update(true)
+    change0.Update(true)
     Assert.True(node.GetState()) ; 1+0=1
 
-    dummy1.Update(true)
+    change1.Update(true)
     Assert.True(node.GetState())  ; 1+1=1
     
-    dummy1.Update(false)
+    change1.Update(false)
     Assert.True(node.GetState()) ; 1+0=1
 
-    dummy1.Update(true)
+    change1.Update(true)
     Assert.True(node.GetState())  ; 1+1=1
 
-    dummy0.Update(false)
+    change0.Update(false)
     Assert.True(node.GetState()) ; 0+1=1
 }
 TestOrNode()
 
 TestXOrNode() {
-    dummy0 := DummyNode(,,false)
-    dummy1 := DummyNode(,,false)
-    node := XOrNode([dummy0, dummy1])
+    change0 := ChangeNode(,,false)
+    change1 := ChangeNode(,,false)
+    node := XOrNode([change0, change1])
     TestNodeInterface(node)
 
     Assert.False(node.GetState()) ; 0^0=0
 
-    dummy0.Update(true)
+    change0.Update(true)
     Assert.True(node.GetState()) ; 1^0=1
     
-    dummy0.Update(true)
+    change0.Update(true)
     Assert.True(node.GetState()) ; 1^0=1
 
-    dummy1.Update(true)
+    change1.Update(true)
     Assert.False(node.GetState())  ; 1^1=0
     
-    dummy1.Update(false)
+    change1.Update(false)
     Assert.True(node.GetState()) ; 1^0=1
 
-    dummy1.Update(true)
+    change1.Update(true)
     Assert.False(node.GetState())  ; 1^1=0
 
-    dummy0.Update(false)
+    change0.Update(false)
     Assert.True(node.GetState()) ; 0^1=1
 }
 TestXOrNode()
+
 
 TestHitNode(){
     counter := 0
     MyCallback(state){
         counter++
     }
-    dummy := DummyNode(,,false)
-    hit := HitNode(dummy, (s) => MyCallback(s))
+    change := ChangeNode(,,false)
+    hit := HitNode(change, (s) => MyCallback(s))
     TestNodeInterface(hit)
 
     ; run slow press-release 
-    dummy.Update(true)
+    change.Update(true)
     Assert.Equal(counter, 0)
     Sleep(300) ;  thresold if 200ms. Si 300 is too long to trigger the hitNode
-    dummy.Update(false)
+    change.Update(false)
     Assert.Equal(counter, 0)
 
     ; run a fast press-release 
-    dummy.Update(true)
+    change.Update(true)
     ts0 := TimeStamp.Now()
     Assert.Equal(counter, 0)
     Sleep(-1) 
-    dummy.Update(false) ; this must trigger the callback in the current thread
+    change.Update(false) ; this must trigger the callback in the current thread
     interval := TimeStamp.Now().Sub(ts0).ValueMs()
     Assert.True(interval < 200, "TestHitNode: slept for too long. Test is not relevant")
     Assert.Equal(counter, 2, "TestHitNode: HitNode must trigger twice")
@@ -156,19 +211,19 @@ TestHoldNode(){
         triggerCount++
         OutputDebug("TestHoldNode: MyCallback(" state ")")
     }
-    dummy := DummyNode(,(s) => OutputDebug("TestHoldNode: dummy.Update(" s ")"),false)
-    hold := HoldNode(dummy, (s) => MyCallback(s), 200)  ; t=0
+    change := ChangeNode(,(s) => OutputDebug("TestHoldNode: change.Update(" s ")"),false)
+    hold := HoldNode(change, (s) => MyCallback(s), 200)  ; t=0
     TestNodeInterface(hold)
 
     ; 1st run fast press-release 
-    dummy.Update(true) ; t=0, 1st timer will wake up at t=200
+    change.Update(true) ; t=0, 1st timer will wake up at t=200
     Assert.Equal(triggerCount, 0)
     Assert.False(hold.GetState())
     Assert.Equal(hold.counter, 0)
 
     OutputDebug("TestHoldNode: Sleep(100) => t=100")
     Sleep(100) ; t=100 ;  thresold is 200ms. t=100 is too short to trigger the HoldNode
-    dummy.Update(false)
+    change.Update(false)
     Assert.Equal(triggerCount, 0)
     Assert.False(hold.GetState())
     Assert.Equal(hold.counter, 1)
@@ -176,7 +231,7 @@ TestHoldNode(){
     ; again a fast press-release, inner 1st timer will wake up but must not trigger the callback
     OutputDebug("TestHoldNode: Sleep(50) => t=150")
     Sleep(50) ; t=150
-    dummy.Update(true) ; new timer scheduled for t=350
+    change.Update(true) ; new timer scheduled for t=350
     Assert.Equal(triggerCount, 0)
     Assert.False(hold.GetState())
     Assert.Equal(hold.counter, 1)
@@ -192,11 +247,11 @@ TestHoldNode(){
     Assert.Equal(triggerCount, 1)
     Assert.True(hold.GetState())
 
-    dummy.Update(false) ; this must trigger the callback in the current thread
+    change.Update(false) ; this must trigger the callback in the current thread
     Assert.Equal(triggerCount, 2)
     Assert.False(hold.GetState())
 
-    dummy.Update(false) ; resending false must not trigger the callback
+    change.Update(false) ; resending false must not trigger the callback
     Assert.Equal(triggerCount, 2)
     Assert.False(hold.GetState())
 }
@@ -221,29 +276,29 @@ TestToggleNode(){
     MyCallback(state){
         counter++
     }
-    dum := DummyNode()
+    input1 := ChangeNode(,,)
 
     ; create naked node
-    tog := ToggleNode(,,false)
-    ToggleNodeReceivesUpdates(tog)
+    sut := ToggleNode(,,false)
+    ToggleNodeReceivesUpdates(sut)
 
     ; add callback to node
-    tog.Subscribe(MyCallback)
-    ToggleNodeReceivesUpdates(tog)
+    sut.Subscribe(MyCallback)
+    ToggleNodeReceivesUpdates(sut)
     Assert.Equal(counter, 2)
 
     ; add input node
-    tog.SetInputNode(dum)
-    Assert.False(tog.GetState() or dum.GetState())
-    dum.Update(true)  ; update dummy node must trigger
-    Assert.True(tog.GetState())
+    sut.SetInputNode(input1)
+    Assert.False(sut.GetState() or input1.GetState())
+    input1.Update(true)  ; update change node must trigger
+    Assert.True(sut.GetState())
 
     ; can create node with input and callback
     counter := 0
-    dum2 := DummyNode()
-    tog2 := ToggleNode(dum2, MyCallback, false)
+    input2 := ChangeNode()
+    tog2 := ToggleNode(input2, MyCallback, false)
     Assert.False(tog2.GetState())
-    dum2.Update(true)
+    input2.Update(true)
     Assert.True(tog2.GetState())
 
 }
