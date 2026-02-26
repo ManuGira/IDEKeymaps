@@ -35,6 +35,39 @@ TestEmptyString() {
 }
 TestEmptyString()
 
+TestMap() {
+    myMap := Map()
+    Assert.Equal(myMap.Count, 0, "Newly created map should have count 0")
+    Assert.True(IsObject(myMap), "Newly created map should be an object")
+    Assert.True(IsSet(myMap), "Newly created map should be set")
+    Assert.False(myMap.Has("a"), "Newly created map should not have key 'a'")
+
+    myMap["a"] := 1
+    myMap["b"] := 2
+    Assert.Equal(myMap.Count, 2, "Map should have count 2 after adding two key-value pairs")
+    Assert.True(myMap.Has("a"), "Map should return correct value for key 'a'")
+    Assert.True(myMap.Has("b"), "Map should return correct value for key 'b'")
+    Assert.Equal(myMap["a"], 1, "Map should return correct value for key 'a'")
+    Assert.Equal(myMap["b"], 2, "Map should return correct value for key 'b'")
+    
+    myMap := Map("c", 3, "d", 4)
+    Assert.Equal(myMap.Count, 2, "Map initialized with pairs should have correct count")
+    Assert.True(myMap.Has("c"), "Map should have key 'c'")
+    Assert.True(myMap.Has("d"), "Map should have key 'd'")
+    Assert.Equal(myMap["c"], 3, "Map should return correct value for key 'c'")
+    Assert.Equal(myMap["d"], 4, "Map should return correct value for key 'd'")
+
+    keys := []
+    values := []
+    for k, v in myMap {
+        keys.Push(k)
+        values.Push(v)
+    }
+    Assert.EqualArray(keys, ["c", "d"], "Map should iterate keys in insertion order")
+    Assert.EqualArray(values, [3, 4], "Map should iterate values in insertion order")
+}
+TestMap()
+
 TestLambda() {
     myLamb := (x) => x * 2
     Assert.Equal(myLamb(3), 6, "Lambda should return double the input")
@@ -63,3 +96,4 @@ TestLambda() {
     Assert.Equal(myLamb(100), 133, "Lambda should capture updated variable from function")
 }
 TestLambda()
+MsgBox("All AHK tests passed")

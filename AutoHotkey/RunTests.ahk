@@ -2,8 +2,12 @@
 
     ExitApp 0
 try {
-	FileAppend "Running AHK`n", "*"
-    #Include Tests/AHK.ahk
+	FileAppend "Running AHKTests`n", "*"
+    #Include Tests/AHKTests.ahk
+    
+    
+	FileAppend "Running DictTests`n", "*"
+    #Include Tests/DictTests.ahk
 
     FileAppend "Running TimeStampTests`n", "*"
     #Include Tests/TimeStampTests.ahk
@@ -17,11 +21,13 @@ try {
     FileAppend "Running CaseConverterTests`n", "*"
     #Include Tests/CaseConverterTests.ahk
     
+    
     FileAppend "Running ScanCodesTests`n", "*"
     #Include Tests/ScanCodesTests.ahk
     
     FileAppend "Running QWERTZTest`n", "*"
     #Include Tests/QWERTZTest.ahk
+    
     
     FileAppend "All tests passed`n", "*"
     ExitApp 0
