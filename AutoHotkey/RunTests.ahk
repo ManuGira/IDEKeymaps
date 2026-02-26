@@ -2,6 +2,9 @@
 
     ExitApp 0
 try {
+	FileAppend "Running AHK`n", "*"
+    #Include Tests/AHK.ahk
+
     FileAppend "Running TimeStampTests`n", "*"
     #Include Tests/TimeStampTests.ahk
     

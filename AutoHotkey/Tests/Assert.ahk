@@ -1,6 +1,10 @@
 #Requires AutoHotkey v2.0
 
 class Assert {
+    static Fail(msg := "Assertion Failed") {
+        throw msg
+    }
+
     static True(actual, msg := ""){
         if not actual
             throw "Assertion Failed. " msg ": Expected true, got " actual
