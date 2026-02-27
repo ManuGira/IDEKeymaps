@@ -68,8 +68,7 @@ class FullKeyboardNode {
 
         this.shiftNode := OrNode([this.modKeyNodes["LShift"], this.modKeyNodes["RShift"]], (s) => SendModInput(s, "Shift"))
         this.altNode := OrNode([this.modKeyNodes["LAlt"], this.modKeyNodes["RAlt"]], (s) => SendModInput(s, "Alt"))
-        ; TODO: Treat AltGr is simply RAlt in many layouts, but not all. 
-        this.ctrlNode := OrNode([this.modKeyNodes["LControl"], this.modKeyNodes["RControl"]], (s) => SendModInput(s, "Control"))
+        this.ctrlNode := OrNode([this.modKeyNodes["LControl"], this.modKeyNodes["RControl"], this.modKeyNodes["RAlt"]], (s) => SendModInput(s, "Control"))
         this.winNode := OrNode([this.modKeyNodes["LWin"], this.modKeyNodes["RWin"]], (s) => SendModInput(s, "Win"))
         
         this.ModStdNode := PassNode(NotNode(OrNode([this.shiftNode, this.altNode, this.ctrlNode, this.winNode])))
