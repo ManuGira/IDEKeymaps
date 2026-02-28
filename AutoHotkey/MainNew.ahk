@@ -12,54 +12,26 @@ class KeyBoardState {
 
         this.kbd := FullKeyboardNode()
         this.kbd.Reset() ; Ensure all keys start in the unpressed state
-
-        ; Register(scanCode_, modNode_, keyStr_){
-        ;     GateNode(this.kbd.charKeyNodes[scanCode_], modNode_, (s) => s ? SendInput(keyStr_) : "")
-        ; }
-
-        
-        ; ; iterate over the key of the dict
-        ; deadKeyNodeDict := Dict()
-        ; for deadKey in QWERTZ.DeadKeyDict.Keys() {
-        ;     result := QWERTZ.FindKey(deadKey)
-        ;     deadScanCode := ScanCodes.KeyMatrix[result.row, result.col]
-        ;     deadKeyNodeDict[deadKey] := kbd.charKeyNodes[deadScanCode]
-        ; }
-        
+      
         for rowIndex, row in ScanCodes.KeyMatrix {
             for colIndex, scanCode in row {
-                this.RegisterDict(scanCode, this.kbd.ModStdNode, this.Layout.Get(rowIndex, colIndex))
-                this.RegisterDict(scanCode, this.kbd.ModShiftNode, this.Layout.Get(rowIndex, colIndex, true, false))
-                this.RegisterDict(scanCode, this.kbd.ModCtrlAltNode, this.Layout.Get(rowIndex, colIndex, false, true))
+                this.CreateGateForLayout(scanCode, this.kbd.ModStdNode, this.Layout.Get(rowIndex, colIndex))
+                this.CreateGateForLayout(scanCode, this.kbd.ModShiftNode, this.Layout.Get(rowIndex, colIndex, true, false))
+                this.CreateGateForLayout(scanCode, this.kbd.ModCtrlAltNode, this.Layout.Get(rowIndex, colIndex, false, true))
 
-                ; TODO: Add registers below to support shortcuts
-                ; qwertzBaseChar := QWERTZ.Get(rowIndex, colIndex)
-                ; Register(scanCode, this.kbd.ModCtrlNode, qwertzBaseChar)
-                ; Register(scanCode, this.kbd.ModWinNode, qwertzBaseChar)
-                ; Register(scanCode, this.kbd.ModAltNode, qwertzBaseChar)
-                ; Register(scanCode, this.kbd.ModAltShiftNode, qwertzBaseChar)
-                ; Register(scanCode, this.kbd.ModCtrlShiftNode, qwertzBaseChar)
-                ; Register(scanCode, this.kbd.ModCtrlAltShiftNode, qwertzBaseChar)
+                qwertzBaseChar := QWERTZ.Get(rowIndex, colIndex)
+                this.CreateGate(scanCode, this.kbd.ModCtrlNode, qwertzBaseChar)
+                this.CreateGate(scanCode, this.kbd.ModWinNode, qwertzBaseChar)
+                this.CreateGate(scanCode, this.kbd.ModAltNode, qwertzBaseChar)
+                this.CreateGate(scanCode, this.kbd.ModAltShiftNode, qwertzBaseChar)
+                this.CreateGate(scanCode, this.kbd.ModCtrlShiftNode, qwertzBaseChar)
+                this.CreateGate(scanCode, this.kbd.ModCtrlAltShiftNode, qwertzBaseChar)
             }
         }
 
         this.kbd.Reset() ; Ensure all keys start in the unpressed state
-
     }
-    
-    RegisterDict(scanCode, modNode, keyStr){
-        GateNode(this.kbd.charKeyNodes[scanCode], modNode, (state) => this.GateCallback(state, keyStr))
-    }
-
-    GateCallback(state, keyStr){
-        if state {
-            char := this.ComputeMsg(keyStr)
-            if char {
-                SendInput("{Blind}{Text}" char)
-            }                
-        }
-    }
-
+   
     ComputeMsg(keyStr){
         deadKeyDict := this.Layout.DeadKeyDict
 
@@ -92,6 +64,23 @@ class KeyBoardState {
         result := this.currentDeadKey . keyStr
         this.currentDeadKey := "" ; Clear the current dead key after use
         return result
+    }
+
+    GateCallback(state, keyStr){
+        if state {
+            char := this.ComputeMsg(keyStr)
+            if char {
+                SendInput("{Blind}{Text}" char)
+            }
+        }
+    }
+
+    CreateGateForLayout(scanCode, modNode, keyStr){
+        GateNode(this.kbd.charKeyNodes[scanCode], modNode, (state) => this.GateCallback(state, keyStr))
+    }
+
+    CreateGate(scanCode, modNode, keyStr){
+        GateNode(this.kbd.charKeyNodes[scanCode], modNode, (s) => s ? SendInput("{Blind}" keyStr) : "")
     }
 }
 
