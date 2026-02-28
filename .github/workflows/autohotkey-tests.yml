@@ -1,0 +1,25 @@
+name: AutoHotkey Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: windows-latest
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install AutoHotkey v2
+        run: |
+          Invoke-WebRequest -Uri "https://www.autohotkey.com/download/ahk-v2.exe" -OutFile "$env:TEMP\ahk-v2.exe"
+          Start-Process -FilePath "$env:TEMP\ahk-v2.exe" -ArgumentList "/S" -Wait
+
+      - name: Run AutoHotkey tests
+        run: |
+          & "C:\Program Files\AutoHotkey\v2\AutoHotkey64.exe" "AutoHotkey/RunTests.ahk"
