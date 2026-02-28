@@ -17,8 +17,8 @@ jobs:
 
       - name: Install AutoHotkey v2
         run: |
-          Invoke-WebRequest -Uri "https://www.autohotkey.com/download/ahk-v2.exe" -OutFile "$env:TEMP\ahk-v2.exe"
-          Start-Process -FilePath "$env:TEMP\ahk-v2.exe" -ArgumentList "/S" -Wait
+          Invoke-WebRequest -Uri "https://github.com/AutoHotkey/AutoHotkey/releases/download/v2.0.21/AutoHotkey_2.0.21_setup.exe" -OutFile "$env:TEMP\ahk-v2-setup.exe"
+          Start-Process -FilePath "$env:TEMP\ahk-v2-setup.exe" -ArgumentList "/S" -Wait
 
       - name: Run AutoHotkey tests
         run: |
