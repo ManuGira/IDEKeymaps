@@ -228,14 +228,14 @@ TestGateNode() {
 
     
     ; Test use case
-    inputNode := PassNode(,,false)
     controllerNode := PassNode(,,false)
+    inputNode := PassNode(,,false)
     counter := 0
     IncrementCounter(state){
         counter++
     }
 
-    sut := GateNode(inputNode, controllerNode, (s) => IncrementCounter(s),false)
+    sut := GateNode(controllerNode, inputNode, (s) => IncrementCounter(s),false)
 
     ResetTest(state := false, isOpen := false){
         inputNode.Update(state)
@@ -253,7 +253,7 @@ TestGateNode() {
     Assert.True(sut.GetState())
     Assert.Equal(counter, 0)
     
-    ; Opening-Closing gate does not trigger the callback
+    ; Opening-Closing gate does not trigger the callback 
     ResetTest()
     sut.Open(true)
     Assert.True(sut.isOpen)

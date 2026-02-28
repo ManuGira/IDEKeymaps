@@ -15,17 +15,17 @@ class KeyBoardState {
       
         for rowIndex, row in ScanCodes.KeyMatrix {
             for colIndex, scanCode in row {
-                this.CreateGateForLayout(scanCode, this.kbd.ModStdNode, this.Layout.Get(rowIndex, colIndex))
-                this.CreateGateForLayout(scanCode, this.kbd.ModShiftNode, this.Layout.Get(rowIndex, colIndex, true, false))
-                this.CreateGateForLayout(scanCode, this.kbd.ModCtrlAltNode, this.Layout.Get(rowIndex, colIndex, false, true))
+                this.CreateGateForLayout(this.kbd.ModStdNode, scanCode, this.Layout.Get(rowIndex, colIndex))
+                this.CreateGateForLayout(this.kbd.ModShiftNode, scanCode, this.Layout.Get(rowIndex, colIndex, true, false))
+                this.CreateGateForLayout(this.kbd.ModCtrlAltNode, scanCode, this.Layout.Get(rowIndex, colIndex, false, true))
 
                 qwertzBaseChar := QWERTZ.Get(rowIndex, colIndex)
-                this.CreateGate(scanCode, this.kbd.ModCtrlNode, qwertzBaseChar)
-                this.CreateGate(scanCode, this.kbd.ModWinNode, qwertzBaseChar)
-                this.CreateGate(scanCode, this.kbd.ModAltNode, qwertzBaseChar)
-                this.CreateGate(scanCode, this.kbd.ModAltShiftNode, qwertzBaseChar)
-                this.CreateGate(scanCode, this.kbd.ModCtrlShiftNode, qwertzBaseChar)
-                this.CreateGate(scanCode, this.kbd.ModCtrlAltShiftNode, qwertzBaseChar)
+                this.CreateGate(this.kbd.ModCtrlNode, scanCode, qwertzBaseChar)
+                this.CreateGate(this.kbd.ModWinNode, scanCode, qwertzBaseChar)
+                this.CreateGate(this.kbd.ModAltNode, scanCode, qwertzBaseChar)
+                this.CreateGate(this.kbd.ModAltShiftNode, scanCode, qwertzBaseChar)
+                this.CreateGate(this.kbd.ModCtrlShiftNode, scanCode, qwertzBaseChar)
+                this.CreateGate(this.kbd.ModCtrlAltShiftNode, scanCode, qwertzBaseChar)
             }
         }
 
@@ -75,12 +75,12 @@ class KeyBoardState {
         }
     }
 
-    CreateGateForLayout(scanCode, modNode, keyStr){
-        GateNode(this.kbd.charKeyNodes[scanCode], modNode, (state) => this.GateCallback(state, keyStr))
+    CreateGateForLayout(modNode, scanCode, keyStr){
+        GateNode(modNode, this.kbd.charKeyNodes[scanCode], (state) => this.GateCallback(state, keyStr))
     }
 
-    CreateGate(scanCode, modNode, keyStr){
-        GateNode(this.kbd.charKeyNodes[scanCode], modNode, (s) => s ? SendInput("{Blind}" keyStr) : "")
+    CreateGate(modNode, scanCode, keyStr){
+        GateNode(modNode, this.kbd.charKeyNodes[scanCode], (s) => s ? SendInput("{Blind}" keyStr) : "")
     }
 }
 
