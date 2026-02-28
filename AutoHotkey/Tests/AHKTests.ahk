@@ -35,6 +35,12 @@ TestEmptyString() {
 }
 TestEmptyString()
 
+TestString() {
+    Assert.Equal("AB", "A" "B", "Concatenation of strings should work")
+    Assert.Equal("AB", "A" . "B", "Concatenation of strings should work")
+}
+TestString()
+
 TestMap() {
     myMap := Map()
     Assert.Equal(myMap.Count, 0, "Newly created map should have count 0")
@@ -96,4 +102,3 @@ TestLambda() {
     Assert.Equal(myLamb(100), 133, "Lambda should capture updated variable from function")
 }
 TestLambda()
-MsgBox("All AHK tests passed")
