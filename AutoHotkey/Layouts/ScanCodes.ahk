@@ -48,4 +48,17 @@ class ScanCodes{
     
     ; Scan code to QWERTY key mapping for keys that are present in the ISO layout.
     static QWERTYMap := ScanCodes.CreateQWERTYMap()
+
+    static CreateQWERTYReverseMap() {
+        result := Map()
+        for rowIndex, row in ScanCodes.KeyMatrix {
+            for colIndex, code in row {
+                result[ScanCodes.QWERTYMatrix[rowIndex][colIndex]] := code
+            }
+        }
+        return result
+    }
+
+    ; QWERTY key name to scan code mapping (reverse of QWERTYMap).
+    static QWERTYReverseMap := ScanCodes.CreateQWERTYReverseMap()
 }
