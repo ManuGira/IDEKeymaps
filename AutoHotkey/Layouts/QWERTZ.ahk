@@ -18,12 +18,12 @@ class QWERTZ {
     ]
     
     static AltGr := [
-        " ¦@#°§¬|¢ ´~",  ; Row 1
+        " ¦@#°§¬|¢  ´~", ; Row 1
          "  €       []", ; Row 2
          "          {}", ; Row 3
         "\          "    ; Row 4
     ]
-
+    
     static DeadKeyDict := Dict(
         "^",  Dict("a", "â", "e", "ê", "i", "î", "o", "ô", "u", "û", 
                    "A", "Â", "E", "Ê", "I", "Î", "O", "Ô", "U", "Û"),
