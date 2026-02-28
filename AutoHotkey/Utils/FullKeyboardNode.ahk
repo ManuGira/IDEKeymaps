@@ -53,6 +53,12 @@ class FullKeyboardNode {
             this.modKeyNodes[k] := ChangeNode(KeyStateNode(k,, false),,)  
         }
 
+        lockKeys := ["CapsLock", "ScrollLock", "NumLock"]
+        this.lockKeyNodes := Map()
+        for k in lockKeys {
+            this.lockKeyNodes[k] := KeyLockStateNode(k, )  
+        }
+
         SendAndTips(msg) {
             SendInput(msg)
             TempToolTip(msg, 1000)
@@ -71,8 +77,10 @@ class FullKeyboardNode {
         this.ctrlNode := OrNode([this.modKeyNodes["LControl"], this.modKeyNodes["RControl"], this.modKeyNodes["RAlt"]], (s) => SendModInput(s, "Control"))
         this.winNode := OrNode([this.modKeyNodes["LWin"], this.modKeyNodes["RWin"]], (s) => SendModInput(s, "Win"))
         
-        this.ModStdNode := PassNode(NotNode(OrNode([this.shiftNode, this.altNode, this.ctrlNode, this.winNode])))
-        this.ModShiftNode := AndNode([this.shiftNode, NotNode(OrNode([this.altNode, this.ctrlNode, this.winNode]))])
+        this.shiftXCapsNode := XOrNode([this.shiftNode, this.lockKeyNodes["CapsLock"]])
+
+        this.ModStdNode := PassNode(NotNode(OrNode([this.shiftXCapsNode, this.altNode, this.ctrlNode, this.winNode])))
+        this.ModShiftNode := AndNode([this.shiftXCapsNode, NotNode(OrNode([this.altNode, this.ctrlNode, this.winNode]))])
         this.ModCtrlNode := AndNode([this.ctrlNode, NotNode(OrNode([this.shiftNode, this.altNode, this.winNode]))])
         this.ModWinNode := AndNode([this.winNode, NotNode(OrNode([this.shiftNode, this.altNode, this.ctrlNode]))])
         this.ModAltNode := AndNode([this.altNode, NotNode(OrNode([this.shiftNode, this.ctrlNode, this.winNode]))])

@@ -32,7 +32,6 @@ class KeyBoardState {
                 this.RegisterDict(scanCode, this.kbd.ModShiftNode, this.Layout.Get(rowIndex, colIndex, true, false))
                 this.RegisterDict(scanCode, this.kbd.ModCtrlAltNode, this.Layout.Get(rowIndex, colIndex, false, true))
 
-                ; TODO: Support CAP SLOCK
                 ; TODO: Add registers below to support shortcuts
                 ; qwertzBaseChar := QWERTZ.Get(rowIndex, colIndex)
                 ; Register(scanCode, this.kbd.ModCtrlNode, qwertzBaseChar)
