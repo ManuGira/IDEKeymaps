@@ -14,6 +14,17 @@ class ScanCodes{
         ["SC056", "SC02C", "SC02D", "SC02E", "SC02F", "SC030", "SC031", "SC032", "SC033", "SC034", "SC035"]
     ]
 
+    static QWERTYMatrix := [
+        ; Row 1 - §1234567890'^ Number row (13 keys)
+        [    "Backquote", "Digit1", "Digit2", "Digit3", "Digit4", "Digit5", "Digit6", "Digit7", "Digit8", "Digit9",    "Digit0",       "Minus",        "Equal"],
+        ; Row 2 - QWERTY row (12 keys)
+                         [  "KeyQ",   "KeyW",   "KeyE",   "KeyR",   "KeyT",   "KeyY",   "KeyU",   "KeyI",   "KeyO",      "KeyP", "BracketLeft", "BracketRight"],
+        ; Row 3 - ASDF row (12 keys)
+                         [  "KeyA",   "KeyS",   "KeyD",   "KeyF",   "KeyG",   "KeyH",   "KeyJ",   "KeyK",   "KeyL", "Semicolon",       "Quote",    "Backslash"],
+        ; Row 4 - <ZXCV row (11 keys)
+        ["IntlBackslash",   "KeyZ",   "KeyX",   "KeyC",   "KeyV",   "KeyB",   "KeyN",   "KeyM",  "Comma", "Period",     "Slash"]
+    ]
+
     static GetRowCol(scanCode) {
         for rowIndex, row in ScanCodes.KeyMatrix {
             for colIndex, code in row {
@@ -24,4 +35,17 @@ class ScanCodes{
         }
         throw ValueError("Scan code not found: " scanCode)
     }
+
+    static CreateQWERTYMap() {
+        result := Map()
+        for rowIndex, row in ScanCodes.KeyMatrix {
+            for colIndex, code in row {
+                result[code] := ScanCodes.QWERTYMatrix[rowIndex][colIndex]
+            }
+        }
+        return result
+    }
+    
+    ; Scan code to QWERTY key mapping for keys that are present in the ISO layout.
+    static QWERTYMap := ScanCodes.CreateQWERTYMap()
 }

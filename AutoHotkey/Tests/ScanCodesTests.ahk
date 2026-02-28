@@ -27,3 +27,8 @@ Assert.EqualArray(ScanCodes.GetRowCol("SC01E"), [3, 1])  ; A
 Assert.EqualArray(ScanCodes.GetRowCol("SC056"), [4, 1])  ; <
 Assert.EqualArray(ScanCodes.GetRowCol("SC02C"), [4, 2])  ; Y
 
+; Test ScanCode to QWERTY mapping
+Assert.Equal(ScanCodes.QWERTYMap["SC029"], "Backquote")  ; §
+Assert.Equal(ScanCodes.QWERTYMap["SC002"], "Digit1")     ; 1
+Assert.Equal(ScanCodes.QWERTYMap["SC003"], "Digit2")     ; 2
+
