@@ -56,8 +56,8 @@ class KeyBoardState {
         if state {
             char := this.ComputeMsg(keyStr)
             if char {
-                SendInput(char)            
-            }
+                SendInput("{Blind}{Text}" char)
+            }                
         }
     }
 
@@ -90,7 +90,7 @@ class KeyBoardState {
             return specialKey
         }
         ; no combination found, send the deadKey followed by the current keyStr
-        result := "{Text}" this.currentDeadKey . keyStr
+        result := this.currentDeadKey . keyStr
         this.currentDeadKey := "" ; Clear the current dead key after use
         return result
     }
