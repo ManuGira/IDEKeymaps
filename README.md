@@ -1,6 +1,7 @@
 
 # Keymaps 
 
+[![AutoHotkey Tests](https://github.com/ManuGira/IDEKeymaps/actions/workflows/autohotkey-tests.yml/badge.svg)](https://github.com/ManuGira/IDEKeymaps/actions/workflows/autohotkey-tests.yml)
 
 ![Keymap Visualization](images/keyboard-layout.png)
 

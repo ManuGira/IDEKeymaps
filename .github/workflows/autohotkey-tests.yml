@@ -1,0 +1,23 @@
+name: AutoHotkey Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: windows-latest
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install AutoHotkey v2
+        run: choco install autohotkey --version=2.0.21 -y
+
+      - name: Run AutoHotkey tests
+        run: |
+          & "C:\Program Files\AutoHotkey\v2\AutoHotkey64.exe" "AutoHotkey/RunTests.ahk"
