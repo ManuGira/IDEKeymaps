@@ -29,11 +29,9 @@ class KeyBoardState {
         for rowIndex, row in ScanCodes.KeyMatrix {
             for colIndex, scanCode in row {
                 this.RegisterDict(scanCode, this.kbd.ModStdNode, this.Layout.Get(rowIndex, colIndex))
-                this.RegisterDict(scanCode, this.kbd.ModShiftNode, this.Layout.Get(rowIndex, colIndex))
-                this.RegisterDict(scanCode, this.kbd.ModCtrlAltNode, this.Layout.Get(rowIndex, colIndex))
+                this.RegisterDict(scanCode, this.kbd.ModShiftNode, this.Layout.Get(rowIndex, colIndex, true, false))
+                this.RegisterDict(scanCode, this.kbd.ModCtrlAltNode, this.Layout.Get(rowIndex, colIndex, false, true))
 
-                ; TODO: support AltGr as Alt+Ctrl
-                ; TODO: ^ + (Shift+e) must return Ê, bot ê
                 ; TODO: Support CAP SLOCK
                 ; TODO: Add registers below to support shortcuts
                 ; qwertzBaseChar := QWERTZ.Get(rowIndex, colIndex)
