@@ -25,7 +25,7 @@ class NumpadAwan {
         ; Maps one of the modifier keys (Ctrl, Shift, Alt, Win)
         mapModKey(key, modkey){
             func := (s) => SendInput("{Blind}{" modkey (s ? "Down}" : "Up}"))
-            filterNode := DummyNode( , func, false)
+            filterNode := ChangeNode( , func, false)
             Conditional.HotKey("$" key, (k) => filterNode.Update(true), condition)
             Conditional.HotKey("$" key " Up", (k) => filterNode.Update(false), (k) => condition(k) || filterNode.GetState())
         }

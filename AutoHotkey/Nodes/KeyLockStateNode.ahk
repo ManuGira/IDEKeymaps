@@ -28,7 +28,7 @@ class KeyLockStateNode extends INode {
             this.Subscribe(callback)
 
         state0 := this.GetLockState()
-        node := DummyNode(KeyStateNode(key, , true), , state0)
+        node := ChangeNode(KeyStateNode(key, , true), , state0)
 
         node.Subscribe((s) => this.Update(s))
     }

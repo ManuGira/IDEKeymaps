@@ -7,8 +7,10 @@
 #Include KeyLockStateNode.ahk
 
 ; Utility nodes
-#Include DummyNode.ahk
+#Include PassNode.ahk
+#Include ChangeNode.ahk
 #Include ToggleNode.ahk
+#Include GateNode.ahk
 
 ; Rhythme nodes
 #Include TimedNode.ahk
