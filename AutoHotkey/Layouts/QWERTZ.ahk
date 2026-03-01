@@ -7,7 +7,8 @@ class QWERTZ {
         "§1234567890'^", ; Row 1
          "qwertzuiopè¨", ; Row 2
          "asdfghjkléà$", ; Row 3
-        "<yxcvbnm,.-"    ; Row 4
+        "<yxcvbnm,.-",   ; Row 4
+           " "           ; Row 5 (space)
     ]
 
     static Shift := [
@@ -15,13 +16,15 @@ class QWERTZ {
          "QWERTZUIOPÈ¨",   ; Row 2
          "ASDFGHJKLÉÀ$",   ; Row 3
         ">YXCVBNM;:_",     ; Row 4
+           " "             ; Row 5 (space)
     ]
     
     static AltGr := [
         " ¦@#°§¬|¢  ´~", ; Row 1
          "  €       []", ; Row 2
          "          {}", ; Row 3
-        "\          "    ; Row 4
+        "\          ",   ; Row 4
+           " "           ; Row 5 (space)
     ]
     
     static DeadKeyDict := Dict(

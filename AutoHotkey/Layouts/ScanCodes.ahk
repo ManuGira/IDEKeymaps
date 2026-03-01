@@ -11,7 +11,9 @@ class ScanCodes{
         ; Row 3 - ASDF row (12 keys)
                  ["SC01E", "SC01F", "SC020", "SC021", "SC022", "SC023", "SC024", "SC025", "SC026", "SC027", "SC028", "SC02B"],
         ; Row 4 - <ZXCV row (11 keys)
-        ["SC056", "SC02C", "SC02D", "SC02E", "SC02F", "SC030", "SC031", "SC032", "SC033", "SC034", "SC035"]
+        ["SC056", "SC02C", "SC02D", "SC02E", "SC02F", "SC030", "SC031", "SC032", "SC033", "SC034", "SC035"],
+        ; Row 5 - Space
+                          ["SC039"]
     ]
 
     static QWERTYMatrix := [
@@ -22,7 +24,9 @@ class ScanCodes{
         ; Row 3 - ASDF row (12 keys)
                          [  "KeyA",   "KeyS",   "KeyD",   "KeyF",   "KeyG",   "KeyH",   "KeyJ",   "KeyK",   "KeyL", "Semicolon",       "Quote",    "Backslash"],
         ; Row 4 - <ZXCV row (11 keys)
-        ["IntlBackslash",   "KeyZ",   "KeyX",   "KeyC",   "KeyV",   "KeyB",   "KeyN",   "KeyM",  "Comma", "Period",     "Slash"]
+        ["IntlBackslash",   "KeyZ",   "KeyX",   "KeyC",   "KeyV",   "KeyB",   "KeyN",   "KeyM",  "Comma", "Period",     "Slash"],
+        ; Row 5 - Space
+                         ["Space"]
     ]
 
     static GetRowCol(scanCode) {
@@ -40,7 +44,8 @@ class ScanCodes{
         result := Map()
         for rowIndex, row in ScanCodes.Matrix {
             for colIndex, code in row {
-                result[code] := ScanCodes.QWERTYMatrix[rowIndex][colIndex]
+                qwertyKeyName := ScanCodes.QWERTYMatrix[rowIndex][colIndex]
+                result[code] := qwertyKeyName
             }
         }
         return result
@@ -53,7 +58,8 @@ class ScanCodes{
         result := Map()
         for rowIndex, row in ScanCodes.Matrix {
             for colIndex, code in row {
-                result[ScanCodes.QWERTYMatrix[rowIndex][colIndex]] := code
+                qwertyKeyName := ScanCodes.QWERTYMatrix[rowIndex][colIndex]
+                result[qwertyKeyName] := code
             }
         }
         return result
