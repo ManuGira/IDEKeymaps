@@ -15,42 +15,37 @@ notShift := false
 notAltGr := false
 
 ; Test that the qwertz layout is correctly mapped
-Assert.Equal(QWERTZ.Get(1, 1, notShift, notAltGr, ""), "§")
-Assert.Equal(QWERTZ.Get(1, 2, notShift, notAltGr, ""), "1")
-Assert.Equal(QWERTZ.Get(2, 3, notShift, notAltGr, ""), "e")
-Assert.Equal(QWERTZ.Get(3, 1, notShift, notAltGr, ""), "a")
+Assert.Equal(QWERTZ.Get("SC029", notShift, notAltGr), "§")
+Assert.Equal(QWERTZ.Get("SC002", notShift, notAltGr), "1")
+Assert.Equal(QWERTZ.Get("SC012", notShift, notAltGr), "e")
+Assert.Equal(QWERTZ.Get("SC01E", notShift, notAltGr), "a")
 
 ; Shift
-Assert.Equal(QWERTZ.Get(1, 1, shift, notAltGr, ""), "°")
-Assert.Equal(QWERTZ.Get(1, 2, shift, notAltGr, ""), "+")
-Assert.Equal(QWERTZ.Get(2, 3, shift, notAltGr, ""), "E")
-Assert.Equal(QWERTZ.Get(3, 1, shift, notAltGr, ""), "A")
+Assert.Equal(QWERTZ.Get("SC029", shift, notAltGr), "°")
+Assert.Equal(QWERTZ.Get("SC002", shift, notAltGr), "+")
+Assert.Equal(QWERTZ.Get("SC012", shift, notAltGr), "E")
+Assert.Equal(QWERTZ.Get("SC01E", shift, notAltGr), "A")
 
 
 ; AltGr
 shift := false
 altGr := true
-Assert.Equal(QWERTZ.Get(1, 1, notShift, altGr, ""), "")
-Assert.Equal(QWERTZ.Get(1, 2, notShift, altGr, ""), "¦")
-Assert.Equal(QWERTZ.Get(2, 3, notShift, altGr, ""), "€")
-Assert.Equal(QWERTZ.Get(3, 1, notShift, altGr, ""), "")
+Assert.Equal(QWERTZ.Get("SC029", notShift, altGr), "")
+Assert.Equal(QWERTZ.Get("SC002", notShift, altGr), "¦")
+Assert.Equal(QWERTZ.Get("SC012", notShift, altGr), "€")
+Assert.Equal(QWERTZ.Get("SC01E", notShift, altGr), "")
 
 ; Shift + AltGr (should return empty string as it's not defined)
 shift := true
 altGr := true
-Assert.Equal(QWERTZ.Get(1, 1, shift, altGr, ""), "")
-Assert.Equal(QWERTZ.Get(2, 3, shift, altGr, ""), "")
-Assert.Equal(QWERTZ.Get(3, 1, shift, altGr, ""), "")
+Assert.Equal(QWERTZ.Get("SC029", shift, altGr), "")
+Assert.Equal(QWERTZ.Get("SC012", shift, altGr), "")
+Assert.Equal(QWERTZ.Get("SC01E", shift, altGr), "")
 
-; Dead key 
-Assert.Equal(QWERTZ.Get(2, 3, notShift, notAltGr, "^"), "ê")
-Assert.Equal(QWERTZ.Get(3, 1, notShift, notAltGr, "^"), "â")
-Assert.Equal(QWERTZ.Get(2, 3, shift, notAltGr, "^"), "Ê")
-Assert.Equal(QWERTZ.Get(2, 3, notShift, altGr, "^"), "^€")
-Assert.Equal(QWERTZ.Get(3, 1, notShift, altGr, "^"), "")
-Assert.Equal(QWERTZ.Get(1, 13, notShift, notAltGr, "^"), "^^")
+
 
 ; Test top row of characters
-for i, char in ["q", "w", "e", "r", "t", "z", "u", "i", "o", "p", "è", "¨"]
-    Assert.Equal(QWERTZ.Get(2, i, notShift, notAltGr, ""), char)
-
+for i, char in ["q", "w", "e", "r", "t", "z", "u", "i", "o", "p", "è", "¨"]{
+    scanCode := ScanCodes.KeyMatrix[2][i]
+    Assert.Equal(QWERTZ.Get(scanCode, notShift, notAltGr), char)
+}

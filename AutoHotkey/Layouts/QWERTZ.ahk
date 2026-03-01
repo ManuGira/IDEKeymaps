@@ -35,7 +35,11 @@ class QWERTZ {
                    "A", "Ã", "N", "Ñ", "O", "Õ"),
     )
 
-    static Get(row, col, shift:=false, altGr:=false, deadKey:="") {
+    static Get(scanCode, shift:=false, altGr:=false) {
+        rowcol := ScanCodes.GetRowCol(scanCode)
+        row := rowcol[1]
+        col := rowcol[2]
+
         if (not shift && not altGr)
             char := SubStr(QWERTZ.Std[row], col, 1)
         else if (shift && not altGr)
@@ -48,33 +52,6 @@ class QWERTZ {
         if char = " " ; No character defined for this key
             return ""
 
-        
-        if (deadKey && QWERTZ.DeadKeyDict.Has(deadKey)) {
-            if (QWERTZ.DeadKeyDict[deadKey].Has(char))
-                return QWERTZ.DeadKeyDict[deadKey][char]
-            else
-                return deadKey . char
-        }
-
         return char
-    }
-
-    static FindKey(char) {
-        for rowIndex, row in QWERTZ.Std {
-            colIndex := InStr(row, char)
-            if (colIndex > 0)
-                return {row: rowIndex, col: colIndex, shift: false, altGr: false}
-        }
-        for rowIndex, row in QWERTZ.Shift {
-            colIndex := InStr(row, char)
-            if (colIndex > 0)
-                return {row: rowIndex, col: colIndex, shift: false, altGr: true}
-        }
-        for rowIndex, row in QWERTZ.AltGr {
-            colIndex := InStr(row, char)
-            if (colIndex > 0)
-                return {row: rowIndex, col: colIndex, shift: true, altGr: false}
-        }
-        throw "Character '" . char . "' not found in QWERTZ layout."
     }
 }
