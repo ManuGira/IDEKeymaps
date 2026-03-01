@@ -30,4 +30,13 @@ class Assert {
                 throw "Assertion Failed. " msg ": At index " i ": Expected " v ", got " actual[i]
         }
     }
+
+    static Throws(func, msg := ""){
+        try {
+            func()
+        } catch Error as err {
+            return ; Expected an error to be thrown, test passes
+        }
+        throw "Assertion Failed. " msg ": Expected an error to be thrown, but no error was thrown."
+    }
 }

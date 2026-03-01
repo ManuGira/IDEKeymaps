@@ -1,0 +1,1 @@
+all layouts (except qwertz.json) have been downloaded from https://github.com/Nuclear-Squid/ergol

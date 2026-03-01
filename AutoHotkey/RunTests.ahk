@@ -10,6 +10,6 @@
 #Include Tests/CaseConverterTests.ahk
 
 #Include Tests/ScanCodesTests.ahk
-#Include Tests/QWERTZTest.ahk
+#Include Tests/KeyboardLayoutTests.ahk
 
 MsgBox "All tests passed successfully!"

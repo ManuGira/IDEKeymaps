@@ -20,6 +20,18 @@ TestBooleans() {
 }
 TestBooleans()
 
+TestArrays() {
+    arr := [1, 2, 3]
+    Assert.Equal(arr.Length, 3, "Array should have correct length")
+    Assert.Equal(arr[1], 1, "Array should return correct value for index 1")
+    Assert.Equal(arr[2], 2, "Array should return correct value for index 2")
+    Assert.Equal(arr[3], 3, "Array should return correct value for index 3")
+
+    Assert.Throws(() => arr[0], "Accessing index 0 should throw an error")
+    Assert.Throws(() => arr[4], "Accessing index 4 should throw an error")
+}
+TestArrays()
+
 TestEmptyString() {
     Assert.Equal("", "")
     Assert.False("", "Empty string should be falsy")
@@ -38,6 +50,11 @@ TestEmptyString()
 TestString() {
     Assert.Equal("AB", "A" "B", "Concatenation of strings should work")
     Assert.Equal("AB", "A" . "B", "Concatenation of strings should work")
+
+    Assert.Equal(StrLen("123"), 3, "Size method should return correct length of string")
+
+    Assert.Equal(SubStr("Hello", 1, 2), "He", "SubStr should return correct substring")
+    Assert.Equal(SubStr("Hello", 2), "ello", "SubStr with only start index should return substring from that index to the end")
 }
 TestString()
 
@@ -71,6 +88,13 @@ TestMap() {
     }
     Assert.EqualArray(keys, ["c", "d"], "Map should iterate keys in insertion order")
     Assert.EqualArray(values, [3, 4], "Map should iterate values in insertion order")
+
+    myMap := Map("e", 5, "f", 6)
+    Assert.Throws(() => myMap["unknown"], "Accessing unknown key should throw an error")
+    Assert.Throws(() => myMap[""], "Accessing empty key should throw an error")
+
+    myMap.Default := "default"
+    Assert.Equal(myMap["unknown"], "default", "Accessing unknown key should return default value when Default is set")
 }
 TestMap()
 

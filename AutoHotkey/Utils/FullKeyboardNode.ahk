@@ -13,7 +13,7 @@ class FullKeyboardNode {
         charKeyScanCodes := []
         
         ; Add all keys from the matrix
-        for row in ScanCodes.KeyMatrix {
+        for row in ScanCodes.Matrix {
             for key in row {
                 charKeyScanCodes.Push(key)
             }
