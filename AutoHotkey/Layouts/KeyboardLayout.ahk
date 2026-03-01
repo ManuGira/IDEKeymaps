@@ -7,6 +7,7 @@ class KeyboardLayout {
     ; Map from scan code (e.g. "SC012") to value array (e.g. ["e", "E", "€"])
     ; Index 1 = normal, 2 = shift, 3 = altgr, 4 = shift+altgr
     KeyMap := Map()
+    DeadKeyDict := Map()
 
     __New(jsonFilePath) {
         jsonStr := FileRead(jsonFilePath, "UTF-8")
@@ -14,8 +15,18 @@ class KeyboardLayout {
 
         ; Build KeyMap: scan code -> value array
         for qwertyName, values in data["keymap"] {
-            if ScanCodes.QWERTYReverseMap.Has(qwertyName)
-                this.KeyMap[ScanCodes.QWERTYReverseMap[qwertyName]] := values
+            scanCode := ScanCodes.QWERTYReverseMap[qwertyName]
+            if scanCode{
+                this.KeyMap[scanCode] := values
+            }
+        }
+
+        for deadKey, combinations in data["deadkeys"] {
+            this.DeadKeyDict[deadKey] := Map()
+            this.DeadKeyDict[deadKey].Default := "" ; If we get a combination that is not defined, we return a void ""
+            for baseChar, combinedChar in combinations {
+                this.DeadKeyDict[deadKey][baseChar] := combinedChar
+            }
         }
     }
 
@@ -29,12 +40,10 @@ class KeyboardLayout {
 
         values := this.KeyMap[scanCode]
 
-        if altGr && shift && values.Length >= 4
-            return values[4]
-        if altGr && values.Length >= 3
-            return values[3]
-        if shift && values.Length >= 2
-            return values[2]
-        return values[1]
+        ind := 1 + (shift ? 1 : 0) + (altGr ? 2 : 0)
+        if ind > values.Length
+            return ""
+
+        return values[ind]
     }
 }

@@ -31,8 +31,8 @@ TestKeyboardLayout_Get() {
     ; Unknown scan code
     Assert.Equal(sut.Get("SC999", false, false), "", "Unknown scan code should return ''")
 
-    ; Shift+AltGr on a key with only 2 values falls back to shift  (SC002: ["&","1"])
-    Assert.Equal(sut.Get("SC002", true, true), "1", "Shift+AltGr fallback should return shift value")
+    ; Shift+AltGr on a key with only 2 values should return ""
+    Assert.Equal(sut.Get("SC002", true, true), "", "Shift+AltGr on a key with only 2 values should return ''")
 }
 TestKeyboardLayout_Get()
 
