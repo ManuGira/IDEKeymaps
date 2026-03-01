@@ -89,6 +89,6 @@ class KeyBoardState {
 }
 
 KeyBoardState(
-    KeyboardLayout("Layouts/azerty.json"), 
+    KeyboardLayout("Layouts/erglace.json"), 
     KeyboardLayout("Layouts/qwertz.json")
 )
