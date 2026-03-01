@@ -3,7 +3,6 @@
 #Include Utils/FullKeyboardNode.ahk
 #Include Utils/Dict.ahk
 #Include Layouts/ScanCodes.ahk
-#Include Layouts/QWERTZ.ahk
 #Include Layouts/KeyboardLayout.ahk
 
 class KeyBoardState {
@@ -89,4 +88,7 @@ class KeyBoardState {
     }
 }
 
-KeyBoardState(KeyboardLayout("Layouts/azerty.json"), QWERTZ)
+KeyBoardState(
+    KeyboardLayout("Layouts/azerty.json"), 
+    KeyboardLayout("Layouts/qwertz.json")
+)

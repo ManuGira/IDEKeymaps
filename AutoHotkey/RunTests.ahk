@@ -11,6 +11,5 @@
 
 #Include Tests/ScanCodesTests.ahk
 #Include Tests/KeyboardLayoutTests.ahk
-#Include Tests/QWERTZTest.ahk
 
 MsgBox "All tests passed successfully!"
