@@ -13,7 +13,7 @@ class KeyBoardState {
         this.kbd := FullKeyboardNode()
         this.kbd.Reset() ; Ensure all keys start in the unpressed state
       
-        for rowIndex, row in ScanCodes.KeyMatrix {
+        for rowIndex, row in ScanCodes.Matrix {
             for colIndex, scanCode in row {
                 this.CreateGateForLayout(this.kbd.ModStdNode, scanCode, this.Layout.Get(rowIndex, colIndex))
                 this.CreateGateForLayout(this.kbd.ModShiftNode, scanCode, this.Layout.Get(rowIndex, colIndex, true, false))

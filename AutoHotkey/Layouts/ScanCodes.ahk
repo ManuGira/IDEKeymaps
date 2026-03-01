@@ -3,7 +3,7 @@
 class ScanCodes{
     ; ISO Keyboard layout matrix (1-based indexing)
     ; Row 1: Number row, Row 2: QWERTY, Row 3: ASDF, Row 4: ZXCV
-    static KeyMatrix := [
+    static Matrix := [
         ; Row 1 - §1234567890'^ Number row (13 keys)
         ["SC029", "SC002", "SC003", "SC004", "SC005", "SC006", "SC007", "SC008", "SC009", "SC00A", "SC00B", "SC00C", "SC00D"],
         ; Row 2 - QWERTY row (12 keys)
@@ -26,7 +26,7 @@ class ScanCodes{
     ]
 
     static GetRowCol(scanCode) {
-        for rowIndex, row in ScanCodes.KeyMatrix {
+        for rowIndex, row in ScanCodes.Matrix {
             for colIndex, code in row {
                 if (code = scanCode) {
                     return [rowIndex, colIndex]
@@ -38,7 +38,7 @@ class ScanCodes{
 
     static CreateQWERTYMap() {
         result := Map()
-        for rowIndex, row in ScanCodes.KeyMatrix {
+        for rowIndex, row in ScanCodes.Matrix {
             for colIndex, code in row {
                 result[code] := ScanCodes.QWERTYMatrix[rowIndex][colIndex]
             }
@@ -51,7 +51,7 @@ class ScanCodes{
 
     static CreateQWERTYReverseMap() {
         result := Map()
-        for rowIndex, row in ScanCodes.KeyMatrix {
+        for rowIndex, row in ScanCodes.Matrix {
             for colIndex, code in row {
                 result[ScanCodes.QWERTYMatrix[rowIndex][colIndex]] := code
             }

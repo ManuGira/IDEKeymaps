@@ -4,19 +4,19 @@
 #Include ../Layouts/ScanCodes.ahk
 
 ; Test row lengths for ISO layout
-Assert.Equal(ScanCodes.KeyMatrix[1].Length, 13)
-Assert.Equal(ScanCodes.KeyMatrix[2].Length, 12)
-Assert.Equal(ScanCodes.KeyMatrix[3].Length, 12)
-Assert.Equal(ScanCodes.KeyMatrix[4].Length, 11)
+Assert.Equal(ScanCodes.Matrix[1].Length, 13)
+Assert.Equal(ScanCodes.Matrix[2].Length, 12)
+Assert.Equal(ScanCodes.Matrix[3].Length, 12)
+Assert.Equal(ScanCodes.Matrix[4].Length, 11)
 
 ; Test row, col to scan code mapping
-Assert.Equal(ScanCodes.KeyMatrix[1][1], "SC029") ; §
-Assert.Equal(ScanCodes.KeyMatrix[1][2], "SC002") ; 1
-Assert.Equal(ScanCodes.KeyMatrix[1][3], "SC003") ; 2
-Assert.Equal(ScanCodes.KeyMatrix[2][1], "SC010") ; Q
-Assert.Equal(ScanCodes.KeyMatrix[3][1], "SC01E") ; A
-Assert.Equal(ScanCodes.KeyMatrix[4][1], "SC056") ; <
-Assert.Equal(ScanCodes.KeyMatrix[4][2], "SC02C") ; Y
+Assert.Equal(ScanCodes.Matrix[1][1], "SC029") ; §
+Assert.Equal(ScanCodes.Matrix[1][2], "SC002") ; 1
+Assert.Equal(ScanCodes.Matrix[1][3], "SC003") ; 2
+Assert.Equal(ScanCodes.Matrix[2][1], "SC010") ; Q
+Assert.Equal(ScanCodes.Matrix[3][1], "SC01E") ; A
+Assert.Equal(ScanCodes.Matrix[4][1], "SC056") ; <
+Assert.Equal(ScanCodes.Matrix[4][2], "SC02C") ; Y
 
 ; Test GetRowCol function
 Assert.EqualArray(ScanCodes.GetRowCol("SC029"), [1, 1])  ; §

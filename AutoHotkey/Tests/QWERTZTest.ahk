@@ -46,6 +46,6 @@ Assert.Equal(QWERTZ.Get("SC01E", shift, altGr), "")
 
 ; Test top row of characters
 for i, char in ["q", "w", "e", "r", "t", "z", "u", "i", "o", "p", "è", "¨"]{
-    scanCode := ScanCodes.KeyMatrix[2][i]
+    scanCode := ScanCodes.Matrix[2][i]
     Assert.Equal(QWERTZ.Get(scanCode, notShift, notAltGr), char)
 }
