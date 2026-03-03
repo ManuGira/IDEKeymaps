@@ -44,10 +44,9 @@ class FullKeyboardNode {
             ; this.charKeyNodes[k].Subscribe(FullKeyboardNode.CreateTooltipCallback(k))
         }
 
-                ; Modifier keys
+        ; Modifier keys
         modKeys := ["LShift", "RShift", "LControl", "RControl", "LAlt", "RAlt", "LWin", "RWin"]
 
-        
         this.modKeyNodes := Map()
         for k in modKeys {
             this.modKeyNodes[k] := ChangeNode(KeyStateNode(k,, false),,)  
@@ -75,7 +74,7 @@ class FullKeyboardNode {
         this.shiftNode := OrNode([this.modKeyNodes["LShift"], this.modKeyNodes["RShift"]], (s) => SendModInput(s, "Shift"))
         this.altNode := OrNode([this.modKeyNodes["LAlt"], this.modKeyNodes["RAlt"]], (s) => SendModInput(s, "Alt"))
         this.ctrlNode := OrNode([this.modKeyNodes["LControl"], this.modKeyNodes["RControl"], this.modKeyNodes["RAlt"]], (s) => SendModInput(s, "Control"))
-        this.winNode := OrNode([this.modKeyNodes["LWin"], this.modKeyNodes["RWin"]], (s) => SendModInput(s, "Win"))
+        this.winNode := OrNode([this.modKeyNodes["LWin"], this.modKeyNodes["RWin"]], (s) => SendModInput(s, "LWin"))
         
         this.shiftXCapsNode := XOrNode([this.shiftNode, this.lockKeyNodes["CapsLock"]])
 
