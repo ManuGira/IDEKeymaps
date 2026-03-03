@@ -36,14 +36,18 @@ TestEmptyString() {
     Assert.Equal("", "")
     Assert.False("", "Empty string should be falsy")
     Assert.True(!"", "Negation of empty string should be true")
-
-    Assert.True("a", "Non-empty string should be truthy")
     
     s := ""
     if s {
         Assert.Fail("Empty string should be falsy")
     }
-    
+
+    Assert.True("a", "Non-empty string should be truthy")
+
+    ; ATTENTION! Even if "0" is a non-empty string, its boolean value is FALSE!
+    Assert.False("0", "String '0' should be falsy, even if it's a non-empty string")
+
+    Assert.True("0" != "")
 }
 TestEmptyString()
 
@@ -55,6 +59,8 @@ TestString() {
 
     Assert.Equal(SubStr("Hello", 1, 2), "He", "SubStr should return correct substring")
     Assert.Equal(SubStr("Hello", 2), "ello", "SubStr with only start index should return substring from that index to the end")
+
+
 }
 TestString()
 

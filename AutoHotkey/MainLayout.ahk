@@ -34,12 +34,12 @@ class KeyBoardState {
     }
    
     ComputeMsg(keyStr){
-        if not keyStr
+        if StrLen(keyStr) == 0
             return ""
 
         deadKeyDict := this.TypingLayout.DeadKeyDict
 
-        if not this.currentDeadKey{
+        if StrLen(this.currentDeadKey) == 0 {
             ; no current deadKey
 
             if deadKeyDict.Has(keyStr){
@@ -54,7 +54,7 @@ class KeyBoardState {
         
         ; we have a deadKey stored, we need to check if the current keyStr can be combined with it
         combinedKey := deadKeyDict[this.currentDeadKey][keyStr]
-        if combinedKey {
+        if StrLen(combinedKey) > 0 {
             ; we have a valid combination, send the combined character and clear the current dead key
             this.currentDeadKey := "" ; Clear the current dead key after use
             return combinedKey
@@ -73,7 +73,7 @@ class KeyBoardState {
     GateCallback(state, keyStr){
         if state {
             char := this.ComputeMsg(keyStr)
-            if char {
+            if StrLen(char) > 0 {
                 SendInput("{Blind}{Text}" char)
             }
         }
@@ -89,6 +89,6 @@ class KeyBoardState {
 }
 
 KeyBoardState(
-    KeyboardLayout("Layouts/erglace.json"), 
+    KeyboardLayout("Layouts/bepo.json"), 
     KeyboardLayout("Layouts/qwertz.json")
 )
