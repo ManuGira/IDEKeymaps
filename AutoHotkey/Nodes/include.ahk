@@ -5,6 +5,7 @@
 ; Input nodes
 #Include KeyStateNode.ahk
 #Include KeyLockStateNode.ahk
+#Include WinSessionStateNode.ahk
 
 ; Utility nodes
 #Include PassNode.ahk

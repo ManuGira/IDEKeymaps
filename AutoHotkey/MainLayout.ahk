@@ -31,6 +31,9 @@ class KeyBoardState {
         }
 
         this.kbd.Reset() ; Ensure all keys start in the unpressed state
+        
+        ; Reset all key states when the Windows session is unlocked, to avoid stuck keys caused by AHK being suspended while the screen was locked.
+        WinSessionStateNode((s) => this.kbd.Reset()) 
     }
    
     ComputeMsg(keyStr){

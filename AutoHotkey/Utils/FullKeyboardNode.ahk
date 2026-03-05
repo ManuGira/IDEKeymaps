@@ -4,7 +4,9 @@
 #Include ../Layouts/ScanCodes.ahk
 
 class FullKeyboardNode {
-    
+    static modKeyLabels := ["LShift", "RShift", "LControl", "RControl", "LAlt", "RAlt", "LWin", "RWin"]
+
+
     static CreateTooltipCallback(key) {
         return (s) => TempToolTip(key " " s, 500)
     }
@@ -43,20 +45,9 @@ class FullKeyboardNode {
             this.charKeyNodes[k] := ChangeNode(KeyStateNode(k, , false))
             ; this.charKeyNodes[k].Subscribe(FullKeyboardNode.CreateTooltipCallback(k))
         }
-
-        ; Modifier keys
-        modKeys := ["LShift", "RShift", "LControl", "RControl", "LAlt", "RAlt", "LWin", "RWin"]
         
         this.modKeyNodes := Map()
-
-        UpdateAllModKeyNodes() {
-            for k in modKeys {
-                state := GetKeyState(k, "P")
-                this.modKeyNodes[k].Update(state)
-            }
-        }
-        
-        for k in modKeys {
+        for k in FullKeyboardNode.modKeyLabels {
             ; We use two chained ChangeNodes per modifier key instead of one, to work around a Windows lockscreen bug:
             ;
             ; Problem: When locking the PC with Win+L, AHK is suspended while the screen is locked, so it never
@@ -69,7 +60,7 @@ class FullKeyboardNode {
             ; The second ChangeNode is what callers subscribe to; it only holds the Windows-authoritative state,
             ; not the raw AHK hotkey stream. This way, re-synchronisation happens automatically on the next
             ; modifier keystroke after an unlock, regardless of which key events AHK may have missed.
-            ChangeNode(KeyStateNode(k, , false), (s) => UpdateAllModKeyNodes(), )
+            ChangeNode(KeyStateNode(k, , false), (s) => this.UpdateAllModKeyNodes(), )
             this.modKeyNodes[k] := ChangeNode()  ; Updated by UpdateAllModKeyNodes on every modifier event
         }
 
@@ -168,14 +159,19 @@ class FullKeyboardNode {
         }
     }
 
+    UpdateAllModKeyNodes() {
+        for k in FullKeyboardNode.modKeyLabels {
+            state := GetKeyState(k, "P")
+            this.modKeyNodes[k].Update(state)
+        }
+    }
+
     Reset() {
         for key, node in this.charKeyNodes {
             node.Update(false)
         }
 
-        for key, node in this.modKeyNodes {
-            node.Update(false)
-        }
+        this.UpdateAllModKeyNodes()
 
         for modNode in this.ModNodes {
             modNode.Update(false)
