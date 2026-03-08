@@ -1,6 +1,7 @@
 #Requires AutoHotkey v2.0
 
 #Include Utils/FullKeyboardNode.ahk
+#Include Utils/ModifierNodes.ahk
 #Include Utils/Dict.ahk
 #Include Layouts/ScanCodes.ahk
 #Include Layouts/KeyboardLayout.ahk
@@ -14,23 +15,36 @@ class KeyBoardState {
         this.kbd := FullKeyboardNode()
         this.kbd.Reset() ; Ensure all keys start in the unpressed state
       
+        this.modNodes := ModifierNodes(this.kbd.ctrlNode, this.kbd.altNode, this.kbd.shiftNode, this.kbd.winNode)
+        ; this.modNodes.EnableShowStateOnChange()
+
+        modStdNode := OrNode([
+            AndNode([this.modNodes.std, NotNode(this.kbd.lockKeyNodes["CapsLock"])]),
+            AndNode([this.modNodes.shift, this.kbd.lockKeyNodes["CapsLock"]])
+        ])
+        modShiftNode := OrNode([
+            AndNode([this.modNodes.std, this.kbd.lockKeyNodes["CapsLock"]]),
+            AndNode([this.modNodes.shift, NotNode(this.kbd.lockKeyNodes["CapsLock"])])
+        ])
+
         for rowIndex, row in ScanCodes.Matrix {
             for colIndex, scanCode in row {
-                this.CreateGateForLayout(this.kbd.ModStdNode, scanCode, this.TypingLayout.Get(scanCode))
-                this.CreateGateForLayout(this.kbd.ModShiftNode, scanCode, this.TypingLayout.Get(scanCode, true, false))
-                this.CreateGateForLayout(this.kbd.ModCtrlAltNode, scanCode, this.TypingLayout.Get(scanCode, false, true))
+                this.CreateGateForLayout(modStdNode, scanCode, this.TypingLayout.Get(scanCode))
+                this.CreateGateForLayout(modShiftNode, scanCode, this.TypingLayout.Get(scanCode, true, false))
+                this.CreateGateForLayout(this.modNodes.ctrl_alt, scanCode, this.TypingLayout.Get(scanCode, false, true))
+                this.CreateGateForLayout(this.modNodes.ctrl_alt_shift, scanCode, this.TypingLayout.Get(scanCode, true, true))
 
                 shortCutChar := this.ShortCutLayout.Get(scanCode)
-                this.CreateGate(this.kbd.ModCtrlNode, scanCode, shortCutChar)
-                this.CreateGate(this.kbd.ModWinNode, scanCode, shortCutChar)
-                this.CreateGate(this.kbd.ModAltNode, scanCode, shortCutChar)
-                this.CreateGate(this.kbd.ModAltShiftNode, scanCode, shortCutChar)
-                this.CreateGate(this.kbd.ModCtrlShiftNode, scanCode, shortCutChar)
-                this.CreateGate(this.kbd.ModCtrlAltShiftNode, scanCode, shortCutChar)
+                this.CreateGate(this.modNodes.ctrl, scanCode, shortCutChar)
+                this.CreateGate(this.modNodes.win, scanCode, shortCutChar)
+                this.CreateGate(this.modNodes.alt, scanCode, shortCutChar)
+                this.CreateGate(this.modNodes.alt_shift, scanCode, shortCutChar)
+                this.CreateGate(this.modNodes.ctrl_shift, scanCode, shortCutChar)
             }
         }
 
         this.kbd.Reset() ; Ensure all keys start in the unpressed state
+        this.modNodes.Reset() ; Ensure all modifier nodes start in the unpressed state
         
         ; Reset all key states when the Windows session is unlocked, to avoid stuck keys caused by AHK being suspended while the screen was locked.
         WinSessionStateNode((s) => this.kbd.Reset()) 
