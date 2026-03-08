@@ -42,25 +42,12 @@ class FullKeyboardNode {
         this.charKeyNodes := Map()
         for k in charKeyScanCodes {
             this.charKeyNodes[k] := ChangeNode(KeyStateNode(k, , false))
-            ; this.charKeyNodes[k].Subscribe(FullKeyboardNode.CreateTooltipCallback(k))
         }
-        
+
+       ; Modifier keys
         this.modKeyNodes := Map()
         for k in FullKeyboardNode.modKeyLabels {
-            ; We use two chained ChangeNodes per modifier key instead of one, to work around a Windows lockscreen bug:
-            ;
-            ; Problem: When locking the PC with Win+L, AHK is suspended while the screen is locked, so it never
-            ; sees the LWin/RWin key-release event. When the user unlocks the PC, our stored Win key state is stuck
-            ; as "pressed", corrupting all modifier state logic until Win is physically pressed and released again.
-            ;
-            ; Solution: The first ChangeNode wraps a KeyStateNode and fires a callback whenever ANY modifier key
-            ; changes state. That callback (UpdateAllModKeyNodes) re-reads the physical state of ALL modifier keys
-            ; directly from Windows via GetKeyState(..., "P"), then pushes those values into the second ChangeNodes.
-            ; The second ChangeNode is what callers subscribe to; it only holds the Windows-authoritative state,
-            ; not the raw AHK hotkey stream. This way, re-synchronisation happens automatically on the next
-            ; modifier keystroke after an unlock, regardless of which key events AHK may have missed.
-            ChangeNode(KeyStateNode(k, , false), (s) => this.UpdateAllModKeyNodes(), )
-            this.modKeyNodes[k] := ChangeNode()  ; Updated by UpdateAllModKeyNodes on every modifier event
+            this.modKeyNodes[k] := ChangeNode(KeyStateNode(k, , false))
         }
 
         lockKeys := ["CapsLock", "ScrollLock", "NumLock"]
@@ -103,7 +90,7 @@ class FullKeyboardNode {
     }
 
     Reset() {
-        for key, node in this.charKeyNodes {
+        for key, node in this.modKeyNodes {
             node.Update(false)
         }
 
