@@ -34,7 +34,7 @@ class Assert {
     static Throws(func, msg := ""){
         try {
             func()
-        } catch Error as err {
+        } catch Any as err {
             return ; Expected an error to be thrown, test passes
         }
         throw "Assertion Failed. " msg ": Expected an error to be thrown, but no error was thrown."
