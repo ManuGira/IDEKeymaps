@@ -43,7 +43,7 @@ class ModifierNodesBase {
             stateStr .= "  alt_shift:  " . this.alt_shift.GetState() . "`n"
             stateStr .= "  ctrl_shift:  " . this.ctrl_shift.GetState() . "`n"
             stateStr .= "  ctrl_alt_shift:  " . this.ctrl_alt_shift.GetState() . "`n"
-            TempToolTip(stateStr, 2000)
+            Utils.TempToolTip(stateStr, 2000)
         }
 
         for modNode in this.GetNodeList() {

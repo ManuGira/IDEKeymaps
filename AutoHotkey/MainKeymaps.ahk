@@ -23,35 +23,35 @@ SetCapsLockState(0)
 rshiftHold := ChangeNode(KeyStateNode("RShift", , false))
 
 capsHold := ChangeNode(KeyStateNode("Capslock", , false))
-;capsHold.Subscribe((s) => SendCharIfNoCombo("CapsLock", s))
+;capsHold.Subscribe((s) => Utils.SendCharIfNoCombo("CapsLock", s))
 
 agraveHold := ChangeNode(KeyStateNode("à", , false))
-agraveHold.Subscribe((s) => SendCharIfNoCombo("à", s))
+agraveHold.Subscribe((s) => Utils.SendCharIfNoCombo("à", s))
 
 egraveHold := ChangeNode(KeyStateNode("è", , false))
-egraveHold.Subscribe((s) => SendCharIfNoCombo("è", s))
+egraveHold.Subscribe((s) => Utils.SendCharIfNoCombo("è", s))
 
 smallerThanHold := ChangeNode(KeyStateNode("<", , false))
-smallerThanHold.Subscribe((s) => SendCharIfNoCombo("<", s))
+smallerThanHold.Subscribe((s) => Utils.SendCharIfNoCombo("<", s))
 
 spaceHold := ChangeNode(KeyStateNode("Space", , false))
-spaceHold.Subscribe((s) => SendCharIfNoCombo("{Space}", s))
+spaceHold.Subscribe((s) => Utils.SendCharIfNoCombo("{Space}", s))
 
 ; --------------- JKIL DIRECTION LAYER ------------------------
 jkilLayerNode := capsHold
-jkilLayerNode.Subscribe((s) => ShowState("JKIL", jkilLayerNode, s))
+jkilLayerNode.Subscribe((s) => Utils.ShowState("JKIL", jkilLayerNode, s))
 jkilCondition := (k) => jkilLayerNode.GetState()
 JKIL.Init(jkilCondition, spaceHold)
 
 ; --------------- J4K5 NUMPAD LAYER ------------------------
 j4k5LayerNode := OrNode([smallerThanHold])
-j4k5LayerNode.Subscribe((s) => ShowState("J4K5", j4k5LayerNode, s))
+j4k5LayerNode.Subscribe((s) => Utils.ShowState("J4K5", j4k5LayerNode, s))
 j4k5Condition := (k) => j4k5LayerNode.GetState()
 J4K5.Init(j4k5Condition)
 
 ; ---------------- MOUSE CONTROLLER LAYER ----------------
 mouseLayerNode := egraveHold
-mouseLayerNode.Subscribe((s) => ShowState("Mouse", mouseLayerNode, s))
+mouseLayerNode.Subscribe((s) => Utils.ShowState("Mouse", mouseLayerNode, s))
 MouseController.Init(mouseLayerNode, spaceHold)
 
 ; --------------- SPACE AS SHIFT ---------------------
@@ -76,7 +76,7 @@ NumpadAwan.Init(numpadAwanCondition)
 
 ; ---------------- FXX LAYER ------------------------
 ffxLayerNode := OrNode([agraveHold, rshiftHold])
-ffxLayerNode.Subscribe((s) => ShowState("FXX", ffxLayerNode, s))
+ffxLayerNode.Subscribe((s) => Utils.ShowState("FXX", ffxLayerNode, s))
 ffxCondition := (k) => ffxLayerNode.GetState()
 FXX.Init(ffxCondition)
 
