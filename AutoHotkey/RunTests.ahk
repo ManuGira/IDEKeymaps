@@ -6,6 +6,7 @@
 #Include Tests/DictTests.ahk
 #Include Tests/TimeStampTests.ahk
 #Include Tests/NodesTests.ahk
+#Include Tests/ModifierNodesTests.ahk
 #Include Tests/PathConverterTests.ahk
 #Include Tests/CaseConverterTests.ahk
 

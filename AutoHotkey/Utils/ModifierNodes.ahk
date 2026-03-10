@@ -3,31 +3,32 @@
 #Include ../Nodes/include.ahk
 #Include ../Utils/Utils.ahk
 
-class ModifierNodes {
-    __New(ctrlNode, altNode, shiftNode, winNode) {
-        this.std := AndNode([NotNode(OrNode([shiftNode, altNode, ctrlNode, winNode]))])
-        this.shift := AndNode([shiftNode, NotNode(OrNode([altNode, ctrlNode, winNode]))])
-        this.ctrl := AndNode([ctrlNode, NotNode(OrNode([shiftNode, altNode, winNode]))])
-        this.win := AndNode([winNode, NotNode(OrNode([shiftNode, altNode, ctrlNode]))])
-        this.alt := AndNode([altNode, NotNode(OrNode([shiftNode, ctrlNode, winNode]))])
+class ModifierNodesBase {
+    
+    __New(nodes){
+        this.std := nodes.std
+        this.shift := nodes.shift
+        this.ctrl := nodes.ctrl
+        this.win := nodes.win
+        this.alt := nodes.alt
+        this.ctrl_alt := nodes.ctrl_alt
+        this.alt_shift := nodes.alt_shift
+        this.ctrl_shift := nodes.ctrl_shift
+        this.ctrl_alt_shift := nodes.ctrl_alt_shift
+    }
 
-        this.ctrl_alt := AndNode([ctrlNode, altNode, NotNode(OrNode([shiftNode, winNode]))])
-        this.alt_shift := AndNode([altNode, shiftNode, NotNode(OrNode([ctrlNode, winNode]))])
-        this.ctrl_shift := AndNode([ctrlNode, shiftNode, NotNode(OrNode([altNode, winNode]))])
-
-        this.ctrl_alt_shift := AndNode([ctrlNode, altNode, shiftNode, NotNode(winNode)])
-
-        this.nodesList := [
-            this.std, 
-            this.shift, 
-            this.ctrl, 
-            this.win, 
+    GetNodeList() {
+        return [
+            this.std,
+            this.shift,
+            this.ctrl,
+            this.win,
             this.alt,
             this.ctrl_alt,
             this.alt_shift,
             this.ctrl_shift,
-            this.ctrl_alt_shift
-        ]        
+            this.ctrl_alt_shift,
+        ]
     }
 
     EnableShowStateOnChange() {
@@ -45,16 +46,54 @@ class ModifierNodes {
             TempToolTip(stateStr, 2000)
         }
 
-        for modNode in this.nodesList {
+        for modNode in this.GetNodeList() {
             modNode.Subscribe((s) => ShowState())
         }
     }
 
     Reset() {
-        for modNode in this.nodesList {
+        for modNode in this.GetNodeList() {
             modNode.Update(false)
         }
 
         this.std.Update(true)
+    }
+}
+
+class ModifierNodes extends ModifierNodesBase {
+    __New(ctrlNode, altNode, shiftNode, winNode) {
+        nodes := {
+            std : AndNode([NotNode(OrNode([shiftNode, altNode, ctrlNode, winNode]))]),
+            shift : AndNode([shiftNode, NotNode(OrNode([altNode, ctrlNode, winNode]))]),
+            ctrl : AndNode([ctrlNode, NotNode(OrNode([shiftNode, altNode, winNode]))]),
+            win : AndNode([winNode, NotNode(OrNode([shiftNode, altNode, ctrlNode]))]),
+            alt : AndNode([altNode, NotNode(OrNode([shiftNode, ctrlNode, winNode]))]),
+
+            ctrl_alt : AndNode([ctrlNode, altNode, NotNode(OrNode([shiftNode, winNode]))]),
+            alt_shift : AndNode([altNode, shiftNode, NotNode(OrNode([ctrlNode, winNode]))]),
+            ctrl_shift : AndNode([ctrlNode, shiftNode, NotNode(OrNode([altNode, winNode]))]),
+
+            ctrl_alt_shift : AndNode([ctrlNode, altNode, shiftNode, NotNode(winNode)]),
+        }
+        super.__New(nodes)
+    }
+}
+
+class GatedModifierNodes extends ModifierNodesBase {
+    __New(controlerNode, modifierNodes) {
+        nodes := {
+            std : GateNode(controlerNode, modifierNodes.std),
+            shift : GateNode(controlerNode, modifierNodes.shift),
+            ctrl : GateNode(controlerNode, modifierNodes.ctrl),
+            win : GateNode(controlerNode, modifierNodes.win),
+            alt : GateNode(controlerNode, modifierNodes.alt),
+
+            ctrl_alt : GateNode(controlerNode, modifierNodes.ctrl_alt),
+            alt_shift : GateNode(controlerNode, modifierNodes.alt_shift),
+            ctrl_shift : GateNode(controlerNode, modifierNodes.ctrl_shift),
+
+            ctrl_alt_shift : GateNode(controlerNode, modifierNodes.ctrl_alt_shift),
+        }
+        super.__New(nodes)
     }
 }
