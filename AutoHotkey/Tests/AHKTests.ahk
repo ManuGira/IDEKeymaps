@@ -132,3 +132,20 @@ TestLambda() {
     Assert.Equal(myLamb(100), 133, "Lambda should capture updated variable from function")
 }
 TestLambda()
+
+TestObjects() {
+    obj := {a: 1, b: 2}
+    Assert.Equal(obj.a, 1, "Object should return correct value for property 'a'")
+    Assert.Equal(obj.b, 2, "Object should return correct value for property 'b'")
+
+    obj.c := 3
+    Assert.Equal(obj.c, 3, "Object should allow adding new properties")
+
+    Assert.Throws(() => obj["unknown"], "Accessing unknown property should throw an error")
+    Assert.Throws(() => obj[""], "Accessing empty property should throw an error")
+
+    obj := {}
+    Assert.True(IsObject(obj), "Empty object should be an object")
+    Assert.True(IsSet(obj), "Empty object must be a set")
+}
+TestObjects()
