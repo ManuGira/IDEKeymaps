@@ -8,7 +8,7 @@ class FullKeyboardNode {
 
 
     static CreateTooltipCallback(key) {
-        return (s) => TempToolTip(key " " s, 500)
+        return (s) => Utils.TempToolTip(key " " s, 500)
     }
 
     __New() {
@@ -58,7 +58,7 @@ class FullKeyboardNode {
 
         SendAndTips(msg) {
             SendInput(msg)
-            TempToolTip(msg, 1000)
+            Utils.TempToolTip(msg, 1000)
         }
 
         SendModInput(state, key) {
