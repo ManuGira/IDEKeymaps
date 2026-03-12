@@ -20,10 +20,12 @@ extendedModNodes := mainModNodes ; ModifierNodes(fkn.shiftNode, fkn.altNode, fkn
 
 ; mainModNodes.EnableShowStateOnChange()
 
+capsLockNode := PassNode(,,false)
 KeyboardState(
     mainLayerNode,
     fkn,
     mainModNodes,
+    capsLockNode,
     KeyboardLayout("Layouts/bepo.json"), 
     KeyboardLayout("Layouts/azerty.json")
 )
@@ -32,6 +34,7 @@ KeyboardState(
     extendedLayerNode,
     fkn,
     extendedModNodes,
+    capsLockNode,
     KeyboardLayout("Layouts/azerty.json"), 
     KeyboardLayout("Layouts/qwertz.json")
 )

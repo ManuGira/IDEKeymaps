@@ -23,24 +23,28 @@ class KeyboardState {
      * @param enableNode {Node} if this node is false, the KeyboardState will not send any input (but will still track state and update nodes)
      * @param keyboardNodes {FullKeyboardNode} node graph for every physical key and lock key
      * @param modNodes {ModifierNodes} pre-built modifier-combination nodes
+     * @param capsLockNode {Node} node of which state tells if CapsLock is enabled or not
      * @param typingLayout {KeyboardLayout} layout used for character output (e.g. bépo)
      * @param shortCutLayout {KeyboardLayout} layout used to resolve shortcut key names (e.g. qwertz)
      */
-    __New(enableNode, keyboardNodes, modNodes, typingLayout, shortCutLayout) {
+    __New(enableNode, keyboardNodes, modNodes, capsLockNode, typingLayout, shortCutLayout) {
         this.enableNode := enableNode
         this.kbd := keyboardNodes
         this.modNodes := modNodes
         this.typingLayout := typingLayout
         this.shortCutLayout := shortCutLayout
+        this.capsLockNode := capsLockNode
+        this.notCapsLockNode := NotNode(this.capsLockNode)
         this.currentDeadKey := ""
 
+        
         modStdNode := OrNode([
-            AndNode([this.modNodes.std, NotNode(this.kbd.lockKeyNodes["CapsLock"])]),
-            AndNode([this.modNodes.shift, this.kbd.lockKeyNodes["CapsLock"]])
+            AndNode([this.modNodes.std, this.notCapsLockNode]),
+            AndNode([this.modNodes.shift, this.capsLockNode])
         ])
         modShiftNode := OrNode([
-            AndNode([this.modNodes.std, this.kbd.lockKeyNodes["CapsLock"]]),
-            AndNode([this.modNodes.shift, NotNode(this.kbd.lockKeyNodes["CapsLock"])])
+            AndNode([this.modNodes.std, this.capsLockNode]),
+            AndNode([this.modNodes.shift, this.notCapsLockNode])
         ])
 
         for rowIndex, row in ScanCodes.Matrix {
