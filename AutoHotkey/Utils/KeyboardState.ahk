@@ -20,12 +20,14 @@
 class KeyboardState {
 
     /**
+     * @param enableNode {Node} if this node is false, the KeyboardState will not send any input (but will still track state and update nodes)
      * @param keyboardNodes {FullKeyboardNode} node graph for every physical key and lock key
      * @param modNodes {ModifierNodes} pre-built modifier-combination nodes
      * @param typingLayout {KeyboardLayout} layout used for character output (e.g. bépo)
      * @param shortCutLayout {KeyboardLayout} layout used to resolve shortcut key names (e.g. qwertz)
      */
-    __New(keyboardNodes, modNodes, typingLayout, shortCutLayout) {
+    __New(enableNode, keyboardNodes, modNodes, typingLayout, shortCutLayout) {
+        this.enableNode := enableNode
         this.kbd := keyboardNodes
         this.modNodes := modNodes
         this.typingLayout := typingLayout
@@ -43,17 +45,19 @@ class KeyboardState {
 
         for rowIndex, row in ScanCodes.Matrix {
             for colIndex, scanCode in row {
-                this.CreateGateForLayout(modStdNode, scanCode, this.typingLayout.Get(scanCode))
-                this.CreateGateForLayout(modShiftNode, scanCode, this.typingLayout.Get(scanCode, true, false))
-                this.CreateGateForLayout(this.modNodes.ctrl_alt, scanCode, this.typingLayout.Get(scanCode, false, true))
-                this.CreateGateForLayout(this.modNodes.ctrl_alt_shift, scanCode, this.typingLayout.Get(scanCode, true, true))
+                gatedKeyNode := GateNode(this.enableNode, this.kbd.charKeyNodes[scanCode])
+
+                this.CreateGateForLayout(modStdNode, gatedKeyNode, this.typingLayout.Get(scanCode))
+                this.CreateGateForLayout(modShiftNode, gatedKeyNode, this.typingLayout.Get(scanCode, true, false))
+                this.CreateGateForLayout(this.modNodes.ctrl_alt, gatedKeyNode, this.typingLayout.Get(scanCode, false, true))
+                this.CreateGateForLayout(this.modNodes.ctrl_alt_shift, gatedKeyNode, this.typingLayout.Get(scanCode, true, true))
 
                 shortCutChar := this.shortCutLayout.Get(scanCode)
-                this.CreateGate(this.modNodes.ctrl, scanCode, shortCutChar)
-                this.CreateGate(this.modNodes.win, scanCode, shortCutChar)
-                this.CreateGate(this.modNodes.alt, scanCode, shortCutChar)
-                this.CreateGate(this.modNodes.alt_shift, scanCode, shortCutChar)
-                this.CreateGate(this.modNodes.ctrl_shift, scanCode, shortCutChar)
+                this.CreateGate(this.modNodes.ctrl, gatedKeyNode, shortCutChar)
+                this.CreateGate(this.modNodes.win, gatedKeyNode, shortCutChar)
+                this.CreateGate(this.modNodes.alt, gatedKeyNode, shortCutChar)
+                this.CreateGate(this.modNodes.alt_shift, gatedKeyNode, shortCutChar)
+                this.CreateGate(this.modNodes.ctrl_shift, gatedKeyNode, shortCutChar)
             }
         }
     }
@@ -123,8 +127,8 @@ class KeyboardState {
      * Creates a GateNode that routes typing-layer characters through the dead-key machine.
      * Use this for std, shift, AltGr, and AltGr+shift layers.
      */
-    CreateGateForLayout(modNode, scanCode, keyStr){
-        GateNode(modNode, this.kbd.charKeyNodes[scanCode], (state) => this.GateCallback(state, keyStr))
+    CreateGateForLayout(modNode, gatedKeyNode, keyStr){
+        GateNode(modNode, gatedKeyNode, (state) => this.GateCallback(state, keyStr))
     }
 
     /**
@@ -132,7 +136,7 @@ class KeyboardState {
      * Use this for shortcut layers (ctrl, alt, win, …) where the host application
      * must see the original key name rather than a Unicode character.
      */
-    CreateGate(modNode, scanCode, keyStr){
-        GateNode(modNode, this.kbd.charKeyNodes[scanCode], (s) => s ? SendInput("{Blind}" keyStr) : "")
+    CreateGate(modNode, gatedKeyNode, keyStr){
+        GateNode(modNode, gatedKeyNode, (s) => s ? SendInput("{Blind}" keyStr) : "")
     }
 }
