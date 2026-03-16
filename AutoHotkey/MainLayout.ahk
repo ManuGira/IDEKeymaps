@@ -12,8 +12,8 @@ mainLayerNode := NotNode(extendedLayerNode)
 
 
 mainModNodes := ModifierNodes(fkn.ctrlNode, fkn.altNode, fkn.shiftNode, fkn.winNode)
-; TODO: extended layer has shift and ctrl swapped 
-extendedModNodes := mainModNodes ; ModifierNodes(fkn.shiftNode, fkn.altNode, fkn.ctrlNode, fkn.winNode)
+; extended layer has shift and ctrl swapped 
+extendedModNodes := ModifierNodes(fkn.shiftNode, fkn.altNode, fkn.ctrlNode, fkn.winNode)
 
 ; mainModNodes := GatedModifierNodes(mainLayerNode, modNodes)
 ; extendedModNodes := GatedModifierNodes(extendedLayerNode, modNodes)
@@ -80,6 +80,6 @@ ShowState() {
     stateStr .= "  ctrl_alt_shift:  " . extendedModNodes.ctrl_alt_shift.GetState() . "`n"
     stateStr .= "`n"
     
-    Utils.TempToolTip(stateStr, 1000)    
+    Utils.TempToolTip(stateStr, 5000)    
 }
 fkn.lockKeyNodes["CapsLock"].Subscribe((s) => ShowState())
