@@ -4,20 +4,24 @@
 #Include ../Utils/Utils.ahk
 
 class ModifierNodesBase {
-    
-    __New(nodes){
-        this.std := nodes.std
-        this.shift := nodes.shift
-        this.ctrl := nodes.ctrl
-        this.win := nodes.win
-        this.alt := nodes.alt
-        this.ctrl_alt := nodes.ctrl_alt
-        this.alt_shift := nodes.alt_shift
-        this.ctrl_shift := nodes.ctrl_shift
-        this.ctrl_alt_shift := nodes.ctrl_alt_shift
+    __New(keyNodes, stateNodes){
+        this.shift_key := keyNodes.shift
+        this.alt_key := keyNodes.alt
+        this.ctrl_key := keyNodes.ctrl
+        this.win_key := keyNodes.win
+
+        this.std := stateNodes.std
+        this.shift := stateNodes.shift
+        this.ctrl := stateNodes.ctrl
+        this.win := stateNodes.win
+        this.alt := stateNodes.alt
+        this.ctrl_alt := stateNodes.ctrl_alt
+        this.alt_shift := stateNodes.alt_shift
+        this.ctrl_shift := stateNodes.ctrl_shift
+        this.ctrl_alt_shift := stateNodes.ctrl_alt_shift
     }
 
-    GetNodeList() {
+    GetStateNodeList() {
         return [
             this.std,
             this.shift,
@@ -46,13 +50,13 @@ class ModifierNodesBase {
             Utils.TempToolTip(stateStr, 2000)
         }
 
-        for modNode in this.GetNodeList() {
+        for modNode in this.GetStateNodeList() {
             modNode.Subscribe((s) => ShowState())
         }
     }
 
     Reset() {
-        for modNode in this.GetNodeList() {
+        for modNode in this.GetStateNodeList() {
             modNode.Update(false)
         }
 
@@ -62,7 +66,14 @@ class ModifierNodesBase {
 
 class ModifierNodes extends ModifierNodesBase {
     __New(ctrlNode, altNode, shiftNode, winNode) {
-        nodes := {
+        keyNodes := {
+            ctrl : ctrlNode,
+            alt : altNode,
+            shift : shiftNode,
+            win : winNode,
+        }
+
+        stateNodes := {
             std : AndNode([NotNode(OrNode([shiftNode, altNode, ctrlNode, winNode]))]),
             shift : AndNode([shiftNode, NotNode(OrNode([altNode, ctrlNode, winNode]))]),
             ctrl : AndNode([ctrlNode, NotNode(OrNode([shiftNode, altNode, winNode]))]),
@@ -75,25 +86,6 @@ class ModifierNodes extends ModifierNodesBase {
 
             ctrl_alt_shift : AndNode([ctrlNode, altNode, shiftNode, NotNode(winNode)]),
         }
-        super.__New(nodes)
-    }
-}
-
-class GatedModifierNodes extends ModifierNodesBase {
-    __New(controlerNode, modifierNodes) {
-        nodes := {
-            std : GateNode(controlerNode, modifierNodes.std),
-            shift : GateNode(controlerNode, modifierNodes.shift),
-            ctrl : GateNode(controlerNode, modifierNodes.ctrl),
-            win : GateNode(controlerNode, modifierNodes.win),
-            alt : GateNode(controlerNode, modifierNodes.alt),
-
-            ctrl_alt : GateNode(controlerNode, modifierNodes.ctrl_alt),
-            alt_shift : GateNode(controlerNode, modifierNodes.alt_shift),
-            ctrl_shift : GateNode(controlerNode, modifierNodes.ctrl_shift),
-
-            ctrl_alt_shift : GateNode(controlerNode, modifierNodes.ctrl_alt_shift),
-        }
-        super.__New(nodes)
+        super.__New(keyNodes, stateNodes)
     }
 }

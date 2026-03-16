@@ -36,8 +36,20 @@ class KeyboardState {
         this.capsLockNode := capsLockNode
         this.notCapsLockNode := NotNode(this.capsLockNode)
         this.currentDeadKey := ""
-
         
+        ; Create GateNodes for modifier keys to send modifier input when they change state
+        ; TODO: This might be moved to another class
+        ; TODO: The map could be passed to this ctor instead of building it here.
+        this.modKeyNodeMap := Map()
+        this.modKeyNodeMap["Shift"] := this.modNodes.shift_key
+        this.modKeyNodeMap["Alt"] := this.modNodes.alt_key
+        this.modKeyNodeMap["Control"] := this.modNodes.ctrl_key
+        this.modKeyNodeMap["LWin"] := this.modNodes.win_key
+        for name, node in this.modKeyNodeMap {
+            ; TODO: simplify this monster
+            GateNode(this.enableNode, node, ((n) => (s) => this.SendModInput(s, n))(name))
+        }
+
         modStdNode := OrNode([
             AndNode([this.modNodes.std, this.notCapsLockNode]),
             AndNode([this.modNodes.shift, this.capsLockNode])
@@ -64,6 +76,34 @@ class KeyboardState {
                 this.CreateGate(this.modNodes.ctrl_shift, gatedKeyNode, shortCutChar)
             }
         }
+
+        this.enableNode.Subscribe((s) => this.UpdateAllModKeyNodes())
+        this.Reset()
+    }
+
+    SendModInput(state, key) {
+        if state {
+            SendInput("{Blind}{" key " Down}")
+        } else {
+            SendInput("{Blind}{" key " Up}")
+        }
+    }
+
+    UpdateAllModKeyNodes() {
+        for name, node in this.modKeyNodeMap {
+            osState := GetKeyState(name, "P")
+            nodeState := node.GetState()
+            if osState != nodeState {
+                node.Update(osState)
+            }
+        }
+    }
+
+    Reset() {
+        this.UpdateAllModKeyNodes()
+
+        ; Not sure if we want the capslock node to be reset, as it may be mapped to any other key.
+        capsLockState := GetKeyState("CapsLock", "T")
     }
    
     /**

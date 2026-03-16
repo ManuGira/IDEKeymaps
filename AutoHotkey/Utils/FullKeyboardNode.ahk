@@ -5,7 +5,7 @@
 
 class FullKeyboardNode {
     static modKeyLabels := ["LShift", "RShift", "LControl", "RControl", "LAlt", "RAlt", "LWin", "RWin"]
-
+    static lockKeys := ["CapsLock", "ScrollLock", "NumLock"]
 
     static CreateTooltipCallback(key) {
         return (s) => Utils.TempToolTip(key " " s, 500)
@@ -50,10 +50,9 @@ class FullKeyboardNode {
             this.modKeyNodes[k] := ChangeNode(KeyStateNode(k, , false))
         }
 
-        lockKeys := ["CapsLock", "ScrollLock", "NumLock"]
         this.lockKeyNodes := Map()
-        for k in lockKeys {
-            this.lockKeyNodes[k] := KeyLockStateNode(k, )  
+        for k in FullKeyboardNode.lockKeys {
+            this.lockKeyNodes[k] := KeyLockStateNode(k  , )  
         }
 
         SendAndTips(msg) {
@@ -61,18 +60,10 @@ class FullKeyboardNode {
             Utils.TempToolTip(msg, 1000)
         }
 
-        SendModInput(state, key) {
-            if state {
-                SendInput("{Blind}{" key " Down}")
-            } else {
-                SendInput("{Blind}{" key " Up}")
-            }
-        }
-
-        this.shiftNode := OrNode([this.modKeyNodes["LShift"], this.modKeyNodes["RShift"]], (s) => SendModInput(s, "Shift"))
-        this.altNode := OrNode([this.modKeyNodes["LAlt"], this.modKeyNodes["RAlt"]], (s) => SendModInput(s, "Alt"))
-        this.ctrlNode := OrNode([this.modKeyNodes["LControl"], this.modKeyNodes["RControl"], this.modKeyNodes["RAlt"]], (s) => SendModInput(s, "Control"))
-        this.winNode := OrNode([this.modKeyNodes["LWin"], this.modKeyNodes["RWin"]], (s) => SendModInput(s, "LWin"))
+        this.shiftNode := OrNode([this.modKeyNodes["LShift"], this.modKeyNodes["RShift"]])
+        this.altNode := OrNode([this.modKeyNodes["LAlt"], this.modKeyNodes["RAlt"]])
+        this.ctrlNode := OrNode([this.modKeyNodes["LControl"], this.modKeyNodes["RControl"], this.modKeyNodes["RAlt"]])
+        this.winNode := OrNode([this.modKeyNodes["LWin"], this.modKeyNodes["RWin"]])
         
         this.ModNodes := [
             this.shiftNode,
@@ -82,19 +73,10 @@ class FullKeyboardNode {
         ]
     }
 
-    UpdateAllModKeyNodes() {
-        for k in FullKeyboardNode.modKeyLabels {
-            state := GetKeyState(k, "P")
-            this.modKeyNodes[k].Update(state)
-        }
-    }
-
     Reset() {
         for key, node in this.modKeyNodes {
             node.Update(false)
         }
-
-        this.UpdateAllModKeyNodes()
 
         for modNode in this.ModNodes {
             modNode.Update(false)
