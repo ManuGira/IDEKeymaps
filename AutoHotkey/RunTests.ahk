@@ -3,6 +3,7 @@
 
 #Include Tests/AHKTests.ahk
 
+#Include Tests/RangeTests.ahk
 #Include Tests/DictTests.ahk
 #Include Tests/TimeStampTests.ahk
 #Include Tests/NodesTests.ahk
