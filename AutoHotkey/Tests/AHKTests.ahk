@@ -140,9 +140,13 @@ TestObjects() {
 
     obj.c := 3
     Assert.Equal(obj.c, 3, "Object should allow adding new properties")
-
+    
+    Assert.Throws(() => obj.d,  "Accessing unknown property should throw an error")
     Assert.Throws(() => obj["unknown"], "Accessing unknown property should throw an error")
     Assert.Throws(() => obj[""], "Accessing empty property should throw an error")
+
+    Assert.True(HasProp(obj, "c"), "HasProp should return true for existing property 'c'")
+    Assert.False(HasProp(obj, "unknown"), "HasProp should return false for non-existing property 'unknown'")
 
     obj := {}
     Assert.True(IsObject(obj), "Empty object should be an object")

@@ -38,25 +38,36 @@ class KeyboardState {
         this.currentDeadKey := ""
         
         ; Create GateNodes for modifier keys to send modifier input when they change state
-        ; TODO: This might be moved to another class
-        ; TODO: The map could be passed to this ctor instead of building it here.
-        this.modKeyNodeMap := Map()
-        this.modKeyNodeMap["Shift"] := this.modNodes.shift_key
-        this.modKeyNodeMap["Alt"] := this.modNodes.alt_key
-        this.modKeyNodeMap["Control"] := this.modNodes.ctrl_key
-        this.modKeyNodeMap["LWin"] := this.modNodes.win_key
-        for name, node in this.modKeyNodeMap {
+        
+        for name, node in this.modNodes.keyNodes {
             ; TODO: simplify this monster
             GateNode(this.enableNode, node, ((n) => (s) => this.SendModInput(s, n))(name))
         }
+        
+        mod_none               := this.modNodes.GetNode({ctrl:false, alt:false, shift:false, win:false})
+        mod_win                := this.modNodes.GetNode({ctrl:false, alt:false, shift:false, win:true })
+        mod_shift              := this.modNodes.GetNode({ctrl:false, alt:false, shift:true,  win:false})
+        mod_shift_win          := this.modNodes.GetNode({ctrl:false, alt:false, shift:true,  win:true })
+        mod_alt                := this.modNodes.GetNode({ctrl:false, alt:true,  shift:false, win:false})
+        mod_alt_win            := this.modNodes.GetNode({ctrl:false, alt:true,  shift:false, win:true })
+        mod_alt_shift          := this.modNodes.GetNode({ctrl:false, alt:true,  shift:true,  win:false})
+        mod_alt_shift_win      := this.modNodes.GetNode({ctrl:false, alt:true,  shift:true,  win:true })
+        mod_ctrl               := this.modNodes.GetNode({ctrl:true,  alt:false, shift:false, win:false})
+        mod_ctrl_win           := this.modNodes.GetNode({ctrl:true,  alt:false, shift:false, win:true })
+        mod_ctrl_shift         := this.modNodes.GetNode({ctrl:true,  alt:false, shift:true,  win:false})
+        mod_ctrl_shift_win     := this.modNodes.GetNode({ctrl:true,  alt:false, shift:true,  win:true })
+        mod_ctrl_alt           := this.modNodes.GetNode({ctrl:true,  alt:true,  shift:false, win:false})
+        mod_ctrl_alt_win       := this.modNodes.GetNode({ctrl:true,  alt:true,  shift:false, win:true })
+        mod_ctrl_alt_shift     := this.modNodes.GetNode({ctrl:true,  alt:true,  shift:true,  win:false})
+        mod_ctrl_alt_shift_win := this.modNodes.GetNode({ctrl:true,  alt:true,  shift:true,  win:true })
 
         modStdNode := OrNode([
-            AndNode([this.modNodes.std, this.notCapsLockNode]),
-            AndNode([this.modNodes.shift, this.capsLockNode])
+            AndNode([mod_none, this.notCapsLockNode]),
+            AndNode([mod_shift, this.capsLockNode])
         ])
         modShiftNode := OrNode([
-            AndNode([this.modNodes.std, this.capsLockNode]),
-            AndNode([this.modNodes.shift, this.notCapsLockNode])
+            AndNode([mod_none, this.capsLockNode]),
+            AndNode([mod_shift, this.notCapsLockNode])
         ])
 
         for rowIndex, row in ScanCodes.Matrix {
@@ -65,19 +76,19 @@ class KeyboardState {
 
                 this.CreateGateForLayout(modStdNode, gatedKeyNode, this.typingLayout.Get(scanCode))
                 this.CreateGateForLayout(modShiftNode, gatedKeyNode, this.typingLayout.Get(scanCode, true, false))
-                this.CreateGateForLayout(this.modNodes.ctrl_alt, gatedKeyNode, this.typingLayout.Get(scanCode, false, true))
-                this.CreateGateForLayout(this.modNodes.ctrl_alt_shift, gatedKeyNode, this.typingLayout.Get(scanCode, true, true))
+                this.CreateGateForLayout(mod_alt, gatedKeyNode, this.typingLayout.Get(scanCode, false, true))
+                this.CreateGateForLayout(mod_ctrl_alt_shift, gatedKeyNode, this.typingLayout.Get(scanCode, true, true))
 
                 shortCutChar := this.shortCutLayout.Get(scanCode)
-                this.CreateGate(this.modNodes.ctrl, gatedKeyNode, shortCutChar)
-                this.CreateGate(this.modNodes.win, gatedKeyNode, shortCutChar)
-                this.CreateGate(this.modNodes.alt, gatedKeyNode, shortCutChar)
-                this.CreateGate(this.modNodes.alt_shift, gatedKeyNode, shortCutChar)
-                this.CreateGate(this.modNodes.ctrl_shift, gatedKeyNode, shortCutChar)
+                this.CreateGate(mod_ctrl, gatedKeyNode, shortCutChar)
+                this.CreateGate(mod_win, gatedKeyNode, shortCutChar)
+                this.CreateGate(mod_alt, gatedKeyNode, shortCutChar)
+                this.CreateGate(mod_alt_shift, gatedKeyNode, shortCutChar)
+                this.CreateGate(mod_ctrl_shift, gatedKeyNode, shortCutChar)
             }
         }
 
-        this.enableNode.Subscribe((s) => this.UpdateAllModKeyNodes())
+        this.enableNode.Subscribe((s) => this.RefreshAllModKeyNodes())
         this.Reset()
     }
 
@@ -89,18 +100,23 @@ class KeyboardState {
         }
     }
 
-    UpdateAllModKeyNodes() {
-        for name, node in this.modKeyNodeMap {
-            osState := GetKeyState(name, "P")
-            nodeState := node.GetState()
-            if osState != nodeState {
-                node.Update(osState)
+    RefreshAllModKeyNodes() {
+        for index in Range(1, 17) {
+            nodeState := this.modNodes.stateNodes[index].GetState()
+            if nodeState == true {
+                break ; No need to update if the node is already active
             }
         }
+        boolModifiers := this.modNodes.CreateBoolModifiers(index)
+
+        this.SendModInput(boolModifiers.shift, ModifierNodes.KeyNames.SHIFT)
+        this.SendModInput(boolModifiers.alt, ModifierNodes.KeyNames.ALT)
+        this.SendModInput(boolModifiers.ctrl, ModifierNodes.KeyNames.CTRL)
+        this.SendModInput(boolModifiers.win, ModifierNodes.KeyNames.WIN)
     }
 
     Reset() {
-        this.UpdateAllModKeyNodes()
+        this.RefreshAllModKeyNodes()
 
         ; Not sure if we want the capslock node to be reset, as it may be mapped to any other key.
         capsLockState := GetKeyState("CapsLock", "T")
