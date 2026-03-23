@@ -89,7 +89,6 @@ class KeyboardState {
         }
 
         this.enableNode.Subscribe((s) => this.RefreshAllModKeyNodes())
-        this.Reset()
     }
 
     SendModInput(state, key) {
@@ -101,9 +100,10 @@ class KeyboardState {
     }
 
     RefreshAllModKeyNodes() {
-        for index in Range(1, 17) {
-            nodeState := this.modNodes.stateNodes[index].GetState()
-            if nodeState == true {
+        index := 0
+        for i in Range(1, 17) {
+            if this.modNodes.stateNodes[i].GetState() {
+                index := i
                 break ; No need to update if the node is already active
             }
         }
@@ -119,7 +119,7 @@ class KeyboardState {
         this.RefreshAllModKeyNodes()
 
         ; Not sure if we want the capslock node to be reset, as it may be mapped to any other key.
-        capsLockState := GetKeyState("CapsLock", "T")
+        ; capsLockState := GetKeyState("CapsLock", "T")
     }
    
     /**

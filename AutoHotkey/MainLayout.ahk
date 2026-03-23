@@ -38,48 +38,53 @@ KeyboardState(
 
 Reset() {
     fkn.Reset()
-    mainLayerNode.Update(false)
+    ; forces capslock to false
+    SetCapsLockState("On")
+    SetCapsLockState("Off")
+
+    ; Set toggle extended layer to true-false to force update of all nodes depending on it
+    extendedLayerNode.Update(true)
     extendedLayerNode.Update(false)
-    mainModNodes.Reset()
-    extendedModNodes.Reset()
 }
 
 ; Reset all key states when the Windows session is unlocked, to avoid stuck keys caused by AHK being suspended while the screen was locked.
 WinSessionStateNode((s) => Reset())
 
-Reset()
-
 ShowState() {
     stateStr := ""
     stateStr .= "OS Modifiers: " . "`n"
-    stateStr .= "  Shift:---.." . GetKeyState("Shift", "P") . " " . mainModNodes.shift_key.GetState() . " " . extendedModNodes.shift_key.GetState() . "`n" 
+    stateStr .= "  Shift:---.." . GetKeyState("Shift", "P") . " " 
+    stateStr .= mainModNodes.keyNodes[ModifierNodes.KeyNames.SHIFT].GetState() . " " 
+    stateStr .= extendedModNodes.keyNodes[ModifierNodes.KeyNames.SHIFT].GetState() . "`n" 
     stateStr .= "  LShift:--.." . GetKeyState("LShift", "P") . "`n" 
     stateStr .= "  RShift:--.." . GetKeyState("RShift", "P") . "`n" 
     
-    stateStr .= "  Control:-" . GetKeyState("Control", "P") . " " . mainModNodes.ctrl_key.GetState() . " " . extendedModNodes.ctrl_key.GetState() . "`n"
+    stateStr .= "  Control:-" . GetKeyState("Control", "P") . " " . mainModNodes.keyNodes[ModifierNodes.KeyNames.CTRL].GetState() . " " . extendedModNodes.keyNodes[ModifierNodes.KeyNames.CTRL].GetState() . "`n"
     stateStr .= "  LCtrl:-----.." . GetKeyState("LCtrl", "P") . "`n"
     stateStr .= "  RCtrl:-----.." . GetKeyState("RCtrl", "P") . "`n"
     
-    stateStr .= "  Alt:-----.." . GetKeyState("Alt", "P") . " " . mainModNodes.alt_key.GetState() . " " . extendedModNodes.alt_key.GetState() . "`n"
+    stateStr .= "  Alt:-----.." . GetKeyState("Alt", "P") . " " . mainModNodes.keyNodes[ModifierNodes.KeyNames.ALT].GetState() . " " . extendedModNodes.keyNodes[ModifierNodes.KeyNames.ALT].GetState() . "`n"
     stateStr .= "  LAlt:----" . GetKeyState("LAlt", "P") . "`n" 
     stateStr .= "  RAlt:----" . GetKeyState("RAlt", "P") . "`n" 
 
-    stateStr .= "  LWin:----" . GetKeyState("LWin", "P") . " " . mainModNodes.win_key.GetState() . " " . extendedModNodes.win_key.GetState() . "`n"
+    stateStr .= "  LWin:----" . GetKeyState("LWin", "P") . " " . mainModNodes.keyNodes[ModifierNodes.KeyNames.WIN].GetState() . " " . extendedModNodes.keyNodes[ModifierNodes.KeyNames.WIN].GetState() . "`n"
     stateStr .= "  RWin:----" . GetKeyState("RWin", "P") . "`n"
     
     stateStr .= "`n"
     stateStr .= "Layer Enabled:    " . mainLayerNode.GetState() . " " . extendedLayerNode.GetState() . "`n"
     stateStr .= "Layer Modifiers: " . "`n"
-    stateStr .= "  std:------------" . mainModNodes.std.GetState() . " " . extendedModNodes.std.GetState() . "`n"
-    stateStr .= "  shift:----------" . mainModNodes.shift.GetState() . " " . extendedModNodes.shift.GetState() . "`n"
-    stateStr .= "  ctrl:-----------" . mainModNodes.ctrl.GetState() . " " . extendedModNodes.ctrl.GetState() . "`n"
-    stateStr .= "  win:-----------" . mainModNodes.win.GetState() . " " . extendedModNodes.win.GetState() . "`n"
-    stateStr .= "  alt:------------" . mainModNodes.alt.GetState() . " " . extendedModNodes.alt.GetState() . "`n"
-    stateStr .= "  ctrl_alt:-------" . mainModNodes.ctrl_alt.GetState() . " " . extendedModNodes.ctrl_alt.GetState() . "`n"
-    stateStr .= "  alt_shift:------" . mainModNodes.alt_shift.GetState() . " " . extendedModNodes.alt_shift.GetState() . "`n"
-    stateStr .= "  ctrl_shift:-----" . mainModNodes.ctrl_shift.GetState() . " " . extendedModNodes.ctrl_shift.GetState() . "`n"
-    stateStr .= "  ctrl_alt_shift:-" . mainModNodes.ctrl_alt_shift.GetState() . " " . extendedModNodes.ctrl_alt_shift.GetState() . "`n"
+    stateStr .= "  std:------------" . mainModNodes.GetState({ctrl:false, alt:false, shift:false, win:false}) . " " . extendedModNodes.GetState({ctrl:false, alt:false, shift:false, win:false}) . "`n"
+    stateStr .= "  shift:----------" . mainModNodes.GetState({ctrl:false, alt:false, shift:true, win:false}) . " " . extendedModNodes.GetState({ctrl:false, alt:false, shift:true, win:false}) . "`n"
+    stateStr .= "  ctrl:-----------" . mainModNodes.GetState({ctrl:true, alt:false, shift:false, win:false}) . " " . extendedModNodes.GetState({ctrl:true, alt:false, shift:false, win:false}) . "`n"
+    stateStr .= "  win:-----------" . mainModNodes.GetState({ctrl:false, alt:false, shift:false, win:true}) . " " . extendedModNodes.GetState({ctrl:false, alt:false, shift:false, win:true}) . "`n"
+    stateStr .= "  alt:------------" . mainModNodes.GetState({ctrl:false, alt:true, shift:false, win:false}) . " " . extendedModNodes.GetState({ctrl:false, alt:true, shift:false, win:false}) . "`n"
+    stateStr .= "  ctrl_alt:-------" . mainModNodes.GetState({ctrl:true, alt:true, shift:false, win:false}) . " " . extendedModNodes.GetState({ctrl:true, alt:true, shift:false, win:false}) . "`n"
+    stateStr .= "  alt_shift:------" . mainModNodes.GetState({ctrl:false, alt:true, shift:true, win:false}) . " " . extendedModNodes.GetState({ctrl:false, alt:true, shift:true, win:false}) . "`n"
+    stateStr .= "  ctrl_shift:-----" . mainModNodes.GetState({ctrl:true, alt:false, shift:true, win:false}) . " " . extendedModNodes.GetState({ctrl:true, alt:false, shift:true, win:false}) . "`n"
+    stateStr .= "  ctrl_alt_shift:-" . mainModNodes.GetState({ctrl:true, alt:true, shift:true, win:false}) . " " . extendedModNodes.GetState({ctrl:true, alt:true, shift:true, win:false}) . "`n"
     
     Utils.TempToolTip(stateStr, 5000)    
 }
 fkn.lockKeyNodes["CapsLock"].Subscribe((s) => ShowState())
+
+Reset()

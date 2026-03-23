@@ -20,7 +20,7 @@
         - Call Reset() to force the "no modifiers" state and clear all others.
 */
 class ModifierNodes {
-    KeyNames := {CTRL:"Control", ALT:"Alt", SHIFT:"Shift", WIN:"LWin"}
+    static KeyNames := {CTRL:"Control", ALT:"Alt", SHIFT:"Shift", WIN:"LWin"}
 
     /*
         Creates the 16 modifier-combination state nodes.
@@ -33,10 +33,10 @@ class ModifierNodes {
     */
     __New(ctrlNode, altNode, shiftNode, winNode) {
         this.keyNodes := Map()
-        this.keyNodes[this.KeyNames.CTRL] := ctrlNode
-        this.keyNodes[this.KeyNames.ALT] := altNode
-        this.keyNodes[this.KeyNames.SHIFT] := shiftNode
-        this.keyNodes[this.KeyNames.WIN] := winNode
+        this.keyNodes[ModifierNodes.KeyNames.CTRL] := ctrlNode
+        this.keyNodes[ModifierNodes.KeyNames.ALT] := altNode
+        this.keyNodes[ModifierNodes.KeyNames.SHIFT] := shiftNode
+        this.keyNodes[ModifierNodes.KeyNames.WIN] := winNode
 
         this.stateNodes := []
         for index in Range(1, 17) {
@@ -60,10 +60,10 @@ class ModifierNodes {
     _CreateModNode(boolModifiers){
         truthies := []
         falsies := []
-        (boolModifiers.ctrl ? truthies : falsies).Push(this.keyNodes[this.KeyNames.CTRL])
-        (boolModifiers.alt ? truthies : falsies).Push(this.keyNodes[this.KeyNames.ALT])
-        (boolModifiers.shift ? truthies : falsies).Push(this.keyNodes[this.KeyNames.SHIFT])
-        (boolModifiers.win ? truthies : falsies).Push(this.keyNodes[this.KeyNames.WIN])
+        (boolModifiers.ctrl ? truthies : falsies).Push(this.keyNodes[ModifierNodes.KeyNames.CTRL])
+        (boolModifiers.alt ? truthies : falsies).Push(this.keyNodes[ModifierNodes.KeyNames.ALT])
+        (boolModifiers.shift ? truthies : falsies).Push(this.keyNodes[ModifierNodes.KeyNames.SHIFT])
+        (boolModifiers.win ? truthies : falsies).Push(this.keyNodes[ModifierNodes.KeyNames.WIN])
 
         truthies.Push(NotNode(OrNode(falsies)))
         modNode := AndNode(truthies)
