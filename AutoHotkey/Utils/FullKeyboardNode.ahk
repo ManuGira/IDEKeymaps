@@ -46,8 +46,10 @@ class FullKeyboardNode {
 
        ; Modifier keys
         this.modKeyNodes := Map()
+        this.modkeyNodes0 := Map()  ; for debugging
         for k in FullKeyboardNode.modKeyLabels {
-            this.modKeyNodes[k] := ChangeNode(KeyStateNode(k, , false))
+            this.modKeyNodes0[k] := KeyStateNode(k, , false)
+            this.modKeyNodes[k] := ChangeNode(this.modKeyNodes0[k])
         }
 
         this.lockKeyNodes := Map()
@@ -74,9 +76,30 @@ class FullKeyboardNode {
     }
 
     Reset() {
-        for key, node in this.modKeyNodes {
+        ; for key, node in this.charKeyNodes {S
+        ;     node.Update(false)
+        ; }
+
+        for key, node in this.lockKeyNodes {
             node.Update(false)
+        }        
+
+        for k in FullKeyboardNode.modKeyLabels {
+            this.modKeyNodes0[k].Update(false)
+            this.modKeyNodes[k].Update(false)
+            SendInput("{Blind}{" k " Up}")
+            ; Sleep for 100 ms
+            Sleep(100)
+            SendInput("{Blind}{" k " Down}")
+            Sleep(100)
+            SendInput("{Blind}{" k " Up}")
+            Sleep(100)
+            
         }
+
+        ; for key, node in this.modKeyNodes {
+        ;     node.Update(false)
+        ; }
 
         for modNode in this.ModNodes {
             modNode.Update(false)

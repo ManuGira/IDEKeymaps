@@ -19,7 +19,7 @@
         - Call ComputeIndex() to resolve a boolModifiers object to its index.
         - Call Reset() to force the "no modifiers" state and clear all others.
 */
-class ModifierNodes {
+class ModifierNodes_OLD {
     static KeyNames := {CTRL:"Control", ALT:"Alt", SHIFT:"Shift", WIN:"LWin"}
 
     /*
@@ -33,39 +33,41 @@ class ModifierNodes {
     */
     __New(ctrlNode, altNode, shiftNode, winNode) {
         this.inputNodes := Map()
-        this.inputNodes[ModifierNodes.KeyNames.CTRL] := ctrlNode
-        this.inputNodes[ModifierNodes.KeyNames.ALT] := altNode
-        this.inputNodes[ModifierNodes.KeyNames.SHIFT] := shiftNode
-        this.inputNodes[ModifierNodes.KeyNames.WIN] := winNode
-
-        ctrlNode.Subscribe((s) => this.UpdateIndex())
-        altNode.Subscribe((s) => this.UpdateIndex())
-        shiftNode.Subscribe((s) => this.UpdateIndex())
-        winNode.Subscribe((s) => this.UpdateIndex())
-
-        this.currentIndex := 1 ; Start with "no modifiers" active
+        this.inputNodes[ModifierNodes_OLD.KeyNames.CTRL] := ctrlNode
+        this.inputNodes[ModifierNodes_OLD.KeyNames.ALT] := altNode
+        this.inputNodes[ModifierNodes_OLD.KeyNames.SHIFT] := shiftNode
+        this.inputNodes[ModifierNodes_OLD.KeyNames.WIN] := winNode
 
         this.stateNodes := []
         for index in Range(1, 17) {
-            this.stateNodes.Push(PassNode(,, false))
+            boolModifiers := this.CreateBoolModifiers(index)
+            modNode := this._CreateModNode(boolModifiers)
+            this.stateNodes.Push(modNode)
         }
     }
 
-    UpdateIndex() {
-        oldIndex := this.currentIndex
-        newIndex := this.ComputeIndex({
-            ctrl: this.inputNodes[ModifierNodes.KeyNames.CTRL].GetState(),
-            alt: this.inputNodes[ModifierNodes.KeyNames.ALT].GetState(),
-            shift: this.inputNodes[ModifierNodes.KeyNames.SHIFT].GetState(),
-            win: this.inputNodes[ModifierNodes.KeyNames.WIN].GetState()
-        })
+    /*
+        Builds an AndNode that is true only when exactly the modifiers described
+        by boolModifiers are active. Required modifiers feed into the And directly;
+        forbidden modifiers are collected into an OrNode which is then negated,
+        ensuring no unwanted modifier is held.
 
-        isChanging := newIndex != oldIndex
-        if (isChanging) {
-            this.stateNodes[oldIndex].Update(false)
-            this.stateNodes[newIndex].Update(true)
-            this.currentIndex := newIndex
-        }
+        Parameters:
+            boolModifiers - Object with boolean fields: ctrl, alt, shift, win.
+
+        Returns: AndNode
+    */
+    _CreateModNode(boolModifiers){
+        truthies := []
+        falsies := []
+        (boolModifiers.ctrl ? truthies : falsies).Push(this.inputNodes[ModifierNodes_OLD.KeyNames.CTRL])
+        (boolModifiers.alt ? truthies : falsies).Push(this.inputNodes[ModifierNodes_OLD.KeyNames.ALT])
+        (boolModifiers.shift ? truthies : falsies).Push(this.inputNodes[ModifierNodes_OLD.KeyNames.SHIFT])
+        (boolModifiers.win ? truthies : falsies).Push(this.inputNodes[ModifierNodes_OLD.KeyNames.WIN])
+
+        truthies.Push(NotNode(OrNode(falsies)))
+        modNode := AndNode(truthies)
+        return modNode
     }
 
     /*
@@ -111,7 +113,7 @@ class ModifierNodes {
 
     /*
         Forces all state nodes to false, then activates the "no modifiers" node
-        (index 1). Use this to bring ModifierNodes to a known clean state,
+        (index 1). Use this to bring ModifierNodes_OLD to a known clean state,
         e.g. on script initialisation or after a focus change.
     */
     Reset() {

@@ -38,8 +38,7 @@ class KeyboardState {
         this.currentDeadKey := ""
         
         ; Create GateNodes for modifier keys to send modifier input when they change state
-        
-        for name, node in this.modNodes.keyNodes {
+        for name, node in this.modNodes.inputNodes {
             ; TODO: simplify this monster
             GateNode(this.enableNode, node, ((n) => (s) => this.SendModInput(s, n))(name))
         }
@@ -94,8 +93,10 @@ class KeyboardState {
     SendModInput(state, key) {
         if state {
             SendInput("{Blind}{" key " Down}")
+            ; SendInput("{" key " Down}")
         } else {
             SendInput("{Blind}{" key " Up}")
+            ; SendInput("{" key " Up}")
         }
     }
 
