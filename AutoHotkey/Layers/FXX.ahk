@@ -26,17 +26,17 @@ class FXX {
     }
 
     static Init(condition) {
-        FXX.AllModHotKey("y", "{F1}", condition) 
-        FXX.AllModHotKey("x", "{F2}", condition) 
-        FXX.AllModHotKey("c", "{F3}", condition) 
-        FXX.AllModHotKey("v", "{F4}", condition) 
+        FXX.AllModHotKey("q", "{F1}", condition) 
+        FXX.AllModHotKey("w", "{F2}", condition) 
+        FXX.AllModHotKey("e", "{F3}", condition) 
+        FXX.AllModHotKey("r", "{F4}", condition) 
         FXX.AllModHotKey("a", "{F5}", condition) 
         FXX.AllModHotKey("s", "{F6}", condition) 
         FXX.AllModHotKey("d", "{F7}", condition) 
         FXX.AllModHotKey("f", "{F8}", condition) 
-        FXX.AllModHotKey("q", "{F9}", condition) 
-        FXX.AllModHotKey("w", "{F10}", condition) 
-        FXX.AllModHotKey("e", "{F11}", condition) 
-        FXX.AllModHotKey("r", "{F12}", condition) 
+        FXX.AllModHotKey("y", "{F9}", condition) 
+        FXX.AllModHotKey("x", "{F10}", condition) 
+        FXX.AllModHotKey("c", "{F11}", condition) 
+        FXX.AllModHotKey("v", "{F12}", condition) 
     }
 }
